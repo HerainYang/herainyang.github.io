@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>OpenGL on Herain&#39;s Blog</title>
-    <link>https://herainyang.github.io/tags/opengl/</link>
+    <link>https://herainic.com/tags/opengl/</link>
     <description>Recent content in OpenGL on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 01 Jan 2021 20:06:32 +1000</lastBuildDate><atom:link href="https://herainyang.github.io/tags/opengl/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 01 Jan 2021 20:06:32 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/opengl/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Code Learn OpenGL Chapter1</title>
-      <link>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%80%E7%AB%A0/</link>
+      <link>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%80%E7%AB%A0/</link>
       <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
       
-      <guid>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%80%E7%AB%A0/</guid>
+      <guid>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%80%E7%AB%A0/</guid>
       <description>OpenGL第一章 OpenGL OpenGL是一个API，由Khronos组织制定和维护，具体实现方法由显卡开发商自行实现。相比早期OpenGL使用的立即渲染模式（固定渲染管线），现在的OpenGL使用的是更为灵活的核心模式（core-profile）。
 OpenGL本身是一个状态机，用一系列的变量去告知OpenGL应该如何运作。规范来说，OpenGL的状态被称作上下文，开发者通过状态设置函数来改变上下文，从而使用OpenGL。
 使用OpenGL时，最好用OpenGL定义的类型，也就是在原本的类型前加上GL，例如GLfloat，从而保证在不同平台上程序都能正常运行。
@@ -24,10 +24,10 @@ target_link_libraries(&amp;lt;project name&amp;gt; glfw GL GLEW ${GL_LIBRARY} m)
     
     <item>
       <title>Code Learn OpenGL Chapter2</title>
-      <link>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%BA%8C%E7%AB%A0/</link>
+      <link>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%BA%8C%E7%AB%A0/</link>
       <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
       
-      <guid>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%BA%8C%E7%AB%A0/</guid>
+      <guid>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%BA%8C%E7%AB%A0/</guid>
       <description>OpenGL第二章 因为第一章写了一万多字Typora就开始有点卡了，所以决定一章一个文件，从现在开始第二章就逐渐进入光照的介绍了。
 颜色 OpenGL里对颜色的处理是符合生活常理的，即：眼睛看到的颜色是物体拒绝吸收的光的颜色，也就是说一个蓝色的物体其实是它拒绝吸收蓝色。
  当我们把光源的颜色与物体的颜色值相乘，所得到的就是这个物体所反射的颜色（也就是我们所感知到的颜色）。
@@ -40,20 +40,20 @@ vec3 norm = normalize(Normal); vec3 lightDir = normalize(lightPos - FragPos); fl
     
     <item>
       <title>Code Learn OpenGL Chapter3</title>
-      <link>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%89%E7%AB%A0/</link>
+      <link>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%89%E7%AB%A0/</link>
       <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
       
-      <guid>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%89%E7%AB%A0/</guid>
+      <guid>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%89%E7%AB%A0/</guid>
       <description>OpenGL第三章 混合 混合顾名思义就是把颜色混合起来，这种技术一半应用在透明或半透明的效果中，目前我们在使用颜色的时候经常只会用到它前三个通道，但其实第四个通道也是有用的，那就是指示该点的透明度。
 比如上图这个草，除了草本体的透明度（后面统称alpha值）为1，其他地方的透明度都为0，为了更直观的观察，建议将背景切换成不同颜色看看效果。</description>
     </item>
     
     <item>
       <title>Code Learn OpenGL Chapter4</title>
-      <link>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E5%9B%9B%E7%AB%A0/</link>
+      <link>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E5%9B%9B%E7%AB%A0/</link>
       <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
       
-      <guid>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E5%9B%9B%E7%AB%A0/</guid>
+      <guid>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E5%9B%9B%E7%AB%A0/</guid>
       <description>OpenGL第四章 深度测试 深度缓冲和颜色缓冲一样，每个片段都储存了对应的信息，通常是24位的。
 当进行深度测试的时候，OpenGL会将一个片段的深度值和深度缓冲的内容（深度缓冲是一块内存区域，它包括了每个像素的深度值）对比，OpenGL会执行一个深度测试，如果这个测试通过了，深度缓冲会更新为新的深度值，反之则丢弃该片段。
 深度测试位于片段着色器和模板测试后，在屏幕空间中运行的，所以和glViewport定义的视口息息相关，并且可以通过gl_FragCoord直接访问，其中(0,0)定义的是屏幕左下角，gl_FragCoord中包含的z分量则是片段的深度值。

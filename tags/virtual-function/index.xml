@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Virtual Function on Herain&#39;s Blog</title>
-    <link>https://herainyang.github.io/tags/virtual-function/</link>
+    <link>https://herainic.com/tags/virtual-function/</link>
     <description>Recent content in Virtual Function on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 08 May 2022 16:03:36 +1000</lastBuildDate><atom:link href="https://herainyang.github.io/tags/virtual-function/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 08 May 2022 16:03:36 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/virtual-function/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>How does C&#43;&#43; visit member function and virtual member function</title>
-      <link>https://herainyang.github.io/posts/virtualfunctionandmemberfunction/</link>
+      <link>https://herainic.com/posts/virtualfunctionandmemberfunction/</link>
       <pubDate>Sun, 08 May 2022 16:03:36 +1000</pubDate>
       
-      <guid>https://herainyang.github.io/posts/virtualfunctionandmemberfunction/</guid>
+      <guid>https://herainic.com/posts/virtualfunctionandmemberfunction/</guid>
       <description>Preconditions Before watching this blog, I suggest you already known what is virtual function and already known some basic stuff about C++ class.
 Question Recently I am reviewing the memory layout of C++ class and I have encountered the following series of problems:
   When we query the size of a class, why size of member functions (not virtual) don&amp;rsquo;t occupy memory. When a class derive from a class that has virtual functions, how many virtual table point does it has.</description>
