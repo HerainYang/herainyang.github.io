@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.80.0" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainyang.github.io/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainyang.github.io/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainyang.github.io/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainyang.github.io/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainyang.github.io/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainyang.github.io/css/bootstrap.min.css" />
+
+  
+  <title>How does C&#43;&#43; visit member function and virtual member function | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+</head>
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>How does C++ visit member function and virtual member function</h1>
+<h1 id="preconditions">Preconditions</h1>
+<p><em>Before watching this blog, I suggest you already known what is <code>virtual</code> function and already known some basic stuff about C++ class.</em></p>
+<h1 id="question">Question</h1>
+<p>Recently I am reviewing the memory layout of C++ class and I have encountered the following series of problems:</p>
+<blockquote>
+<ol>
+<li>When we query the size of a class, why size of member functions (not virtual) don&rsquo;t occupy memory.</li>
+<li>When a class derive from a class that has virtual functions, how many virtual table point does it has.</li>
+</ol>
+</blockquote>
+<h1 id="answer-1">Answer 1</h1>
+<p>For the first question, the answer is during the compilation stage, every call to a member function of a class is translated. We know that after a function is compiled, it will be placed into the read-only code segment, so the address of this function won&rsquo;t change during the ruining time.</p>
+<img src="https://i.stack.imgur.com/Ufj7o.png" alt="c - Why are instructions addresses on the top of the memory user space  contrary to the linux process memory layout? - Stack Overflow" style="zoom:50%;" />
+<p>In addition, for any member function, it has a hidden parameter corresponding to the instance that calling it:</p>
+<pre><code class="language-assembly" data-lang="assembly">lea    -0x20(%rbp),%rax # put instance into rax, then into rdi, which represent the first parameter
+mov    %rax,%rdi
+call   0x55555555524c &lt;ChildA::test()&gt;
+</code></pre><p>Since we have such nice properties, the compiler simply translate each function call into above format, so we don&rsquo;t need to store a pointer inside a class to point to its member function.</p>
+<h1 id="answer-2">Answer 2</h1>
+<p>I thought the answer is it contains two vpointers, the memory layout of child class looks like:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#f92672">-----</span> child
+<span style="color:#f92672">|</span> Vpointer
+<span style="color:#f92672">|</span> SomethingElse
+<span style="color:#f92672">|-----</span> Parent
+<span style="color:#f92672">||</span> Vpointer
+<span style="color:#f92672">||</span> SomethingElse
+<span style="color:#f92672">|-----</span>
+<span style="color:#f92672">-----</span>
+</code></pre></div><p>The reason is I found that I can still access parent&rsquo;s virtual function by doing <code>child.Parent::function()</code>, but it is wrong because this is in fact call though another mechanism rather than using vtable: Instead of finding the function in the vtable, it finds <code>Parent::function()</code> in the code segment, and pass the instance (derived instance, but it is still acceptable by base class&rsquo;s function) into the function.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BaseA</span> {
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> F1() {
+        printf(<span style="color:#e6db74">&#34;something A&#34;</span>);
+    };
+};
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ChildA</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BaseA{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">void</span> F1(){
+        printf(<span style="color:#e6db74">&#34;something B&#34;</span>);
+    }
+};
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+    ChildA a;
+    a.BaseA<span style="color:#f92672">::</span>F1();
+    a.F1();
+}
+</code></pre></div><p>So the answer to question 2 is only 1 vpointer.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>
