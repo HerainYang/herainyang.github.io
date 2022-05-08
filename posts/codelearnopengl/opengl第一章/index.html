@@ -1,0 +1,1918 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.80.0" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainyang.github.io/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainyang.github.io/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainyang.github.io/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainyang.github.io/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainyang.github.io/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainyang.github.io/css/bootstrap.min.css" />
+
+  
+  <title>Code Learn OpenGL Chapter1 | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] },
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Code Learn OpenGL Chapter1</h1>
+<h1 id="opengl第一章">OpenGL第一章</h1>
+<h2 id="opengl">OpenGL</h2>
+<p>OpenGL是一个API，由Khronos组织制定和维护，具体实现方法由显卡开发商自行实现。相比早期OpenGL使用的立即渲染模式（固定渲染管线），现在的OpenGL使用的是更为灵活的<strong>核心模式</strong>（core-profile）。</p>
+<p>OpenGL本身是一个状态机，用一系列的变量去告知OpenGL应该如何运作。规范来说，OpenGL的状态被称作<strong>上下文</strong>，开发者通过<strong>状态设置函数</strong>来改变上下文，从而使用OpenGL。</p>
+<p>使用OpenGL时，最好用OpenGL定义的类型，也就是在原本的类型前加上<code>GL</code>，例如<code>GLfloat</code>，从而保证在不同平台上程序都能正常运行。</p>
+<h2 id="配置环境">配置环境</h2>
+<p>本人所使用的环境是Ubuntu20.04，运行命令如下：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">sudo apt-get install build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev cmake xorg-dev libglew-dev
+</code></pre></div><p>这些依赖库包括了OpenGL的Library，Utilities，Utility Toolkit以及GLEW和GLFW。</p>
+<ul>
+<li>GLFW是一个图形库框架，主要包括了创建，管理窗口，管理OpenGL上下文，处理手柄，键盘，鼠标输入的功能</li>
+<li>GLEW是一个跨平台的拓展库，有助于查询和加载OpenGL的拓展，用于管理OpenGL的函数指针，在调用任何OpenGL函数前都需要初始化GLEW。</li>
+</ul>
+<p>安装完之后也要记得把库的引用加入到CMakeLists里，如果你用的不是IDE，那在链接的时候记得使用<code>-l</code>链接这些库。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-makefile" data-lang="makefile"><span style="color:#960050;background-color:#1e0010">target_link_libraries(&lt;project</span> <span style="color:#960050;background-color:#1e0010">name&gt;</span> <span style="color:#960050;background-color:#1e0010">glfw</span> <span style="color:#960050;background-color:#1e0010">GL</span> <span style="color:#960050;background-color:#1e0010">GLEW</span> <span style="color:#960050;background-color:#1e0010">${GL_LIBRARY}</span> <span style="color:#960050;background-color:#1e0010">m)</span>
+</code></pre></div><h2 id="创建窗口">创建窗口</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GL/glew.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GLFW/glfw3.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#75715e">//在包含GLFW的头文件之前，GLEW需要先被包含，正如先前所说，GLFW依赖于OpenGL
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">const</span> GLuint WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>, HEIGHT <span style="color:#f92672">=</span> <span style="color:#ae81ff">600</span>;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode);
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+   glfwInit();
+    <span style="color:#75715e">//初始化GLFW
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//下面一系列glfwWindowHint用于配置GLFW，这个函数接受两个值，第一个是一个枚举值，用于指向想要更改的选项，第二个参数是一个整型，也就是具体要更改的值。
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//具体的枚举值可以在https://www.glfw.org/docs/latest/window.html#window_hints查看。
+</span><span style="color:#75715e"></span>   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span style="color:#ae81ff">3</span>);
+    <span style="color:#75715e">//设定我们要用的OpenGL版本
+</span><span style="color:#75715e"></span>   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    <span style="color:#75715e">//设定渲染模式，明确告诉了GLFW后如果再使用老版本的函数就会报错
+</span><span style="color:#75715e"></span>   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    <span style="color:#75715e">//不允许用户调整窗口的大小
+</span><span style="color:#75715e"></span>    
+    <span style="color:#75715e">//如果是macOS，还需要启用GLFW_OPENGL_FORWARD_COMPAT以指定OpenGL是否前向兼容之前的上下文，具体代码还请自行尝试。
+</span><span style="color:#75715e"></span>
+   GLFWwindow <span style="color:#f92672">*</span>window <span style="color:#f92672">=</span> glfwCreateWindow(WIDTH, HEIGHT, <span style="color:#e6db74">&#34;LearnOpenGL&#34;</span>, <span style="color:#66d9ef">nullptr</span>, <span style="color:#66d9ef">nullptr</span>);
+    <span style="color:#75715e">//创建窗口，前两个函数指的是窗口的宽高，第三个函数是窗口名称，第四个函数在需要全屏时指定屏幕，第五个函数指向另外一个window，这个新建的window会共享指定window的对象（材质，顶点等等）
+</span><span style="color:#75715e"></span>    
+   <span style="color:#66d9ef">if</span>(window <span style="color:#f92672">==</span> <span style="color:#66d9ef">nullptr</span>){
+       fprintf(stderr, <span style="color:#e6db74">&#34;Failed to create GLFW window&#34;</span>);
+       glfwTerminate();
+       <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+   }
+   glfwMakeContextCurrent(window);
+   glfwSetKeyCallback(window, key_callback);
+    <span style="color:#75715e">//设置当前窗口的键盘响应事件，响应函数的原型为：
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//void function_name(GLFWwindow* window, int key, int scancode, int action, int mods)
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//key参数表示按下的按键，scancode是键盘扫描码，action表示它是按下还是释放，mods表示是否支持带有Ctrl，Shift等组合键的操作
+</span><span style="color:#75715e"></span>    
+
+   glewExperimental <span style="color:#f92672">=</span> GL_TRUE;
+    <span style="color:#75715e">//初始化GLEW，允许使用更多实验性功能
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">if</span>(glewInit() <span style="color:#f92672">!=</span> GLEW_OK){
+       fprintf(stderr, <span style="color:#e6db74">&#34;Failed to initialize GLEW&#34;</span>);
+       <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+   }
+
+   <span style="color:#66d9ef">int</span> width, height;
+   glfwGetFramebufferSize(window, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height);
+    <span style="color:#75715e">//获取窗口的大小
+</span><span style="color:#75715e"></span>   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, width, height);
+    <span style="color:#75715e">//这个函数负责把视锥体截取的图像按照规则规定的宽高显示到屏幕上
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//前两个参数x，y代表了视口的左下角位置，后两个参数w，h代表视口的宽高
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//视口可以想象成窗口内的一个大小不定的画布
+</span><span style="color:#75715e"></span>
+   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+       <span style="color:#75715e">//检查窗口是否要求被退出
+</span><span style="color:#75715e"></span>       glfwPollEvents();
+       <span style="color:#75715e">//检查有没有事件发生，如果有就调用对应的回调函数
+</span><span style="color:#75715e"></span>       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+       <span style="color:#75715e">//指定用于清除画面的背景颜色
+</span><span style="color:#75715e"></span>       glClear(GL_COLOR_BUFFER_BIT);
+       <span style="color:#75715e">//清除屏幕的颜色缓存
+</span><span style="color:#75715e"></span>
+       glfwSwapBuffers(window);
+       <span style="color:#75715e">//交换前后缓冲区的颜色缓冲，然后用于绘制输出
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//这个函数用到了双缓冲技术。传统的单缓冲是指在屏幕上直接绘制图像，因为绘制过程是从左到右，从上到下，不是立刻呈现，所以效果不理想。双缓冲则是在后缓冲上绘制完之后再交换给前缓冲，这样图像就能直接呈现给用户。
+</span><span style="color:#75715e"></span>   }
+    <span style="color:#75715e">//一个类似Unity update()的循环，让程序持续运行
+</span><span style="color:#75715e"></span>   glfwTerminate();
+    <span style="color:#75715e">//释放GLFW分配的内存
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode){
+   printf(<span style="color:#e6db74">&#34;%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, key);
+   <span style="color:#66d9ef">if</span> (key <span style="color:#f92672">==</span> GLFW_KEY_ESCAPE <span style="color:#f92672">&amp;&amp;</span> action <span style="color:#f92672">==</span> GLFW_PRESS)
+       glfwSetWindowShouldClose(window, GL_TRUE);
+    <span style="color:#75715e">//如果按下退出键，就关闭窗口
+</span><span style="color:#75715e"></span>}
+
+</code></pre></div><h2 id="三角形">三角形</h2>
+<p>将物体从3D空间转换到2D空间的过程由图形渲染管线实现，这个过程分作两个部分，一个是坐标转换，一个是上色。要注意2D坐标和像素是两个概念，2D坐标表示一个精准的点，像素则是近似值，坐标要比像素无限小。</p>
+<p>管线被分为几个阶段，每个阶段有对应的函数处理，这些函数被称作<strong>着色器</strong>（shader）。有的着色器允许开发者自行配置与替换，OpenGL的着色器使用OpenGL着色器语言（GLSL）编写，下图蓝色部分为可自定义的着色器。</p>
+<p><img src="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/04/pipeline.png" alt="img"></p>
+<p>一个顶点是一个3D坐标，<strong>顶点属性</strong>可以包括任何我们想用的数据。</p>
+<p>顶点着色器将这组数据映射到另一个3D坐标系中。</p>
+<blockquote>
+<p>经过顶点着色器处理的数据会被映射到<strong>标准化设备坐标</strong>（Normalized Device Coordinates）中，这个坐标的xyz值在$[-1.0,1.0]$范围中，在这个范围外的点会被裁剪。</p>
+<p>OpenGL采用的是右手坐标系，其中y轴方向向上，x轴方向向右，z轴方向向后，原点在图像中心。</p>
+<p><img src="https://learnopengl-cn.github.io/img/01/08/coordinate_systems_right_handed.png" alt="coordinate_systems_right_handed"></p>
+<p>在这之后，标准化设备坐标会通过<strong>视口转换</strong>（Viewport Transform）转换为<strong>屏幕空间坐标</strong>（Scrren-space Coordinates）。再之后屏幕空间坐标又会被变换为片段输入到片段着色器中。</p>
+</blockquote>
+<p>图元装配指将三个坐标以某种方式（点，线，三角形）组合到一起。</p>
+<p>几何着色器可以构造新的顶点来形成新的形状。</p>
+<p>光栅化阶段会把坐标映射到屏幕中的像素。</p>
+<p>在片段着色器之前，超出视图范围的像素会被裁切，片段着色器会计算一个像素的最终颜色。</p>
+<p>测试混合阶段会检测模板值，深度值，alpha值（通常用于混合颜色）。</p>
+<p>具体管线内容可以查看本人Unity日常记录，有一章专门针对管线做出了解释。</p>
+<hr>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GL/glew.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GLFW/glfw3.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">const</span> GLuint WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>, HEIGHT <span style="color:#f92672">=</span> <span style="color:#ae81ff">600</span>;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode);
+
+<span style="color:#75715e">//每个着色器都起始于一个版本声明，GLSL的版本号和OpenGL的版本是匹配的，例如此处OpenGL为3.3，core表示使用核心模式
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>vertexShaderSource <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#version 330 core</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;layout (location = 0) in vec3 aPos;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;void main()</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;}</span><span style="color:#ae81ff">\0</span><span style="color:#e6db74">&#34;</span>;
+<span style="color:#75715e">//使用in关键字，声明aPos为输入变量，将输入顶点属性（Input Vertex Attribute）引入顶点着色器中
+</span><span style="color:#75715e">//layout (location=0)设置了输入变量的顶点属性索引值
+</span><span style="color:#75715e">//由于每个顶点包含的是一个3D坐标，所以使用vec3来存位置信息
+</span><span style="color:#75715e">//在GLSL中的向量最多有4个分量，xyz和w，w是齐次坐标
+</span><span style="color:#75715e">//为了设置顶点着色器的输出，我们把位置数据赋值给预设值的gl_Position变量，第四个参数w暂且设置成1
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>fragmentShaderSource <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#version 330 core</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;out vec4 FragColor;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;void main()</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;}</span><span style="color:#ae81ff">\n\0</span><span style="color:#e6db74">&#34;</span>;
+<span style="color:#75715e">//是用out关键字，声明FragColor为输出变量
+</span><span style="color:#75715e">//将颜色值赋值给FragColor，第四个参数是透明度
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+   glfwInit();
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+   GLFWwindow <span style="color:#f92672">*</span>window <span style="color:#f92672">=</span> glfwCreateWindow(WIDTH, HEIGHT, <span style="color:#e6db74">&#34;LearnOpenGL&#34;</span>, <span style="color:#66d9ef">nullptr</span>, <span style="color:#66d9ef">nullptr</span>);
+
+   <span style="color:#66d9ef">if</span>(window <span style="color:#f92672">==</span> <span style="color:#66d9ef">nullptr</span>){
+       fprintf(stderr, <span style="color:#e6db74">&#34;Failed to create GLFW window&#34;</span>);
+       glfwTerminate();
+       <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+   }
+   glfwMakeContextCurrent(window);
+   glfwSetKeyCallback(window, key_callback);
+
+   glewExperimental <span style="color:#f92672">=</span> GL_TRUE;
+   <span style="color:#66d9ef">if</span>(glewInit() <span style="color:#f92672">!=</span> GLEW_OK){
+       fprintf(stderr, <span style="color:#e6db74">&#34;Failed to initialize GLEW&#34;</span>);
+       <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+   }
+
+   <span style="color:#66d9ef">int</span> width, height;
+   glfwGetFramebufferSize(window, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height);
+   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, width, height);
+
+   GLuint vertexShader <span style="color:#f92672">=</span> glCreateShader(GL_VERTEX_SHADER);
+    <span style="color:#75715e">//创建着色器对象，返回值为这个对象的ID，因为我们要创建顶点着色器，所以传递参数是GL_VERTEX_SHADER
+</span><span style="color:#75715e"></span>   glShaderSource(vertexShader, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>vertexShaderSource, NULL);
+    <span style="color:#75715e">//将着色器源码加载到着色器上，第二个参数为源码字符串数量，第三个是具体要传的源码，第四个参数如果为NULL，则默认字符串以\0结尾，如果为具体数字，则为读取的字符数量
+</span><span style="color:#75715e"></span>   glCompileShader(vertexShader);
+    <span style="color:#75715e">//编译着色器
+</span><span style="color:#75715e"></span>
+   GLint success;
+   GLchar infoLog[<span style="color:#ae81ff">512</span>];
+   glGetShaderiv(vertexShader, GL_COMPILE_STATUS, <span style="color:#f92672">&amp;</span>success);
+    <span style="color:#75715e">//返回对应着色器，对应属性的状态
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>success){
+       glGetShaderInfoLog(vertexShader, <span style="color:#ae81ff">512</span>, NULL, infoLog);
+       fprintf(stderr, <span style="color:#e6db74">&#34;ERROR::SHADER::VERTEX::COMPILATION_FAILED</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">%s&#34;</span>, infoLog);
+   }
+
+   GLuint fragmentShader <span style="color:#f92672">=</span> glCreateShader(GL_FRAGMENT_SHADER);
+    <span style="color:#75715e">//创建片段着色器
+</span><span style="color:#75715e"></span>   glShaderSource(fragmentShader, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>fragmentShaderSource, NULL);
+   glCompileShader(fragmentShader);
+   glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, <span style="color:#f92672">&amp;</span>success);
+   <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>success){
+       glGetShaderInfoLog(fragmentShader, <span style="color:#ae81ff">512</span>, NULL, infoLog);
+       fprintf(stderr, <span style="color:#e6db74">&#34;ERROR::SHADER::FRAGMENT::COMPILATION_FAILED</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">%s&#34;</span>, infoLog);
+   }
+
+    <span style="color:#75715e">//着色器程序（Shader Program Object）是将多个着色器合并链接之后的最终版本，要使用编译完成的着色器，就必须把它链接到一个着色器程序中，然后在做渲染的时候激活这个着色器程序，以便在我们发送渲染调用的时候使用它
+</span><span style="color:#75715e"></span>   GLuint shaderProgram <span style="color:#f92672">=</span> glCreateProgram();
+   glAttachShader(shaderProgram, vertexShader);
+    <span style="color:#75715e">//合并顶点着色器
+</span><span style="color:#75715e"></span>   glAttachShader(shaderProgram, fragmentShader);
+    <span style="color:#75715e">//合并片段着色器
+</span><span style="color:#75715e"></span>   glLinkProgram(shaderProgram);
+    <span style="color:#75715e">//链接着色器程序
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//激活着色器程序在渲染循环中实现，代码为glUseProgram(shaderProgram)
+</span><span style="color:#75715e"></span>   glGetProgramiv(shaderProgram, GL_LINK_STATUS, <span style="color:#f92672">&amp;</span>success);
+   <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>success){
+       glGetShaderInfoLog(shaderProgram, <span style="color:#ae81ff">512</span>, NULL, infoLog);
+       fprintf(stderr, <span style="color:#e6db74">&#34;ERROR::SHADER::PROGRAM::LINKING_FAILED</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">%s&#34;</span>, infoLog);
+   }
+
+   glDeleteShader(vertexShader);
+   glDeleteShader(fragmentShader);
+    <span style="color:#75715e">//链接完成后，着色器对象不再被需要
+</span><span style="color:#75715e"></span>
+   GLfloat vertices[] <span style="color:#f92672">=</span> {
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,
+            <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,
+            <span style="color:#ae81ff">0.0f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>
+   };
+    <span style="color:#75715e">//顶点数据的写法不止一种，只要能向顶点着色器解释的形式都可以使用
+</span><span style="color:#75715e"></span>    
+   GLuint VBO, VAO;
+    <span style="color:#75715e">//VBO是顶点缓冲对象（Vertex Buffer Objects），它会在显存中存储大量顶点的信息
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//使用缓冲对象可以一次性发送一大批数据到显卡（批处理），来缓解CPU-GPU数据发送较慢的问题
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//这里的VBO是整型类型，因为在这之后这个变量将用于存储顶点缓冲对象的ID
+</span><span style="color:#75715e"></span>    
+    <span style="color:#75715e">//VAO是顶点缓冲对象的集合，叫做顶点数组对象（Vertex Array Object），它最多有16的属性指针，每一个指针代表顶点的一组信息（位置，材质，颜色等等），这个指针的索引值也就是前面提到过的顶点属性索引值
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//在配置VAO时，我们把VBO集合解析一遍，把各个属性添加到对应的属性指针上后，在绘制阶段只需要绑定对应的VAO就可以了，这种方式让不同的顶点数据和属性配置的切换变得简单，当我们需要绘制另一个图案时，只需要切换到对应的VAO就可以了
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//如果没有VAO，每次切换VBO我们都要重新解析VBO的各个部分是什么，就会重复耗费时间
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//VAO会存储：
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//        |1.glEnableVertexAttribArray和glDisableVertexAttribArray的调用
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//        |2.通过glVertexAttribPointer设置的顶点属性配置
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//        |3.通过glVertexAttribPointer调用进行的顶点缓冲对象与顶点属性链接
+</span><span style="color:#75715e"></span>    
+   glGenVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+    <span style="color:#75715e">//生成一个VAO，将其ID存储到“&amp;VAO”中
+</span><span style="color:#75715e"></span>   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+    <span style="color:#75715e">//生成“1”个缓冲对象，将其ID存储到“&amp;VBO”中
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第一个参数为生成缓冲对象的个数，第二个为存储缓冲对象的数组（此处只有一个所以传地址就行了）
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//此时的缓冲对象还不是顶点缓冲对象
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">//****开始配置VAO****
+</span><span style="color:#75715e"></span>   glBindVertexArray(VAO);
+    <span style="color:#75715e">//绑定VAO
+</span><span style="color:#75715e"></span>
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    <span style="color:#75715e">//通过ID（此刻存储在变量VBO中），让对应的缓冲对象都绑定上对应的缓冲类型
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//GL_ARRAY_BUFFER是顶点缓冲对象的缓冲类型，同一时间，一个缓冲类型只能绑定一个缓冲对象，不然缓冲区在接收数据后，会不知道把数据传给哪个缓冲对象
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//如果不太明白工作原理，可以想象一个流水素面，竹子的出口只能对着一个碗，对准之后，所有放入竹子的面都会流入这个碗中
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//我们可以有很多的VBO，只要他们绑定的是不同的缓冲类型（即不同的顶点信息）
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//绑定完成后，任何传送给GL_ARRAY_BUFFER缓冲的数据都会被用于配置VBO（可以理解为转发到VBO里）
+</span><span style="color:#75715e"></span>    
+   glBufferData(GL_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);
+    <span style="color:#75715e">//发送数据给GL_ARRAY_BUFFER，最后一个参数有三种形式：
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//                                          |1.GL_STATIC_DRAW 数据几乎不变
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//                                          |2.GL_DYNAMIC_DRAW 数据会变
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//                                          |3.GL_STREAM_DRAW 数据每次绘制都会变
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//根据这个参数，显卡会判断要不要把数据写到能够高速写入的内存部分
+</span><span style="color:#75715e"></span>
+   glVertexAttribPointer(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) <span style="color:#ae81ff">0</span>);
+    <span style="color:#75715e">//告诉VAO如何解释顶点数据
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第一个参数是顶点属性索引值，在顶点着色器代码中我们也通过layout (location=0)指定过这个索引值，此处的操作类似于set，顶点着色器代码中的操作类似于get
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第二个参数是顶点属性的大小，因为它是个vec3，所以大小是3
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第三个参数是数据类型
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第四个参数是是否要标准化这组数据，因为我们数据已经在标准范围内了所以设置为不需要
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第五个参数是步长（stride），指的是第二组顶点的开始位置距离第一组顶点开始位置有多少字节
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第六个参数是数据在数组（这个数组和GL_ARRAY_BUFFER绑定，存储于缓冲区中，上一条代码已经把数据发到这个缓冲类型的缓冲区中了）中起始位置的偏移量
+</span><span style="color:#75715e"></span>    
+   glEnableVertexAttribArray(<span style="color:#ae81ff">0</span>);
+    <span style="color:#75715e">//启用索引值为0的顶点属性，如果不启用，着色器将无法访问这个数据
+</span><span style="color:#75715e"></span>
+   glBindBuffer(GL_ARRAY_BUFFER, <span style="color:#ae81ff">0</span>);
+    <span style="color:#75715e">//解绑VAO
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//****结束配置VAO****
+</span><span style="color:#75715e"></span>
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+       glfwPollEvents();
+       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+       glClear(GL_COLOR_BUFFER_BIT);
+
+       glUseProgram(shaderProgram);
+       <span style="color:#75715e">//激活着色器程序
+</span><span style="color:#75715e"></span>       glBindVertexArray(VAO);
+       glDrawArrays(GL_TRIANGLES, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>);
+       <span style="color:#75715e">//第一个参数为我们打算绘制的图元类型，第二个参数表示顶点数组的起始索引，第三个数组表示我们打算绘制几个顶点
+</span><span style="color:#75715e"></span>       glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+       glfwSwapBuffers(window);
+   }
+   glDeleteVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+   glDeleteBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+
+   glfwTerminate();
+   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode){
+   printf(<span style="color:#e6db74">&#34;%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, key);
+   fflush(stdout);
+   <span style="color:#66d9ef">if</span> (key <span style="color:#f92672">==</span> GLFW_KEY_ESCAPE <span style="color:#f92672">&amp;&amp;</span> mode <span style="color:#f92672">==</span> GLFW_MOD_SHIFT <span style="color:#f92672">&amp;&amp;</span> action <span style="color:#f92672">==</span> GLFW_PRESS)
+       glfwSetWindowShouldClose(window, GL_TRUE);
+}
+</code></pre></div><p>对于顶点数据的解释（图示）：</p>
+<p><img src="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/04/vertex_attribute_pointer.png" alt="img"></p>
+<p>对于VAO的解释（图示）：</p>
+<p><img src="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/04/vertex_array_objects.png" alt="img"></p>
+<p>术语解释：</p>
+<ul>
+<li>输入变量：将传入顶点着色器中的参数赋值给一个变量，这个变量叫做输入变量。</li>
+<li>输出变量：将片段着色器的运算结果放在一个变量中，并指定这个变量为返回值，这个变量叫做输出变量。</li>
+<li>顶点属性：任何和这个顶点相关的数据，无论是位置，颜色还是别的。</li>
+<li>顶点属性索引值：专门针对VAO的一个术语，VAO有16个指针，把这16个指针按地址排列下来，每个指针给一个值，这个值就是顶点属性索引值。</li>
+<li>VBO：一系列关于顶点的数据</li>
+<li>VAO：解析一系列VBO，并分类放到不同的指针里，这系列指针的集合就是VAO</li>
+</ul>
+<h2 id="正方形">正方形</h2>
+<p>当我们要绘制一个矩形的时候，一般都是用两个三角形拼成一个矩形，但如果像这样做矩形：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">GLfloat vertices[] <span style="color:#f92672">=</span> {
+    <span style="color:#75715e">// 第一个三角形
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#75715e">// 右上角
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// 右下角
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// 左上角
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// 第二个三角形
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// 右下角
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#75715e">// 左下角
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>   <span style="color:#75715e">// 左上角
+</span><span style="color:#75715e"></span>};
+</code></pre></div><p>那么会有两个顶点重复了两次。</p>
+<p><strong>索引缓冲对象</strong>（Element Buffer Object）可以帮我们解决这个问题，他的工作方式是，给定一系列点和绘制他们的顺序，EBO会按照这个顺序来绘制图案。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">GLfloat vertices[] <span style="color:#f92672">=</span> {
+    <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#75715e">// 右上角
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// 右下角
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#75715e">// 左下角
+</span><span style="color:#75715e"></span>    <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>   <span style="color:#75715e">// 左上角
+</span><span style="color:#75715e"></span>};
+
+GLuint indices[] <span style="color:#f92672">=</span> { <span style="color:#75715e">// 注意索引从0开始! 
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#75715e">// 第一个三角形
+</span><span style="color:#75715e"></span>    <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>  <span style="color:#75715e">// 第二个三角形
+</span><span style="color:#75715e"></span>};
+
+GLuint EBO;
+glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>EBO);
+
+<span style="color:#75715e">//初始化代码
+</span><span style="color:#75715e"></span>glBindVertexArray(VAO);
+<span style="color:#75715e">//1.绑定顶点数组对象
+</span><span style="color:#75715e"></span>
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+<span style="color:#75715e">//2.把我们的顶点数组复制到一个顶点缓冲中，供OpenGL使用
+</span><span style="color:#75715e"></span>
+glBufferData(GL_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);
+    
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+<span style="color:#75715e">//3.复制我们的索引数组到一个索引缓冲中，供OpenGL使用
+</span><span style="color:#75715e">//当目标是GL_ELEMENT_ARRAY_BUFFER的时候，VAO会储存glBindBuffer的函数调用。这也意味着它也会储存解绑调用（如果用glBindBuffer解绑，那解绑所用的默认值0会被VAO记录），所以确保你没有在解绑VAO之前解绑索引数组缓冲，否则它就没有这个EBO配置了
+</span><span style="color:#75715e">//不同的是，解绑GL_ARRAY_BUFFER就没有这个问题，因为他不是自动记录的
+</span><span style="color:#75715e"></span>
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(indices), indices, GL_STATIC_DRAW);
+
+
+glVertexAttribPointer(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>)<span style="color:#ae81ff">0</span>);
+glEnableVertexAttribArray(<span style="color:#ae81ff">0</span>);
+<span style="color:#75715e">//4.设定顶点属性指针
+</span><span style="color:#75715e"></span>
+glBindVertexArray(<span style="color:#ae81ff">0</span>);
+<span style="color:#75715e">//5. 解绑VAO（不是EBO！）
+</span><span style="color:#75715e"></span>
+glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+<span style="color:#75715e">//线框模式，只绘制边框不填充颜色
+</span><span style="color:#75715e"></span>
+[...]
+
+<span style="color:#75715e">//绘制代码（游戏循环中）
+</span><span style="color:#75715e"></span>glUseProgram(shaderProgram);
+glBindVertexArray(VAO);
+glDrawElements(GL_TRIANGLES, <span style="color:#ae81ff">6</span>, GL_UNSIGNED_INT, <span style="color:#ae81ff">0</span>);
+<span style="color:#75715e">//我们要绘制6个顶点，索引的类型是GL_UNSIGNED_INT，EBO中偏移量为0
+</span><span style="color:#75715e">//这个偏移量的单位为字节，假设要从第三个index开始绘制，那么这里应该写作(GLvoid*)(3*sizeof(GLuint))
+</span><span style="color:#75715e"></span>glBindVertexArray(<span style="color:#ae81ff">0</span>);
+</code></pre></div><p>包含EBO的VAO（图示）：</p>
+<p><img src="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/04/vertex_array_objects_ebo.png" alt="img"></p>
+<h2 id="着色器">着色器</h2>
+<p>着色器是运行在GPU上的小程序，它们服务于管线的某些特定部分。</p>
+<p>着色器由GLSL写成，这种语言包含一些针对向量和矩阵的操作。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version version_number</span>
+<span style="color:#75715e">//GLSL的开头总是要声明版本</span>
+
+<span style="color:#66d9ef">in</span> type in_variable_name;
+<span style="color:#66d9ef">in</span> type in_variable_name;
+<span style="color:#75715e">//声明输入变量（顶点属性），正如前文所说，顶点属性的数量是有上限的，一般来说为16个包含4个分量的属性</span>
+
+<span style="color:#66d9ef">out</span> type out_variable_name;
+<span style="color:#75715e">//声明输出变量</span>
+
+<span style="color:#66d9ef">uniform</span> type uniform_name;
+<span style="color:#75715e">//uniform关键字用于声明全局变量，这种变量在着色器程序中必须是独一无二的</span>
+<span style="color:#75715e">//uniform变量可以在同一个着色器程序的不同着色器中共享使用，但想要共享使用，需要在每个着色器中用同样的方法声明同样的变量</span>
+<span style="color:#75715e">//对于着色器来说，uniform变量是只读的，uniform变量的设置只有两种方法：1.初始化的时候设置 2.CPU端设置，也就是通过OpenGL函数设置</span>
+
+<span style="color:#66d9ef">int</span> main()
+{
+  <span style="color:#75715e">//main函数是程序唯一入口</span>
+  out_variable_name <span style="color:#f92672">=</span> weird_stuff_we_processed;
+}
+</code></pre></div><p>GLSL中的数据类型有：</p>
+<ul>
+<li>
+<p>基本数据类型：<code>int</code>，<code>float</code>，<code>double</code>，<code>uint</code>，<code>bool</code>。</p>
+</li>
+<li>
+<p>容器类型：向量，矩阵</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vecn</code></td>
+<td>包含n个float分量的向量</td>
+</tr>
+<tr>
+<td><code>bvecn</code></td>
+<td>包含n个bool分量的向量</td>
+</tr>
+<tr>
+<td><code>ivecn</code></td>
+<td>包含n个int分量的向量</td>
+</tr>
+<tr>
+<td><code>uvecn</code></td>
+<td>包含n个uint分量的向量</td>
+</tr>
+<tr>
+<td><code>dvecn</code></td>
+<td>包含n个double分量的向量</td>
+</tr>
+</tbody>
+</table>
+<p>获取向量的分量，可以通过<code>xyzw</code>，<code>rgba</code>，<code>stpq</code>，也可以随机组合这些字母，组成新的向量，这种操作称为<strong>重组</strong>（Swizzling）。</p>
+</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GL/glew.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GLFW/glfw3.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;math.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">const</span> GLuint WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>, HEIGHT <span style="color:#f92672">=</span> <span style="color:#ae81ff">600</span>;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode);
+
+<span style="color:#75715e">//下面的两个着色器代码中我们都声明了uniform变量ourColor，虽然顶点着色器我们没有用到这个变量，但他们是共享的
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>vertexShaderSource <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#version 330 core</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;layout (location = 0) in vec3 position;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;uniform vec4 ourColor;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;void main()</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;   gl_Position = vec4(position.x, position.y, position.z, 1.0);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;}</span><span style="color:#ae81ff">\0</span><span style="color:#e6db74">&#34;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>fragmentShaderSource <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#version 330 core</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;out vec4 FragColor;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;uniform vec4 ourColor;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;void main()</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;   FragColor = ourColor;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;}</span><span style="color:#ae81ff">\n\0</span><span style="color:#e6db74">&#34;</span>;
+
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+   glfwInit();
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+   GLFWwindow <span style="color:#f92672">*</span>window <span style="color:#f92672">=</span> glfwCreateWindow(WIDTH, HEIGHT, <span style="color:#e6db74">&#34;LearnOpenGL&#34;</span>, <span style="color:#66d9ef">nullptr</span>, <span style="color:#66d9ef">nullptr</span>);
+   glfwMakeContextCurrent(window);
+   glfwSetKeyCallback(window, key_callback);
+
+   glewExperimental <span style="color:#f92672">=</span> GL_TRUE;
+   glewInit();
+
+   <span style="color:#66d9ef">int</span> width, height;
+   glfwGetFramebufferSize(window, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height);
+   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, width, height);
+
+   GLuint vertexShader <span style="color:#f92672">=</span> glCreateShader(GL_VERTEX_SHADER);
+   glShaderSource(vertexShader, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>vertexShaderSource, NULL);
+   glCompileShader(vertexShader);
+
+   GLuint fragmentShader <span style="color:#f92672">=</span> glCreateShader(GL_FRAGMENT_SHADER);
+   glShaderSource(fragmentShader, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>fragmentShaderSource, NULL);
+   glCompileShader(fragmentShader);
+
+   GLuint shaderProgram <span style="color:#f92672">=</span> glCreateProgram();
+   glAttachShader(shaderProgram, vertexShader);
+   glAttachShader(shaderProgram, fragmentShader);
+   glLinkProgram(shaderProgram);
+
+   glDeleteShader(vertexShader);
+   glDeleteShader(fragmentShader);
+
+   GLfloat vertices[] <span style="color:#f92672">=</span> {
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// Top Right
+</span><span style="color:#75715e"></span>           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// Bottom Right
+</span><span style="color:#75715e"></span>           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// Bottom Left
+</span><span style="color:#75715e"></span>           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>   <span style="color:#75715e">// Top Left
+</span><span style="color:#75715e"></span>   };
+
+   GLuint indices[] <span style="color:#f92672">=</span> {
+           <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>,
+           <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>
+   };
+
+   GLuint VBO, VAO, EBO;
+
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>EBO);
+   glGenVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+
+   glBindVertexArray(VAO);
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+   glBufferData(GL_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(indices), indices, GL_STATIC_DRAW);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) <span style="color:#ae81ff">0</span>);
+   glEnableVertexAttribArray(<span style="color:#ae81ff">0</span>);
+
+   glBindBuffer(GL_ARRAY_BUFFER, <span style="color:#ae81ff">0</span>);
+
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+   <span style="color:#75715e">//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+</span><span style="color:#75715e"></span>
+   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+       glfwPollEvents();
+       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+       glClear(GL_COLOR_BUFFER_BIT);
+
+
+       glUseProgram(shaderProgram);
+       GLfloat timeValue <span style="color:#f92672">=</span> glfwGetTime();
+       <span style="color:#75715e">//获取时间
+</span><span style="color:#75715e"></span>       GLfloat greenValue <span style="color:#f92672">=</span> (sin(timeValue)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>)<span style="color:#f92672">+</span><span style="color:#ae81ff">0.5</span>;
+       GLint vertexColorLocation <span style="color:#f92672">=</span> glGetUniformLocation(shaderProgram, <span style="color:#e6db74">&#34;ourColor&#34;</span>);
+       <span style="color:#75715e">//在shaderProgram这个着色器程序中查找ourColor这个变量的索引值，后续我们需要通过这个索引值来更改这个变量的具体值，如果返回-1就代表没有找到这个变量
+</span><span style="color:#75715e"></span>       glUniform4f(vertexColorLocation, <span style="color:#ae81ff">0.0f</span>, greenValue, <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>);
+       <span style="color:#75715e">//因为ourColor是一个四浮点分量的向量，所以我们通过对应函数去设置它的值
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//在查询之前，必须先激活程序
+</span><span style="color:#75715e"></span>       glBindVertexArray(VAO);
+       glDrawElements(GL_TRIANGLES, <span style="color:#ae81ff">3</span>, GL_UNSIGNED_INT, (GLvoid<span style="color:#f92672">*</span>)<span style="color:#ae81ff">0</span>);
+       glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+       glfwSwapBuffers(window);
+   }
+   glDeleteVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+   glDeleteBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+   glDeleteBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>EBO);
+
+   glfwTerminate();
+   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode){
+   printf(<span style="color:#e6db74">&#34;%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, key);
+   fflush(stdout);
+   <span style="color:#66d9ef">if</span> (key <span style="color:#f92672">==</span> GLFW_KEY_ESCAPE <span style="color:#f92672">&amp;&amp;</span> mode <span style="color:#f92672">==</span> GLFW_MOD_SHIFT <span style="color:#f92672">&amp;&amp;</span> action <span style="color:#f92672">==</span> GLFW_PRESS)
+       glfwSetWindowShouldClose(window, GL_TRUE);
+}
+</code></pre></div><h3 id="vao补充">VAO补充</h3>
+<p>之前的VAO我们只用了一个变量指针，下面这个代码会展示怎么用两个：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GL/glew.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GLFW/glfw3.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;math.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">const</span> GLuint WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>, HEIGHT <span style="color:#f92672">=</span> <span style="color:#ae81ff">600</span>;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode);
+
+<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>vertexShaderSource <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#version 330 core</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;layout (location = 0) in vec3 position;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;layout (location = 1) in vec3 color;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;out vec3 ourColor;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;void main()</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;   gl_Position = vec4(position.x, position.y, position.z, 1.0);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;   ourColor = color;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                <span style="color:#e6db74">&#34;}</span><span style="color:#ae81ff">\0</span><span style="color:#e6db74">&#34;</span>;
+
+<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>fragmentShaderSource <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;#version 330 core</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;out vec4 FragColor;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;in vec3 ourColor;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;void main()</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;{</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;   FragColor = vec4(ourColor, 1.0f);</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>
+                                  <span style="color:#e6db74">&#34;}</span><span style="color:#ae81ff">\n\0</span><span style="color:#e6db74">&#34;</span>;
+
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+   glfwInit();
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+   GLFWwindow <span style="color:#f92672">*</span>window <span style="color:#f92672">=</span> glfwCreateWindow(WIDTH, HEIGHT, <span style="color:#e6db74">&#34;LearnOpenGL&#34;</span>, <span style="color:#66d9ef">nullptr</span>, <span style="color:#66d9ef">nullptr</span>);
+   glfwMakeContextCurrent(window);
+   glfwSetKeyCallback(window, key_callback);
+
+   glewExperimental <span style="color:#f92672">=</span> GL_TRUE;
+   glewInit();
+
+   <span style="color:#66d9ef">int</span> width, height;
+   glfwGetFramebufferSize(window, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height);
+   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, width, height);
+
+   GLuint vertexShader <span style="color:#f92672">=</span> glCreateShader(GL_VERTEX_SHADER);
+   glShaderSource(vertexShader, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>vertexShaderSource, NULL);
+   glCompileShader(vertexShader);
+
+   GLuint fragmentShader <span style="color:#f92672">=</span> glCreateShader(GL_FRAGMENT_SHADER);
+   glShaderSource(fragmentShader, <span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>fragmentShaderSource, NULL);
+   glCompileShader(fragmentShader);
+
+   GLuint shaderProgram <span style="color:#f92672">=</span> glCreateProgram();
+   glAttachShader(shaderProgram, vertexShader);
+   glAttachShader(shaderProgram, fragmentShader);
+   glLinkProgram(shaderProgram);
+
+   glDeleteShader(vertexShader);
+   glDeleteShader(fragmentShader);
+
+   GLfloat vertices[] <span style="color:#f92672">=</span> {
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// Bottom Right
+</span><span style="color:#75715e"></span>           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#75715e">// Bottom Left
+</span><span style="color:#75715e"></span>           <span style="color:#ae81ff">0.0f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>   <span style="color:#75715e">// Top
+</span><span style="color:#75715e"></span>   };
+
+
+   GLuint VBO, VAO;
+
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+   glGenVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+
+   glBindVertexArray(VAO);
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+   glBufferData(GL_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">6</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) <span style="color:#ae81ff">0</span>);
+   glEnableVertexAttribArray(<span style="color:#ae81ff">0</span>);
+    
+    <span style="color:#75715e">//下面把颜色值绑定到索引值为1的函数指针上
+</span><span style="color:#75715e"></span>   glVertexAttribPointer(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">6</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) (<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat)));
+   glEnableVertexAttribArray(<span style="color:#ae81ff">1</span>);
+
+   glBindBuffer(GL_ARRAY_BUFFER, <span style="color:#ae81ff">0</span>);
+
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+   <span style="color:#75715e">//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+</span><span style="color:#75715e"></span>
+   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+       glfwPollEvents();
+       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+       glClear(GL_COLOR_BUFFER_BIT);
+
+
+       glUseProgram(shaderProgram);
+
+       glBindVertexArray(VAO);
+       glDrawArrays(GL_TRIANGLES, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>);
+       <span style="color:#75715e">//最后输出的图片在片段着色器中进行了片段插值，也就是说对于一个不知道颜色的点，着色器会通过它附近的点的颜色来推测它的颜色
+</span><span style="color:#75715e"></span>       glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+       glfwSwapBuffers(window);
+   }
+   glDeleteVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+   glDeleteBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+
+   glfwTerminate();
+   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode){
+   printf(<span style="color:#e6db74">&#34;%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, key);
+   fflush(stdout);
+   <span style="color:#66d9ef">if</span> (key <span style="color:#f92672">==</span> GLFW_KEY_ESCAPE <span style="color:#f92672">&amp;&amp;</span> mode <span style="color:#f92672">==</span> GLFW_MOD_SHIFT <span style="color:#f92672">&amp;&amp;</span> action <span style="color:#f92672">==</span> GLFW_PRESS)
+       glfwSetWindowShouldClose(window, GL_TRUE);
+}
+</code></pre></div><p>为了简化构建着色器程序的流程以及规范着色器代码，我们用以下代码封装一下着色器程序：</p>
+<p><a href="https://learnopengl.com/code_viewer.php?type=header&amp;code=shader">Code Viewer. Source code: headers/shader (learnopengl.com)</a></p>
+<h2 id="纹理">纹理</h2>
+<p>纹理是一张2D贴图，使用纹理可以在不增加额外顶点数量的同时，给物体加入更多的细节。</p>
+<p>这是下面要用到的纹理贴图：</p>
+<p><a href="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/06/wall.jpg">https://learnopengl-cn.readthedocs.io/zh/latest/img/01/06/wall.jpg</a></p>
+<p>纹理的工作原理是，对每一个顶点，我们都指定它对应的纹理坐标位置，对于这组顶点定义的片元，着色器会根据不同模式对其插值。</p>
+<p><img src="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/06/tex_coords.png" alt="img"></p>
+<p>纹理坐标的范围是<code>[0,0]-[1,1]</code>，我们总是把贴图平铺到这个范围的正方形，不同的插值方式定义了超出纹理坐标范围的图像该怎么绘制：</p>
+<table>
+<thead>
+<tr>
+<th>环绕方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GL_REPEAT</code></td>
+</tr>
+<tr>
+<td><code>GL_MIRRORED_REPEAT</code></td>
+</tr>
+<tr>
+<td><code>GL_CLAMP_TO_EDGE</code></td>
+</tr>
+<tr>
+<td><code>GL_CLAMP_TO_BORDED</code></td>
+</tr>
+</tbody>
+</table>
+<p>具体表现请看图：</p>
+<p><img src="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/06/texture_wrapping.png" alt="img"></p>
+<p>对于纹理的s轴和t轴，我们可以定义不同的环绕方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+<span style="color:#75715e">//这个是一个2D纹理，S轴和T轴都采用镜像循环的环绕方式
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">float</span> borderColor[] <span style="color:#f92672">=</span> { <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span> };
+glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+<span style="color:#75715e">//这是一个2D纹理，如果要用GL_CLAMP_TO_BORDED环绕方式，那么同时需要指定超出范围的材质用什么颜色
+</span><span style="color:#75715e">//在OpenGL中，函数后缀通常包含了这个函数接受的参数的类型：
+</span><span style="color:#75715e">//          |后缀        |含义                    |
+</span><span style="color:#75715e">//          |f          |函数需要一个float         |
+</span><span style="color:#75715e">//          |i          |函数需要一个int           |
+</span><span style="color:#75715e">//          |ui         |函数需要一个unsigned int  |
+</span><span style="color:#75715e">//          |3f         |函数需要一个3个float       |
+</span><span style="color:#75715e">//          |fv         |函数需要一个float向量或数组 |
+</span></code></pre></div><p>因为纹理是一张图，他的分辨率就一定有上限，对于如何把纹理像素转换成具体每个纹理坐标的颜色（想象一下PS里吸取某个点颜色的操作），这个工作叫做<strong>纹理过滤</strong>（Texture Filtering）。</p>
+<ol>
+<li>近邻过滤（Nearest Neighbor Filtering），选取最近的一个像素作为这个点的颜色。</li>
+<li>线性过滤（Bilinear Filtering），选取最近的几个像素计算一个插值作为这个点的像素。</li>
+</ol>
+<p><img src="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/06/texture_filtering.png" alt="img"></p>
+<p>当纹理被放大和缩小（应用到不同体积的物体）的时候，我们可以选用不同的过滤方式：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+<span style="color:#75715e">//纹理被缩小（Minify），用近邻过滤
+</span><span style="color:#75715e"></span>glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+<span style="color:#75715e">//纹理被放大（Magnify），用线性过滤
+</span></code></pre></div><p>如果离物体比较远，但是使用的纹理贴图还是一样的，就会出现两个问题：</p>
+<ol>
+<li>纹理过滤时过滤了大部分颜色，最后可能就剩下一两个颜色，这样物体看起来就不真实了。</li>
+<li>远距离的物体用很高清的纹理，会徒增显存压力。</li>
+</ol>
+<p>OpenGL使用<strong>多级渐远纹理</strong>（Mipmap）来处理这个问题，这是一组纹理的集合，后一个纹理图像总是为前一个纹理图案的一半大，当观察者距离超过一定阈值的时候，OpenGL会切换它所使用的纹理。</p>
+<p><img src="https://learnopengl-cn.readthedocs.io/zh/latest/img/01/06/mipmaps.png" alt="img"></p>
+<p>OpenGL有一个<code>glGenerateMipmaps</code>函数来帮助生成多级渐远纹理，和普通的纹理一样，多级渐远纹理也有纹理过滤：</p>
+<table>
+<thead>
+<tr>
+<th>过滤方式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GL_NEAREST_MIPMAP_NEAREST</td>
+<td>用最匹配的一张纹理，并使用邻近过滤计算颜色</td>
+</tr>
+<tr>
+<td>GL_LINEAR_MIPMAP_NEAREST</td>
+<td>用最匹配的一张纹理，并使用线性过滤计算颜色</td>
+</tr>
+<tr>
+<td>GL_NEAREST_MIPMAP_LINEAR</td>
+<td>用多张接近的纹理，使用邻近过滤计算颜色</td>
+</tr>
+<tr>
+<td>GL_LINEAR_MIPMAP_LINEAR</td>
+<td>用多张接近的纹理，并使用线性过滤计算颜色</td>
+</tr>
+</tbody>
+</table>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+<span style="color:#75715e">//特别注意此处，因为多级渐远纹理是用来处理纹理被缩小的情况的，对于放大，我们不用多级渐远纹理的过滤方式，如果用了会报错
+</span></code></pre></div><p>使用纹理的第一件事肯定是要把对应的纹理图案加载到程序中，SOIL是简易OpenGL图像库，它就支持大多数流行的图像格式。因为SOIL的官网垮掉了，所以这里提供一个Github的下载链接：https://github.com/kbranigan/Simple-OpenGL-Image-Library</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GL/glew.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GLFW/glfw3.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;SOIL.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Shader.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">const</span> GLuint WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>, HEIGHT <span style="color:#f92672">=</span> <span style="color:#ae81ff">600</span>;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode);
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+   glfwInit();
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+   GLFWwindow <span style="color:#f92672">*</span>window <span style="color:#f92672">=</span> glfwCreateWindow(WIDTH, HEIGHT, <span style="color:#e6db74">&#34;LearnOpenGL&#34;</span>, <span style="color:#66d9ef">nullptr</span>, <span style="color:#66d9ef">nullptr</span>);
+   glfwMakeContextCurrent(window);
+   glfwSetKeyCallback(window, key_callback);
+
+   glewExperimental <span style="color:#f92672">=</span> GL_TRUE;
+   glewInit();
+
+   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, WIDTH, HEIGHT);
+
+   Shader myShader(<span style="color:#e6db74">&#34;vertex shader path&#34;</span>, <span style="color:#e6db74">&#34;fragment shader path&#34;</span>);
+
+   GLfloat vertices[] <span style="color:#f92672">=</span> {
+           <span style="color:#75715e">// Positions          // Colors           // Texture Coords
+</span><span style="color:#75715e"></span>           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#75715e">// Top Right
+</span><span style="color:#75715e"></span>           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#75715e">// Bottom Right
+</span><span style="color:#75715e"></span>           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,   <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#75715e">// Bottom Left
+</span><span style="color:#75715e"></span>           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,   <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>  <span style="color:#75715e">// Top Left
+</span><span style="color:#75715e"></span>   };
+
+   GLuint indices[] <span style="color:#f92672">=</span> {
+           <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>,
+           <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>
+   };
+
+
+   GLuint VBO, VAO, EBO;
+
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>EBO);
+   glGenVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+
+   glBindVertexArray(VAO);
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+
+   glBufferData(GL_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(indices), indices, GL_STATIC_DRAW);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">8</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) <span style="color:#ae81ff">0</span>);
+   glEnableVertexAttribArray(<span style="color:#ae81ff">0</span>);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">8</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) (<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat)));
+   glEnableVertexAttribArray(<span style="color:#ae81ff">1</span>);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">8</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) (<span style="color:#ae81ff">6</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat)));
+   glEnableVertexAttribArray(<span style="color:#ae81ff">2</span>);
+    <span style="color:#75715e">//将纹理坐标绑定到VAO的第三个顶点属性指针上
+</span><span style="color:#75715e"></span>
+   glBindBuffer(GL_ARRAY_BUFFER, <span style="color:#ae81ff">0</span>);
+
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+   GLuint texture;
+   glGenTextures(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>texture);
+   glBindTexture(GL_TEXTURE_2D, texture);
+    <span style="color:#75715e">//绑定纹理
+</span><span style="color:#75715e"></span>
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+   <span style="color:#66d9ef">int</span> width, height;
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>image <span style="color:#f92672">=</span> SOIL_load_image(<span style="color:#e6db74">&#34;texture path&#34;</span>, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height, <span style="color:#ae81ff">0</span>, SOIL_LOAD_RGB);
+    <span style="color:#75715e">//加载贴图，第二个和第三个参数会返回贴图的宽和高，第四个参数返回图片的通道数，最后一个参数告诉SOIL我们只关心图片的RGB值，函数返回值是一个很大的数组
+</span><span style="color:#75715e"></span>   glTexImage2D(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>, GL_RGB, width, height, <span style="color:#ae81ff">0</span>, GL_RGB, GL_UNSIGNED_BYTE, image);
+    <span style="color:#75715e">//第一个参数指定了纹理目标，之前绑定了纹理对象到GL_TEXTURE_2D上，那么和其他绑定的原理一样，对GL_TEXTURE_2D的配置都会应用到这个对象上
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第二个参数为纹理指定多级纹理的级别，这里设置0，表示基本级别
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第三个参数表示纹理的存储格式，我们只有RGB，所以存为GL_RGB
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第四和第五参数表示纹理的宽高
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第六个参数总是被设置为0，不需要纠结它
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//第七第八个参数指定了源图的格式和数组的数据类型，我们用RGB加载的原图，用char（unsigned byte）存储的原图
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//最后一个是真正的图像数据
+</span><span style="color:#75715e"></span>   glGenerateMipmap(GL_TEXTURE_2D);
+    <span style="color:#75715e">//因为之前没有加载多级渐远纹理，所以在生成纹理后，我们需要手动调用并生成，这会为当前绑定的纹理自动生成所有需要的多级渐远纹理
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//请注意有个长得非常像的函数叫glGenerateTextureMipmap，两个函数的功能都是一样的，但是参数不同
+</span><span style="color:#75715e"></span>   SOIL_free_image_data(image);
+   glBindTexture(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>);
+
+   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+       glfwPollEvents();
+       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+       glClear(GL_COLOR_BUFFER_BIT);
+
+
+       glBindTexture(GL_TEXTURE_2D, texture);
+       myShader.Use();
+
+       glBindVertexArray(VAO);
+       glDrawElements(GL_TRIANGLES, <span style="color:#ae81ff">6</span>, GL_UNSIGNED_INT, <span style="color:#ae81ff">0</span>);
+       glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+       glfwSwapBuffers(window);
+   }
+   glDeleteVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+   glDeleteBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+   glDeleteBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>EBO);
+
+   glfwTerminate();
+   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode){
+   printf(<span style="color:#e6db74">&#34;%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, key);
+   fflush(stdout);
+   <span style="color:#66d9ef">if</span> (key <span style="color:#f92672">==</span> GLFW_KEY_ESCAPE <span style="color:#f92672">&amp;&amp;</span> mode <span style="color:#f92672">==</span> GLFW_MOD_SHIFT <span style="color:#f92672">&amp;&amp;</span> action <span style="color:#f92672">==</span> GLFW_PRESS)
+       glfwSetWindowShouldClose(window, GL_TRUE);
+}
+</code></pre></div><p>顶点着色器：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version 330 core</span>
+layout (location <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> position;
+layout (location <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> color;
+layout (location <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>) <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec2</span> texCoord;
+
+<span style="color:#66d9ef">out</span> <span style="color:#66d9ef">vec3</span> ourColor;
+<span style="color:#66d9ef">out</span> <span style="color:#66d9ef">vec2</span> TexCoord;
+
+<span style="color:#66d9ef">void</span> main()
+{
+    gl_Position <span style="color:#f92672">=</span> <span style="color:#66d9ef">vec4</span>(position, <span style="color:#ae81ff">1.0</span>f);
+    ourColor <span style="color:#f92672">=</span> color;
+    TexCoord <span style="color:#f92672">=</span> texCoord;
+}
+</code></pre></div><p>片段着色器：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version 330 core</span>
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> ourColor;
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec2</span> TexCoord;
+
+<span style="color:#66d9ef">out</span> <span style="color:#66d9ef">vec4</span> color;
+
+<span style="color:#66d9ef">uniform</span> <span style="color:#66d9ef">sampler2D</span> ourTexture;
+<span style="color:#75715e">//sample被称为采样器，它以贴图的纹理类型作为后缀</span>
+<span style="color:#75715e">//采样器会和glDrawElements沟通，调用glDrawElements之后，它会把纹理赋值给采样器</span>
+<span style="color:#75715e">//sampler2D被称为不透明类型(Opaque Type)，这是一种不能被实例化的类型，我们只能通过uniform来定义它，如果不用uniform，GLSL会报错</span>
+<span style="color:#75715e">//不透明类型指的是那些内部形式没有被暴露出来的类型</span>
+<span style="color:#66d9ef">void</span> main()
+{
+    color <span style="color:#f92672">=</span> texture(ourTexture, TexCoord);
+    <span style="color:#75715e">//texture函数用于采样纹理的颜色，第一个参数是一个采样器，第二个参数是对应的纹理坐标</span>
+}
+</code></pre></div><p>使用多个纹理贴图：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">myShader.Use();
+
+<span style="color:#75715e">//glActiveTexture(GL_TEXTURE0);
+</span><span style="color:#75715e">//在绑定纹理单元到对应采样器之前，需要先激活对应的纹理单元，这点和VAO要激活顶点属性类似
+</span><span style="color:#75715e">//GL_TEXTURE0是默认激活的，所以不用特别说明也行
+</span><span style="color:#75715e"></span>glBindTexture(GL_TEXTURE_2D, texture);
+glUniform1i(glGetUniformLocation(myShader.Program, <span style="color:#e6db74">&#34;ourTexture&#34;</span>), <span style="color:#ae81ff">0</span>);
+<span style="color:#75715e">//使用这个函数，我们会给对应的纹理采样器分配一个索引值，这个索引值被称为纹理单元（Texture Unit），纹理单元和glGetUniformLocation返回的索引值，顶点属性的索引值（VAO指针索引值）是不同的索引值，不会冲突
+</span><span style="color:#75715e">//glGetUniformLocation返回的是一个指出着色器程序中这个变量位置的值，我们通过这个值，给对应的纹理采样器一个纹理单元，上限是16，它们的定义是连续的，也就是说GL_TEXTURE0+1==GL_TEXTURE1
+</span><span style="color:#75715e">//虽然纹理单元是被连续定义的，但我们使用的时候并没有被要求一定要把采样器按顺序绑定纹理单元，也就是说绑定完0后，不一定要绑定1
+</span><span style="color:#75715e">//一个纹理的默认纹理单元是0（所以其实注释掉这段代码也没问题），如果不特别指定，所有的纹理的纹理单元都会是0，所以在多贴图的时候要重新指定纹理单元
+</span><span style="color:#75715e"></span>
+glActiveTexture(GL_TEXTURE1);
+glBindTexture(GL_TEXTURE_2D, texture2);
+glUniform1i(glGetUniformLocation(myShader.Program, <span style="color:#e6db74">&#34;ourTexture2&#34;</span>), <span style="color:#ae81ff">1</span>);
+
+glBindVertexArray(VAO);
+glDrawElements(GL_TRIANGLES, <span style="color:#ae81ff">6</span>, GL_UNSIGNED_INT, <span style="color:#ae81ff">0</span>);
+glBindVertexArray(<span style="color:#ae81ff">0</span>);
+</code></pre></div><p>对应的片段着色器</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version 330 core</span>
+...
+
+<span style="color:#66d9ef">uniform</span> <span style="color:#66d9ef">sampler2D</span> ourTexture1;
+<span style="color:#66d9ef">uniform</span> <span style="color:#66d9ef">sampler2D</span> ourTexture2;
+
+<span style="color:#66d9ef">void</span> main()
+{
+    color <span style="color:#f92672">=</span> mix(texture(ourTexture1, TexCoord), texture(ourTexture2, TexCoord), <span style="color:#ae81ff">0.2</span>);
+    <span style="color:#75715e">//mix函数会混合两个值，第三个值表示它们的混合比例</span>
+}
+</code></pre></div><h2 id="变换">变换</h2>
+<p>一个向量包含一个<strong>方向</strong>（Direction）和<strong>大小</strong>（Magnitude），起点为原点的向量被称作<strong>位置向量</strong>（Position Vector），向量的运算包括：</p>
+<ul>
+<li>
+<p>向量加<strong>标量</strong>（Scalar）</p>
+</li>
+<li>
+<p>向量取反</p>
+</li>
+<li>
+<p>向量加减</p>
+</li>
+<li>
+<p>向量求长度（用标准化算<strong>单位向量</strong>（Unit Vector））</p>
+</li>
+<li>
+<p>向量乘积</p>
+<ul>
+<li>
+<p>点乘：$\vec v \cdot\vec k=\Vert\vec v\Vert\cdot\Vert\vec k\Vert\cdot\cos\theta$，或$\sum _{i=0}^n v_i\times k_i$，点乘可以用来测试两个向量是否垂直或平行</p>
+</li>
+<li>
+<p>叉乘：两个向量的叉乘结果会垂直于这两个向量
+$$
+\left(\begin{array}{c}A_x \\\ A_y \\\ A_z\end{array}\right)\times\left(\begin{array}{c}B_x \\\ B_y \\\ B_z\end{array}\right)=\left(\begin{array}{c}A_y\cdot B_z -A_z\cdot B_y \\\ A_z\cdot B_x - A_x\cdot B_z   \\\ A_x\cdot B_y - A_y\cdot B_x\end{array}\right)
+$$</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>矩阵的运算包括：</p>
+<ul>
+<li>
+<p>矩阵加标量</p>
+</li>
+<li>
+<p>矩阵乘标量</p>
+</li>
+<li>
+<p>矩阵相乘：</p>
+<p><img src="https://learnopengl-cn.github.io/img/01/07/matrix_multiplication.png" alt="Matrix Multiplication"></p>
+</li>
+<li>
+<p>单位矩阵</p>
+</li>
+</ul>
+<p>上面的都是基础中的基础，比较重要的三个变换操作是缩放，位移和旋转。</p>
+<p>要看懂这三个操作，首先要弄清变换矩阵右下角这个常量的意义。在前面提到过，一个有四个分量的向量可以被表示为xyzw，这个w就是这个向量，也叫做齐次坐标。如果没有齐次坐标，我们就无法位移坐标。所以如果齐次坐标为0，这个向量就代表一个方向向量。如果不是方向向量，那它的齐次坐标就是1。</p>
+<p>缩放
+$$
+\left[\begin{array}{cccc}S_1 &amp; 0   &amp; 0   &amp; 0\\\ 0   &amp; S_2 &amp; 0   &amp; 0\\\ 0   &amp; 0   &amp; S_3 &amp; 0\\\ 0   &amp; 0   &amp; 0   &amp; 1 \end{array} \right] \cdot \left(\begin{array}{c}x \\\ y \\\ z \\\ 1\end{array}\right)= \left(\begin{array}{c} S_1 \\\ S_2 \\\ S_3 \\\ 1 \end{array} \right)
+$$
+如果<strong>缩放因子</strong>（Scaling Factor）都一样，那么这个缩放操作就是均匀缩放。</p>
+<p>位移
+$$
+\left[\begin{array}{cccc}1   &amp; 0   &amp; 0   &amp; T_x \\\ 0   &amp; 1   &amp; 0   &amp; T_y \\\ 0   &amp; 0   &amp; 1   &amp; T_z \\\ 0   &amp; 0   &amp; 0   &amp; 1 \end{array}\right]\cdot\left(\begin{array}{c}x \\\ y \\\ z \\\ 1\end{array}\right) = \left( \begin{array}{c} x + T_x \\\ y + T_y \\\ z + T_z \\\ 1 \end{array} \right)
+$$</p>
+<p>旋转</p>
+<blockquote>
+<p>弧度转角度：$角度=弧度\times (180/\pi)$</p>
+<p>角度转弧度：$弧度=角度\times (\pi/180)$</p>
+</blockquote>
+<p>沿x轴旋转
+$$
+\left[\begin{array}{cccc}1   &amp; 0   &amp; 0   &amp; 0\\\ 0   &amp; \cos\theta&amp; -\sin\theta   &amp; 0 \\\ 0   &amp; \sin\theta   &amp; \cos\theta   &amp; 0 \\\ 0   &amp; 0   &amp; 0   &amp; 1\end{array}\right]\cdot\left(\begin{array}{c}x \\\ y \\\ z \\\ 1\end{array}\right)=\left(\begin{array}{c}x \\\ \cos\theta \cdot y-\sin\theta\cdot z \\\ \sin\theta \cdot y+\cos\theta\cdot z \\\ 1\end{array}\right)
+$$
+沿y轴旋转
+$$
+\left[\begin{array}{cccc}\cos\theta &amp; 0   &amp; \sin\theta   &amp; 0\\\ 0   &amp; 1 &amp;  0  &amp; 0\\\ -\sin\theta   &amp;  0  &amp; \cos\theta   &amp; 0\\\ 0   &amp; 0   &amp; 0   &amp; 1\end{array}\right]\cdot\left(\begin{array}{c}x \\\ y \\\ z \\\ 1\end{array}\right)=\left(\begin{array}{c}\cos\theta \cdot x +\sin\theta\cdot z\\\ y \\\ -\sin\theta \cdot x +\cos\theta\cdot z \\\ 1\end{array}\right)
+$$
+沿z轴旋转
+$$
+\left[\begin{array}{cccc}\cos\theta &amp; -\sin\theta   &amp; 0   &amp; 0\\\ \sin\theta   &amp; \cos\theta &amp;  0  &amp; 0\\\ 0   &amp;  0  &amp;  1  &amp; 0\\\ 0   &amp; 0   &amp; 0   &amp; 1 \end{array}\right]\cdot\left(\begin{array}{c}x \\\ y \\\ z \\\ 1\end{array}\right)=\left(\begin{array}{c}\cos\theta \cdot x -\sin\theta\cdot y\\\ \sin\theta \cdot x +\cos\theta\cdot y \\\ z \\\ 1\end{array}\right)
+$$
+了解这些运算后，如何将其运用到代码中呢，首先是要装好矩阵运算需要的库<code>GLM</code>，下载链接如下：https://github.com/g-truc/glm/tags</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glm<span style="color:#f92672">::</span>mat4 trans <span style="color:#f92672">=</span> glm<span style="color:#f92672">::</span>mat4(<span style="color:#ae81ff">1.0f</span>)
+<span style="color:#75715e">//声明一个矩阵，并初始化为（1.0，1.0，1.0，1.0）
+</span><span style="color:#75715e"></span>trans <span style="color:#f92672">=</span> glm<span style="color:#f92672">::</span>translate(trans, glm<span style="color:#f92672">::</span>vec3(<span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>));
+<span style="color:#75715e">//平移
+</span><span style="color:#75715e"></span>trans <span style="color:#f92672">=</span> glm<span style="color:#f92672">::</span>rotate(trans, glm<span style="color:#f92672">::</span>radians(<span style="color:#ae81ff">90.0f</span>), glm<span style="color:#f92672">::</span>vec3(<span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">1.0</span>));
+<span style="color:#75715e">//围绕glm::vec3(0.0, 0.0, 1.0)旋转90度，因为这个函数接受的是弧度制，所以需要转换一下
+</span><span style="color:#75715e"></span>trans <span style="color:#f92672">=</span> glm<span style="color:#f92672">::</span>scale(trans, glm<span style="color:#f92672">::</span>vec3(<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>));
+<span style="color:#75715e">//缩放
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> transformLoc <span style="color:#f92672">=</span> glGetUniformLocation(ourShader.ID, <span style="color:#e6db74">&#34;transform&#34;</span>);
+glUniformMatrix4fv(transformLoc, <span style="color:#ae81ff">1</span>, GL_FALSE, glm<span style="color:#f92672">::</span>value_ptr(trans));
+<span style="color:#75715e">//我们要设置一个4行4列的矩阵，那么后缀是Matrix4，fv代表函数想要一个矩阵作为参数
+</span><span style="color:#75715e">//第二个参数表示我们需要传送几个矩阵
+</span><span style="color:#75715e">//第三个参数询问我们是否要转置矩阵，在线性代数中，我们用的是行主序，但是在OpenGL中我们用的是列主序矩阵，幸运的是GLM默认布局也是列主序，所以此处不需要转置
+</span><span style="color:#75715e">//第四个参数表示真正的矩阵数据，因为GLM的数据并不是OpenGL接受的那种，所以需要用value_ptr转换一下
+</span></code></pre></div><p>对应的顶点着色器：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version 330 core</span>
+layout (location <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> aPos;
+layout (location <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec2</span> aTexCoord;
+
+<span style="color:#66d9ef">out</span> <span style="color:#66d9ef">vec2</span> TexCoord;
+
+<span style="color:#66d9ef">uniform</span> mat4 transform;
+
+<span style="color:#66d9ef">void</span> main()
+{
+    gl_Position <span style="color:#f92672">=</span> transform <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec4</span>(aPos, <span style="color:#ae81ff">1.0</span>f);
+    <span style="color:#75715e">//转换矩阵的应用是左乘</span>
+    TexCoord <span style="color:#f92672">=</span> <span style="color:#66d9ef">vec2</span>(aTexCoord.x, <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> aTexCoord.y);
+}
+</code></pre></div><h2 id="坐标系统">坐标系统</h2>
+<p>这一章节会讨论五个不同的坐标系统：</p>
+<ol>
+<li>局部空间（Local Space），相对一个局部原点的坐标。</li>
+<li>世界空间（World Space），相对一个全局原点的坐标。</li>
+<li>观察空间（View Space），每个坐标都是从摄像机或者观察者角度进行观察的。</li>
+<li>裁剪空间（Clip Space），裁剪坐标的范围是<code>[-1,1]</code>，在这之外的点会被裁剪。</li>
+<li>屏幕空间（Screen Space），视口变换会把裁剪坐标变换到由glViewport函数所定义的坐标范围内。</li>
+</ol>
+<p>从上到下，是一个顶点在被转换成片段之前要经历的所有不同状态。</p>
+<p>要将一个空间转换到另一个空间，需要用到几个重要的变换矩阵：<strong>模型</strong>（Model），<strong>观察</strong>（View），<strong>投影</strong>（Projection），下图（其中观察空间的描述不够恰当，可以想象观察空间是以摄像机为原点构建的一个坐标系）展示了整个流程以及各个变换过程做了什么：</p>
+<p><img src="https://learnopengl-cn.github.io/img/01/08/coordinate_systems.png" alt="coordinate_systems"></p>
+<p>裁切空间中，如何判断什么应该被裁切掉是很重要的一点，为此我们需要定义一个<strong>投影矩阵</strong>，它定义了一个范围值，在这个范围内的坐标会被标准化到<code>[-1.0, 1.0]</code>，超出范围的会被裁减。如果某个物体只有一部分超出了<strong>剪裁体积</strong>（Clipping Volumn），那么OpenGL会为此重建一个会多个三角形（图元）让其能够适合这个范围。</p>
+<p>由投影矩阵描绘的观察箱被称为<strong>平截头体</strong>（Frustum），在平截头体范围内的坐标最终会出现在屏幕上，这个坐标转换过程被称为投影。这个转换过程有两种不同的形式，每种都定义了不同的平截头体。</p>
+<p>正射投影（Orthographic Projection Matrix）</p>
+<p><img src="https://learnopengl-cn.github.io/img/01/08/orthographic_frustum.png" alt="orthographic projection frustum"></p>
+<p>正交投影的平截头体是一个立方体，平截头体由宽，高，近平面，远平面指定。</p>
+<p>GLM的内置函数提供了创建正交矩阵的方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glm<span style="color:#f92672">::</span>ortho(<span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">800.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">600.0f</span>, <span style="color:#ae81ff">0.1f</span>, <span style="color:#ae81ff">100.0f</span>);
+<span style="color:#75715e">//前两个参数指定了平截头体的左右坐标（width）
+</span><span style="color:#75715e">//第三第四个参数指定了平截头题的底部和顶部坐标（height）
+</span><span style="color:#75715e">//第五第六个参数定义了近平面和远平面的坐标
+</span></code></pre></div><p>透视投影（Perspective Projection Matrix）</p>
+<p>透视投影因为考虑了近大远小的关系，看起来会更贴近真实。</p>
+<p><img src="https://learnopengl-cn.github.io/img/01/08/perspective_frustum.png" alt=" perspective_frustum"></p>
+<p>在描述透视投影之前，我想先理清一下为什么OpenGL表示一个三维的点要用一个4分量的向量，以及最后一个向量w的意义是什么，我们从三个方向分析：</p>
+<ol>
+<li>
+<p>在一个坐标系中，向量和点的表示方式完全是一模一样的，那怎么区分向量和点呢？这时候w就可以派上用场了，当w为1的时候，它表示一个点，当w为0的时候，它表示一个向量。这样表示有个很巧妙地地方，我们知道一个向量是两个点做减法得出的，当两个点相减后，w恰好为0，我们又指定一个向量加一个点可以表示这个点经过这个向量能到达的终点，这是w恰好又为1。</p>
+</li>
+<li>
+<p>虽然从小的数学教育告诉我们，同一个平面的两条平行直线不会相交，但是从视觉角度来说，这个定理是不成立的，比如下图这种情况：</p>
+<p><img src="https://img-blog.csdnimg.cn/20190709195103643.png" alt="img"></p>
+<p>可以看到两条铁路在很远的地方是相交的，那我们应该怎么表示这种情况呢，同样，也是引入齐次坐标w。在有的教学中认为距离越远，w越小，但是我觉得应该是距离越远，w越大。这里用w转换坐标到笛卡尔坐标系（也就是裁剪空间），即$(x,y,z,w)\rightarrow(\frac{x}{w},\frac{y}{w},\frac{z}{w})$，如果w足够大，那么任何点都会汇聚在原点。在透视投影中如何理解w的存在呢，可以想象w是沿着z轴上运动的一个点（要注意z轴方向是从屏幕出发指向我们），随着点的远离，w会增大。</p>
+</li>
+<li>
+<p>对于缩放和旋转，我们都可以用3乘3的变换矩阵来做乘法运算，但是平移加法运算的结果，有没有办法可以让平移也做乘法运算呢？答案是升维，正如之前给出的公式，在四维空间中，三维的点的平移也可以是乘法运算。</p>
+</li>
+</ol>
+<p>了解了w的意义之后，那么再来看看w的应用，在透视投影中，任何笛卡尔坐标（$(x,y,z,w)\rightarrow(\frac{x}{w},\frac{y}{w},\frac{z}{w})$）在<code>[-1,1]</code>范围外的点都会被裁切。关于透视投影矩阵的证明过程在我的Unity记录里有记载，欢迎查阅。</p>
+<p>GLM的内置函数提供了创建透视矩阵的方法：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glm<span style="color:#f92672">::</span>mat4 proj <span style="color:#f92672">=</span> glm<span style="color:#f92672">::</span>perspective(glm<span style="color:#f92672">::</span>radians(<span style="color:#ae81ff">45.0f</span>), (<span style="color:#66d9ef">float</span>)width<span style="color:#f92672">/</span>(<span style="color:#66d9ef">float</span>)height, <span style="color:#ae81ff">0.1f</span>, <span style="color:#ae81ff">100.0f</span>);
+<span style="color:#75715e">//第一个参数定义了FOV，即视野大小，一般来说45度比较真实
+</span><span style="color:#75715e">//第二个参数定义了视口的宽高比，比如上面的铁路图就比较接近1：1
+</span><span style="color:#75715e">//第三第四个参数定义了平截头体近平面和远平面的坐标
+</span></code></pre></div><p>学会了投影的方法之后，空间转换的前四步就都不是问题了，至于最后一步，回想一下代码中<code>glViewport</code>这个函数，它帮我们干了最后一件事，视口转换。用线代知识总结一下前四步的过程：
+$$
+V_{clip}=M_{projection}\cdot M_{view}\cdot M_{model}\cdot V_{local}
+$$
+这里帮大家回忆一下一个知识点，对某个矩阵进行一个操作，等于这个矩阵<em>左乘</em>这个操作对应的变换矩阵。</p>
+<p>下面是一个简单的3D物体渲染的代码，请注意其中关于Z缓冲的解释：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GL/glew.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GLFW/glfw3.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;SOIL.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Shader.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/glm.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/gtc/matrix_transform.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/gtc/type_ptr.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> GLuint WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>, HEIGHT <span style="color:#f92672">=</span> <span style="color:#ae81ff">600</span>;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode);
+
+<span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> glm;
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+   glfwInit();
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+   GLFWwindow <span style="color:#f92672">*</span>window <span style="color:#f92672">=</span> glfwCreateWindow(WIDTH, HEIGHT, <span style="color:#e6db74">&#34;Hengine&#34;</span>, <span style="color:#66d9ef">nullptr</span>, <span style="color:#66d9ef">nullptr</span>);
+   glfwMakeContextCurrent(window);
+   glfwSetKeyCallback(window, key_callback);
+
+   glewExperimental <span style="color:#f92672">=</span> GL_TRUE;
+   glewInit();
+
+   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, WIDTH, HEIGHT);
+
+   Shader myShader(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/Shader/texture/shader.vertex&#34;</span>, <span style="color:#e6db74">&#34;/home/herain/Documents/opengl/Shader/texture/shader.fragment&#34;</span>);
+
+   <span style="color:#66d9ef">float</span> vertices[] <span style="color:#f92672">=</span> {
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>
+   };
+
+
+   GLuint VBO, VAO;
+
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+   glGenVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+
+   glBindVertexArray(VAO);
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+   glBufferData(GL_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) <span style="color:#ae81ff">0</span>);
+   glEnableVertexAttribArray(<span style="color:#ae81ff">0</span>);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) (<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat)));
+   glEnableVertexAttribArray(<span style="color:#ae81ff">1</span>);
+
+   glBindBuffer(GL_ARRAY_BUFFER, <span style="color:#ae81ff">0</span>);
+
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+   GLuint texture, texture2;
+   <span style="color:#66d9ef">int</span> width, height;
+   glGenTextures(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>texture);
+   glGenTextures(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>texture2);
+
+   glBindTexture(GL_TEXTURE_2D, texture);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>image <span style="color:#f92672">=</span> SOIL_load_image(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/Shader/texture/ti.png&#34;</span>, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height, <span style="color:#ae81ff">0</span>, SOIL_LOAD_RGB);
+   glTexImage2D(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>, GL_RGB, width, height, <span style="color:#ae81ff">0</span>, GL_RGB, GL_UNSIGNED_BYTE, image);
+   glGenerateMipmap(GL_TEXTURE_2D);
+   SOIL_free_image_data(image);
+
+   glBindTexture(GL_TEXTURE_2D, texture2);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>image2 <span style="color:#f92672">=</span> SOIL_load_image(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/Shader/texture/container.jpg&#34;</span>, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height, <span style="color:#ae81ff">0</span>, SOIL_LOAD_RGB);
+   glTexImage2D(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>, GL_RGB, width, height, <span style="color:#ae81ff">0</span>, GL_RGB, GL_UNSIGNED_BYTE, image2);
+   glGenerateMipmap(GL_TEXTURE_2D);
+   SOIL_free_image_data(image2);
+
+   glBindTexture(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>);
+
+   glEnable(GL_DEPTH_TEST);
+    <span style="color:#75715e">//启用深度缓冲，OpenGL将所有深度信息都存在一个Z缓冲里，这个缓冲是GLFW自动生成的
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//对于每个片段，OpenGL会把它的深度值和z缓冲的深度值进行比较，如果这个片段的深度值在缓冲的深度值后面，就会被丢弃，不然就覆盖，最后只有深度值等于缓冲里深度值的片段会被渲染。
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//一般来说深度测试时关闭的，需要手动打开
+</span><span style="color:#75715e"></span>
+
+   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+       glfwPollEvents();
+       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+       glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT);
+       <span style="color:#75715e">//上次循环的深度值需要被清除，这个不用多说
+</span><span style="color:#75715e"></span>
+
+       myShader.Use();
+
+       mat4 model <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+       model <span style="color:#f92672">=</span> rotate(model, (<span style="color:#66d9ef">float</span>)glfwGetTime(), vec3(<span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>));
+
+       mat4 view <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+       view <span style="color:#f92672">=</span> translate(view, vec3(<span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">3.0f</span>));
+       <span style="color:#75715e">//解释一下这个操作，在着色器中我们是对物体进行矩阵操作，摄像头往后退，相对来说等于物体远离摄像头，那么如果摄像头为定点，那我们相对移动物体就行了
+</span><span style="color:#75715e"></span>
+       mat4 projection <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+       projection <span style="color:#f92672">=</span> perspective(radians(<span style="color:#ae81ff">45.0f</span>), (<span style="color:#66d9ef">float</span>)WIDTH<span style="color:#f92672">/</span>(<span style="color:#66d9ef">float</span>)HEIGHT, <span style="color:#ae81ff">0.1f</span>, <span style="color:#ae81ff">100.0f</span>);
+
+       <span style="color:#66d9ef">int</span> modelLoc <span style="color:#f92672">=</span> glGetUniformLocation(myShader.Program, <span style="color:#e6db74">&#34;model&#34;</span>);
+       glUniformMatrix4fv(modelLoc, <span style="color:#ae81ff">1</span>, GL_FALSE, value_ptr(model));
+
+       <span style="color:#66d9ef">int</span> viewLoc <span style="color:#f92672">=</span> glGetUniformLocation(myShader.Program, <span style="color:#e6db74">&#34;view&#34;</span>);
+       glUniformMatrix4fv(viewLoc, <span style="color:#ae81ff">1</span>, GL_FALSE, value_ptr(view));
+
+       <span style="color:#66d9ef">int</span> persLoc <span style="color:#f92672">=</span> glGetUniformLocation(myShader.Program, <span style="color:#e6db74">&#34;projection&#34;</span>);
+       glUniformMatrix4fv(persLoc, <span style="color:#ae81ff">1</span>, GL_FALSE, value_ptr(projection));
+
+       <span style="color:#75715e">//glActiveTexture(GL_TEXTURE0);
+</span><span style="color:#75715e"></span>       glBindTexture(GL_TEXTURE_2D, texture);
+       <span style="color:#75715e">//glUniform1i(glGetUniformLocation(myShader.Program, &#34;ourTexture&#34;), 0);
+</span><span style="color:#75715e"></span>
+       glActiveTexture(GL_TEXTURE1);
+       glBindTexture(GL_TEXTURE_2D, texture2);
+       glUniform1i(glGetUniformLocation(myShader.Program, <span style="color:#e6db74">&#34;ourTexture2&#34;</span>), <span style="color:#ae81ff">1</span>);
+
+       glBindVertexArray(VAO);
+       glDrawArrays(GL_TRIANGLES, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">36</span>);
+       glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+       glfwSwapBuffers(window);
+   }
+   glDeleteVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+   glDeleteBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+
+   glfwTerminate();
+   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode){
+   printf(<span style="color:#e6db74">&#34;%d</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, key);
+   fflush(stdout);
+   <span style="color:#66d9ef">if</span> (key <span style="color:#f92672">==</span> GLFW_KEY_ESCAPE <span style="color:#f92672">&amp;&amp;</span> mode <span style="color:#f92672">==</span> GLFW_MOD_SHIFT <span style="color:#f92672">&amp;&amp;</span> action <span style="color:#f92672">==</span> GLFW_PRESS)
+       glfwSetWindowShouldClose(window, GL_TRUE);
+}
+</code></pre></div><h2 id="摄像机">摄像机</h2>
+<p>在之前的例子中，我们没有处理摄像机的位置，而是让场景本身移动，然而这样操作是反常识的。那么如何构建摄像机呢？首先要构建以摄像机为原点的坐标系，一个坐标系包括原点和前，右，上三个轴。</p>
+<p>原点位置</p>
+<p>原点位置很容易获取，想让摄像机在哪，哪里就是摄像机位置。</p>
+<p><strong>前轴</strong></p>
+<p>要注意一点，摄像机指向方向和之前提到过的坐标系方向一样，是-z方向，而此处我们要获取的前轴方向是+z方向，所以是摄像机位置减去目标位置。</p>
+<p><strong>右轴</strong></p>
+<p>计算右轴方向，我们可以定义一个上向量，用叉乘算出答案。</p>
+<p><strong>上轴</strong></p>
+<p>利用刚算出来的右轴叉乘前轴，也可以简单算出答案。</p>
+<p>有了三个轴和原点的信息，我们就可以利用它们构造<code>LookAt</code> 矩阵了：
+$$
+LookAt=
+\left[\begin{array}{cccc}
+R_x &amp; R_y &amp; R_z &amp; 0 \\\<br>
+U_x &amp; U_y &amp; U_z &amp; 0 \\\<br>
+D_x &amp; D_y &amp; D_z &amp; 0 \\\<br>
+0   &amp; 0   &amp; 0   &amp; 0
+\end{array}\right]
+\cdot
+\left[\begin{array}{cccc}
+1   &amp; 0   &amp; 0   &amp; -P_x \\\<br>
+0   &amp; 1   &amp; 0   &amp; -P_y \\\<br>
+0   &amp; 0   &amp; 1   &amp; -P_z \\\<br>
+0   &amp; 0   &amp; 0   &amp; 1 <br>
+\end{array}\right]
+$$
+其中，R是右向量，U是上向量，D是方向向量，P是摄像机位置。为什么位置要取反呢，因为原理上来说，LookAt函数是通过移动世界坐标到相反的方向来模拟摄像机运动的。</p>
+<p>大致了解摄像机位置的原理之后，我们继续了解一下摄像机角度，表示旋转我们使用欧拉角：</p>
+<p><img src="http://www.learnopengl.com/img/getting-started/camera_pitch_yaw_roll.png" alt="img"></p>
+<p>在摄像机系统中，我们只需考虑俯仰角（pitch）和偏航角（yaw）。</p>
+<p>请注意两点：</p>
+<ul>
+<li>正如图中所示，随着数值（指pitch，yaw，roll）增加，物体呈顺时针旋转，此时实际角度减小。</li>
+<li>当pitch和yaw都为0时，物体默认看向+z轴方向。</li>
+</ul>
+<p>下面给出的代码请注意看：</p>
+<ol>
+<li>怎么绑定鼠标监听函数</li>
+<li>如何设置摄像机角度以及为何这么设置</li>
+<li>yaw变量的初始值</li>
+<li>LookAt函数的设置</li>
+<li>delta时间的解释</li>
+</ol>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GL/glew.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stdio.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;GLFW/glfw3.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;SOIL.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Shader.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/glm.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/gtc/matrix_transform.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/gtc/type_ptr.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">const</span> GLuint WIDTH <span style="color:#f92672">=</span> <span style="color:#ae81ff">800</span>, HEIGHT <span style="color:#f92672">=</span> <span style="color:#ae81ff">600</span>;
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">mouse_callback</span>(GLFWwindow<span style="color:#f92672">*</span> window, <span style="color:#66d9ef">double</span> xpos, <span style="color:#66d9ef">double</span> ypos);
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode);
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">scrool_callback</span>(GLFWwindow<span style="color:#f92672">*</span> window, <span style="color:#66d9ef">double</span> xoffset, <span style="color:#66d9ef">double</span> yoffset);
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">pos_update</span>();
+
+<span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> glm;
+
+vec3 cameraPos <span style="color:#f92672">=</span> vec3(<span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">3.0f</span>);
+vec3 cameraFront <span style="color:#f92672">=</span> vec3(<span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1.0f</span>);
+vec3 cameraUp <span style="color:#f92672">=</span> vec3(<span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>);
+
+<span style="color:#66d9ef">bool</span> keys[<span style="color:#ae81ff">1024</span>];
+GLfloat currentFrame <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0f</span>;
+GLfloat lastFrame <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0f</span>;
+GLfloat deltaFrame <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0f</span>;
+
+GLfloat gPitch <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0f</span>;
+GLfloat gYaw <span style="color:#f92672">=</span> <span style="color:#ae81ff">180.0f</span>;
+<span style="color:#75715e">//请注意这里的yaw初始值是180，因为默认0的时候摄像机是看向+z方向的，而我们需要摄像机看向-z方向，所以逆时针转180度
+</span><span style="color:#75715e"></span>GLfloat fov <span style="color:#f92672">=</span> <span style="color:#ae81ff">45.0f</span>;
+GLfloat lastX <span style="color:#f92672">=</span> WIDTH<span style="color:#f92672">/</span><span style="color:#ae81ff">2.0</span>;
+GLfloat lastY <span style="color:#f92672">=</span> HEIGHT<span style="color:#f92672">/</span><span style="color:#ae81ff">2.0</span>;
+
+<span style="color:#66d9ef">bool</span> initMouse <span style="color:#f92672">=</span> true;
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+   glfwInit();
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, <span style="color:#ae81ff">3</span>);
+   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+   glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+
+   GLFWwindow <span style="color:#f92672">*</span>window <span style="color:#f92672">=</span> glfwCreateWindow(WIDTH, HEIGHT, <span style="color:#e6db74">&#34;Hengine&#34;</span>, <span style="color:#66d9ef">nullptr</span>, <span style="color:#66d9ef">nullptr</span>);
+   glfwMakeContextCurrent(window);
+   glfwSetKeyCallback(window, key_callback);
+   glfwSetCursorPosCallback(window, mouse_callback);
+    <span style="color:#75715e">//绑定鼠标监听函数
+</span><span style="color:#75715e"></span>   glfwSetScrollCallback(window, scrool_callback);
+    <span style="color:#75715e">//绑定滚轮监听函数
+</span><span style="color:#75715e"></span>
+   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    <span style="color:#75715e">//设置光标，让光标不可见
+</span><span style="color:#75715e"></span>
+   glewExperimental <span style="color:#f92672">=</span> GL_TRUE;
+   glewInit();
+
+   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, WIDTH, HEIGHT);
+
+   Shader myShader(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/Shader/texture/shader.vertex&#34;</span>, <span style="color:#e6db74">&#34;/home/herain/Documents/opengl/Shader/texture/shader.fragment&#34;</span>);
+
+   <span style="color:#66d9ef">float</span> vertices[] <span style="color:#f92672">=</span> {
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>,
+           <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5f</span>,  <span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">1.0f</span>
+   };
+
+   glm<span style="color:#f92672">::</span>vec3 cubePositions[] <span style="color:#f92672">=</span> {
+           glm<span style="color:#f92672">::</span>vec3( <span style="color:#ae81ff">0.0f</span>,  <span style="color:#ae81ff">0.0f</span>,  <span style="color:#ae81ff">0.0f</span>),
+           glm<span style="color:#f92672">::</span>vec3( <span style="color:#ae81ff">2.0f</span>,  <span style="color:#ae81ff">5.0f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">15.0f</span>),
+           glm<span style="color:#f92672">::</span>vec3(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.5f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2.2f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2.5f</span>),
+           glm<span style="color:#f92672">::</span>vec3(<span style="color:#f92672">-</span><span style="color:#ae81ff">3.8f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2.0f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">12.3f</span>),
+           glm<span style="color:#f92672">::</span>vec3( <span style="color:#ae81ff">2.4f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">0.4f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">3.5f</span>),
+           glm<span style="color:#f92672">::</span>vec3(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.7f</span>,  <span style="color:#ae81ff">3.0f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">7.5f</span>),
+           glm<span style="color:#f92672">::</span>vec3( <span style="color:#ae81ff">1.3f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2.0f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2.5f</span>),
+           glm<span style="color:#f92672">::</span>vec3( <span style="color:#ae81ff">1.5f</span>,  <span style="color:#ae81ff">2.0f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2.5f</span>),
+           glm<span style="color:#f92672">::</span>vec3( <span style="color:#ae81ff">1.5f</span>,  <span style="color:#ae81ff">0.2f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1.5f</span>),
+           glm<span style="color:#f92672">::</span>vec3(<span style="color:#f92672">-</span><span style="color:#ae81ff">1.3f</span>,  <span style="color:#ae81ff">1.0f</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1.5f</span>)
+   };
+
+
+   GLuint VBO, VAO;
+
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+   glGenVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+
+   glBindVertexArray(VAO);
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+   glBufferData(GL_ARRAY_BUFFER, <span style="color:#66d9ef">sizeof</span>(vertices), vertices, GL_STATIC_DRAW);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) <span style="color:#ae81ff">0</span>);
+   glEnableVertexAttribArray(<span style="color:#ae81ff">0</span>);
+
+   glVertexAttribPointer(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, GL_FLOAT, GL_FALSE, <span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat), (GLvoid<span style="color:#f92672">*</span>) (<span style="color:#ae81ff">3</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(GLfloat)));
+   glEnableVertexAttribArray(<span style="color:#ae81ff">1</span>);
+
+   glBindBuffer(GL_ARRAY_BUFFER, <span style="color:#ae81ff">0</span>);
+
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+   GLuint texture, texture2;
+   <span style="color:#66d9ef">int</span> width, height;
+   glGenTextures(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>texture);
+   glGenTextures(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>texture2);
+
+   glBindTexture(GL_TEXTURE_2D, texture);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>image <span style="color:#f92672">=</span> SOIL_load_image(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/Shader/texture/ti.png&#34;</span>, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height, <span style="color:#ae81ff">0</span>, SOIL_LOAD_RGB);
+   glTexImage2D(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>, GL_RGB, width, height, <span style="color:#ae81ff">0</span>, GL_RGB, GL_UNSIGNED_BYTE, image);
+   glGenerateMipmap(GL_TEXTURE_2D);
+   SOIL_free_image_data(image);
+
+   glBindTexture(GL_TEXTURE_2D, texture2);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+   glTextureParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>image2 <span style="color:#f92672">=</span> SOIL_load_image(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/Shader/texture/container.jpg&#34;</span>, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height, <span style="color:#ae81ff">0</span>, SOIL_LOAD_RGB);
+   glTexImage2D(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>, GL_RGB, width, height, <span style="color:#ae81ff">0</span>, GL_RGB, GL_UNSIGNED_BYTE, image2);
+   glGenerateMipmap(GL_TEXTURE_2D);
+   SOIL_free_image_data(image2);
+
+   glBindTexture(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>);
+
+   glEnable(GL_DEPTH_TEST);
+
+   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+       currentFrame <span style="color:#f92672">=</span> glfwGetTime();
+       deltaFrame <span style="color:#f92672">=</span> currentFrame <span style="color:#f92672">-</span> lastFrame;
+       lastFrame <span style="color:#f92672">=</span> currentFrame;
+       <span style="color:#75715e">//为什么这里要计算一个delta时间？因为在不同机器上对一个图形的渲染速度是不同的，想象我们有两台机子，一台是现在顶尖配置一台是10年前最拉的配置，如果我们在两台机子上渲染同一个图像然后运动，第一台电脑渲染速度快，帧之间间隔小，那么单位时间内收到的运动指令就更多，相反，10年前电脑可能就受到几个指令，那么好电脑在观感上物体就运动更多，差的电脑运动的就更少
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//但如果我们记录渲染需要的时间，乘以这个时间就能保证两个电脑上的物体运动速度一样（但后者帧率肯定惨不忍睹）
+</span><span style="color:#75715e"></span>       
+       glfwPollEvents();
+       pos_update();
+       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+       glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT);
+
+       myShader.Use();
+
+
+
+       mat4 view <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+       view <span style="color:#f92672">=</span> lookAt(cameraPos, cameraPos <span style="color:#f92672">+</span> cameraFront, cameraUp);
+       <span style="color:#75715e">//第一个函数时相机位置，第二个函数是目标位置，第三个函数是世界坐标的朝上方向，虽然这里写的意思像相机朝上方向，但实际上是世界坐标！
+</span><span style="color:#75715e"></span>
+       mat4 projection <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+       projection <span style="color:#f92672">=</span> perspective(radians(fov), (<span style="color:#66d9ef">float</span>)WIDTH<span style="color:#f92672">/</span>(<span style="color:#66d9ef">float</span>)HEIGHT, <span style="color:#ae81ff">0.1f</span>, <span style="color:#ae81ff">100.0f</span>);
+
+       myShader.setMat4(<span style="color:#e6db74">&#34;view&#34;</span>, view);
+       myShader.setMat4(<span style="color:#e6db74">&#34;projection&#34;</span>, projection);
+
+       <span style="color:#75715e">//glActiveTexture(GL_TEXTURE0);
+</span><span style="color:#75715e"></span>       glBindTexture(GL_TEXTURE_2D, texture);
+       <span style="color:#75715e">//glUniform1i(glGetUniformLocation(myShader.Program, &#34;ourTexture&#34;), 0);
+</span><span style="color:#75715e"></span>
+       glActiveTexture(GL_TEXTURE1);
+       glBindTexture(GL_TEXTURE_2D, texture2);
+       glUniform1i(glGetUniformLocation(myShader.Program, <span style="color:#e6db74">&#34;ourTexture2&#34;</span>), <span style="color:#ae81ff">1</span>);
+
+       glBindVertexArray(VAO);
+       <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">10</span>; i <span style="color:#f92672">++</span>){
+           mat4 model <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+           model <span style="color:#f92672">=</span> translate(model, cubePositions[i]);
+           <span style="color:#66d9ef">float</span> angle <span style="color:#f92672">=</span> <span style="color:#ae81ff">20.0f</span> <span style="color:#f92672">*</span> i;
+           model <span style="color:#f92672">=</span> rotate(model, radians(angle), vec3(<span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.5f</span>));
+           myShader.setMat4(<span style="color:#e6db74">&#34;model&#34;</span>, model);
+
+           glDrawArrays(GL_TRIANGLES, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">36</span>);
+       }
+       glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+       glfwSwapBuffers(window);
+   }
+   glDeleteVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+   glDeleteBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+
+   glfwTerminate();
+   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">key_callback</span>(GLFWwindow <span style="color:#f92672">*</span>window, <span style="color:#66d9ef">int</span> key, <span style="color:#66d9ef">int</span> scancode, <span style="color:#66d9ef">int</span> action, <span style="color:#66d9ef">int</span> mode){
+
+   <span style="color:#66d9ef">if</span> (key <span style="color:#f92672">==</span> GLFW_KEY_ESCAPE <span style="color:#f92672">&amp;&amp;</span> mode <span style="color:#f92672">==</span> GLFW_MOD_SHIFT <span style="color:#f92672">&amp;&amp;</span> action <span style="color:#f92672">==</span> GLFW_PRESS)
+       glfwSetWindowShouldClose(window, GL_TRUE);
+
+   <span style="color:#66d9ef">if</span>(action <span style="color:#f92672">==</span> GLFW_PRESS){
+       keys[key] <span style="color:#f92672">=</span> true;
+   }  <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (action <span style="color:#f92672">==</span> GLFW_RELEASE){
+       keys[key] <span style="color:#f92672">=</span> false;
+   }
+}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">pos_update</span>(){
+   GLfloat cameraSpeed <span style="color:#f92672">=</span> <span style="color:#ae81ff">5.0f</span> <span style="color:#f92672">*</span> deltaFrame;
+   <span style="color:#66d9ef">if</span>(keys[GLFW_KEY_W])
+       cameraPos <span style="color:#f92672">+=</span> cameraSpeed <span style="color:#f92672">*</span> cameraFront;
+   <span style="color:#66d9ef">if</span>(keys[GLFW_KEY_S])
+       cameraPos <span style="color:#f92672">-=</span> cameraSpeed <span style="color:#f92672">*</span> cameraFront;
+   <span style="color:#66d9ef">if</span>(keys[GLFW_KEY_A])
+       cameraPos <span style="color:#f92672">-=</span> normalize(cross(cameraFront, cameraUp)) <span style="color:#f92672">*</span> cameraSpeed;
+   <span style="color:#66d9ef">if</span>(keys[GLFW_KEY_D])
+       cameraPos <span style="color:#f92672">+=</span> normalize(cross(cameraFront, cameraUp)) <span style="color:#f92672">*</span> cameraSpeed;
+}
+<span style="color:#75715e">//请注意这里为什么要把key事件分成两个函数来写，这是因为大多数事件输入系统一次只能处理一个输入，所以如果我们用key的监听函数来实现移动，我们的物体就不能同时往两个方向移动，分成两个函数为什么可以，看代码不难理解。
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">mouse_callback</span>(GLFWwindow<span style="color:#f92672">*</span> window, <span style="color:#66d9ef">double</span> xpos, <span style="color:#66d9ef">double</span> ypos){
+   <span style="color:#66d9ef">if</span>(initMouse){
+       lastX <span style="color:#f92672">=</span> xpos;
+       lastY <span style="color:#f92672">=</span> ypos;
+       initMouse <span style="color:#f92672">=</span> false;
+   }
+
+    <span style="color:#75715e">//下面我们要获取鼠标被移动了多少
+</span><span style="color:#75715e"></span>   GLfloat xOffset <span style="color:#f92672">=</span> xpos <span style="color:#f92672">-</span> lastX;
+   GLfloat yOffset <span style="color:#f92672">=</span> lastY <span style="color:#f92672">-</span> ypos;
+    <span style="color:#75715e">//这里x，y的获取方法不同，原因是y坐标是从底部到顶部依次增大的
+</span><span style="color:#75715e"></span>   lastX <span style="color:#f92672">=</span> xpos;
+   lastY <span style="color:#f92672">=</span> ypos;
+
+   GLfloat h_sensitivity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.005f</span>;
+   GLfloat v_sensitivity <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.005f</span>;
+   xOffset <span style="color:#f92672">*=</span> v_sensitivity;
+   yOffset <span style="color:#f92672">*=</span> h_sensitivity;
+    <span style="color:#75715e">//这里我分开设置了x轴和y轴的速度，因为速度一致可能会导致一些人头晕
+</span><span style="color:#75715e"></span>
+   gYaw <span style="color:#f92672">+=</span> xOffset;
+   gPitch <span style="color:#f92672">+=</span> yOffset;
+
+   <span style="color:#66d9ef">if</span>(gPitch <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">89.0f</span>)
+       gPitch <span style="color:#f92672">=</span> <span style="color:#ae81ff">89.0f</span>;
+   <span style="color:#66d9ef">if</span>(gPitch <span style="color:#f92672">&lt;</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">89.0f</span>)
+       gPitch <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">89.0f</span>;
+
+   vec3 front;
+   front.x <span style="color:#f92672">=</span> cos(radians(gPitch)) <span style="color:#f92672">*</span> sin(<span style="color:#f92672">-</span>radians(gYaw));
+   front.y <span style="color:#f92672">=</span> sin(radians(gPitch));
+   front.z <span style="color:#f92672">=</span> cos(radians(gPitch)) <span style="color:#f92672">*</span> cos(<span style="color:#f92672">-</span>radians(gYaw));
+    <span style="color:#75715e">//这里的操作涉及到三角形方面的知识，设斜边为h，那么我们可以求出对边为h*sin theta，临边为h*cos theta
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//   |   
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//   |  /|
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//   | / | sin theta   
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//   |/  |
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// --+------------
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//   cos theta
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//然而就算了解这个知识，应用到实际还是比较难想象的，这里提供一个更直观的理解方法，首先先求pitch变换
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//两手指尖朝前，左手在下右手在上合在一起，之前提到过我们把相机反转了180度，所以现在指尖朝向是-z轴
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//绕x轴的顺时针运动是z，y，-z，-y，所以当我们接受一个正的pitch值时，就做顺时针运动，想象y轴从下往上穿过掌根，那么顺时针运动就是左手手掌向下分离（掌根紧贴），可以发现随着pitch值增加，实际角度也在增加所以根据三角知识，可以算出xyz的变化
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//下面求yaw的变换
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//两手指尖朝前，左手右手都在同一平面合在一起，绕y轴的顺时针运动是z，x，-z，-x，所以接收到一个正的yaw值时，左手不动右手分离（掌根紧贴），可以发现随着yaw值增加，实际角度实在减小的，所以带入运算时的角度要取反
+</span><span style="color:#75715e"></span>    cameraFront <span style="color:#f92672">=</span> normalize(front);
+    <span style="color:#75715e">//我们只想要方向，所以标准化
+</span><span style="color:#75715e"></span>}
+
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">scrool_callback</span>(GLFWwindow<span style="color:#f92672">*</span> window, <span style="color:#66d9ef">double</span> xoffset, <span style="color:#66d9ef">double</span> yoffset){
+   fov <span style="color:#f92672">-=</span> (<span style="color:#66d9ef">float</span>) yoffset;
+   <span style="color:#66d9ef">if</span>(fov <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">1.0f</span>)
+       fov <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0f</span>;
+   <span style="color:#66d9ef">if</span>(fov <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">45.0f</span>)
+       fov <span style="color:#f92672">=</span> <span style="color:#ae81ff">45.0f</span>;
+}
+</code></pre></div>
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>

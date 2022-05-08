@@ -1,0 +1,1357 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.80.0" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainyang.github.io/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainyang.github.io/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainyang.github.io/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainyang.github.io/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainyang.github.io/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainyang.github.io/css/bootstrap.min.css" />
+
+  
+  <title>Code Learn OpenGL Chapter2 | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] },
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Code Learn OpenGL Chapter2</h1>
+<h1 id="opengl第二章">OpenGL第二章</h1>
+<p>因为第一章写了一万多字Typora就开始有点卡了，所以决定一章一个文件，从现在开始第二章就逐渐进入光照的介绍了。</p>
+<h2 id="颜色">颜色</h2>
+<p>OpenGL里对颜色的处理是符合生活常理的，即：眼睛看到的颜色是物体拒绝吸收的光的颜色，也就是说一个蓝色的物体其实是它拒绝吸收蓝色。</p>
+<blockquote>
+<p>当我们把光源的颜色与物体的颜色值相乘，所得到的就是这个物体所反射的颜色（也就是我们所感知到的颜色）。</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl">glm<span style="color:#f92672">::</span><span style="color:#66d9ef">vec3</span> lightColor(<span style="color:#ae81ff">1.0</span>f, <span style="color:#ae81ff">1.0</span>f, <span style="color:#ae81ff">1.0</span>f);
+glm<span style="color:#f92672">::</span><span style="color:#66d9ef">vec3</span> toyColor(<span style="color:#ae81ff">1.0</span>f, <span style="color:#ae81ff">0.5</span>f, <span style="color:#ae81ff">0.31</span>f);
+glm<span style="color:#f92672">::</span><span style="color:#66d9ef">vec3</span> result <span style="color:#f92672">=</span> lightColor <span style="color:#f92672">*</span> toyColor; <span style="color:#75715e">// = (1.0f, 0.5f, 0.31f);</span>
+</code></pre></div><h2 id="基础光照">基础光照</h2>
+<p>现实中的光照非常复杂，出于性能考量，我们在OpenGL中使用的是简化的光照模型，其中一个常用的模型叫做<strong>冯氏光照模型</strong>（Phong Lighting Model），这种模型由三个分量组成：</p>
+<ul>
+<li>环境（Ambient）</li>
+<li>漫反射（Diffuse）</li>
+<li>镜面（Specular）</li>
+</ul>
+<p>环境光照</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">float</span> ambientStrength <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>;
+<span style="color:#75715e">//常量环境因子</span>
+<span style="color:#66d9ef">vec3</span> ambient <span style="color:#f92672">=</span> ambientStrength <span style="color:#f92672">*</span> lightColor;
+</code></pre></div><p>漫反射</p>
+<p><img src="https://learnopengl-cn.github.io/img/02/02/diffuse_light.png" alt="img"></p>
+<p>漫反射的原理是，光照越垂直一个物体，它对物体的影响会越大，为了测量这个垂直程度，我们要用到法向量，正如先前所说，两角点乘越接近1，它们的夹角越小，这里用的就是这个原理。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">vec3</span> norm <span style="color:#f92672">=</span> normalize(Normal);
+<span style="color:#66d9ef">vec3</span> lightDir <span style="color:#f92672">=</span> normalize(lightPos <span style="color:#f92672">-</span> FragPos);
+<span style="color:#66d9ef">float</span> diff <span style="color:#f92672">=</span> max(dot(norm, lightDir), <span style="color:#ae81ff">0.0</span>);
+<span style="color:#75715e">//如果两角为钝角，点乘会返回负数，但是这不是我们想要的结果</span>
+<span style="color:#66d9ef">vec3</span> diffuse <span style="color:#f92672">=</span> diff <span style="color:#f92672">*</span> lightColor;
+</code></pre></div><p>在万事大吉之前，还有一件事要注意一下，还记得我们处理模型位置的时候，第一步做了什么吗？从模型空间转换到世界空间。既然模型位置需要转换，法向量要不要转换呢？答案是要。</p>
+<p>但是和位置信息不一样，法向量是一个向量，正如定义，向量包含位置信息，所以：</p>
+<ol>
+<li>model矩阵的位移操作应该被去除。</li>
+<li>我们应该专注于缩放和旋转变换。</li>
+</ol>
+<p>不过如果模型执行了不等比的缩放，会导致法向量不再垂直于表面，为了纠正这个问题，我们使用<strong>法线矩阵</strong>（Normal Matrix）。</p>
+<p><img src="https://learnopengl-cn.github.io/img/02/02/basic_lighting_normal_transformation.png" alt="img"></p>
+<p>法线矩阵实质上是模型矩阵左上角的逆矩阵的转置矩阵，在顶点着色器中我们可以自己生成这个矩阵：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl">Normal <span style="color:#f92672">=</span> mat3(transpose(inverse(model))) <span style="color:#f92672">*</span> aNormal;
+<span style="color:#75715e">//            转置矩阵   逆矩阵   模型矩阵</span>
+</code></pre></div><p>关于矩阵的证明，这里给出网上找的一幅图，个人觉得解释的不错：</p>
+<p><img src="https://uploads.disquscdn.com/images/5666918ed573bb4810bd7af5200be6227d143c43c354c780c1591c5ef1487153.png" alt="img"></p>
+<p>镜面光照</p>
+<p>所谓镜面光照其实就是<strong>高光</strong>（Specular Highlight），它的原理如图，结合生活常识应该不难理解：</p>
+<p><img src="https://learnopengl-cn.github.io/img/02/02/basic_lighting_specular_theory.png" alt="img"></p>
+<p>最终高光呈现出来的效果是，夹角越小，镜面光越强烈。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">float</span> specularStrength <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span>;
+<span style="color:#75715e">//镜面强度</span>
+<span style="color:#66d9ef">vec3</span> viewDir <span style="color:#f92672">=</span> normalize(viewPos <span style="color:#f92672">-</span> FragPos);
+<span style="color:#75715e">//算出入射向量</span>
+<span style="color:#66d9ef">vec3</span> reflectDir <span style="color:#f92672">=</span> reflect(<span style="color:#f92672">-</span>lightDir, norm);
+<span style="color:#75715e">//算出出射向量，在漫反射的时候我们算的lightDir是从镜面出发到光源位置，所以这里要取反</span>
+<span style="color:#66d9ef">float</span> spec <span style="color:#f92672">=</span> pow(max(dot(viewDir, reflectDir), <span style="color:#ae81ff">0.0</span>), <span style="color:#ae81ff">32</span>);
+<span style="color:#75715e">//32指代反光度，反光度越大，散射越少</span>
+<span style="color:#75715e">//这部操作还算了出射向量和观察向量的角度</span>
+<span style="color:#66d9ef">vec3</span> specular <span style="color:#f92672">=</span> specularStrength <span style="color:#f92672">*</span> spec <span style="color:#f92672">*</span> lightColor;
+</code></pre></div><p>算出三个光，我们再将它们汇总，这样就算出了最后的冯氏着色：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">vec3</span> result <span style="color:#f92672">=</span> (ambient <span style="color:#f92672">+</span> diffuse <span style="color:#f92672">+</span> specular) <span style="color:#f92672">*</span> objectColor;
+FragColor <span style="color:#f92672">=</span> <span style="color:#66d9ef">vec4</span>(result, <span style="color:#ae81ff">1.0</span>);
+</code></pre></div><p>这节的最后再提一下Gouraud着色，Gouraud着色本质是再顶点着色器实现的冯氏着色，相比片段着色器来说，顶点着色器要处理的顶点要少很多，所以Gouraud着色会更加高效，但因为顶点少了，更多的地方要通过线性插值来计算光照颜色，这样处理的光照可以说是靠猜，就不够真实。</p>
+<h3 id="材质">材质</h3>
+<p>对于不同物体，它们会有不同的“反光度”，通过对光的反射，这些属性会让物体呈现出不同的效果，具体来说，这些属性分为：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version 330 core</span>
+<span style="color:#66d9ef">struct</span> Material {
+    <span style="color:#66d9ef">vec3</span> ambient;
+    <span style="color:#75715e">//环境光反射颜色</span>
+    <span style="color:#66d9ef">vec3</span> diffuse;
+    <span style="color:#75715e">//漫反射物体颜色</span>
+    <span style="color:#66d9ef">vec3</span> specular;
+    <span style="color:#75715e">//镜面光照颜色影响</span>
+    <span style="color:#66d9ef">float</span> shininess;
+    <span style="color:#75715e">//高光的半径</span>
+}; 
+<span style="color:#75715e">//请注意这里的反射颜色是vec3，方便控制对于每个颜色通道的反射程度</span>
+
+<span style="color:#66d9ef">uniform</span> Material material;
+</code></pre></div><p>改了材质，我们再将光照强度细分为每个通道颜色的强度，请注意区分材质和光照强度，材质是对反射颜色的描述，而光照是对各个颜色的光照强度的描述：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">struct</span> Light {
+    <span style="color:#66d9ef">vec3</span> position;
+
+    <span style="color:#66d9ef">vec3</span> ambient;
+    <span style="color:#66d9ef">vec3</span> diffuse;
+    <span style="color:#66d9ef">vec3</span> specular;
+};
+
+<span style="color:#66d9ef">uniform</span> Light light;
+</code></pre></div><p>更改完之后，本来的代码应该改成：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">vec3</span> ambient  <span style="color:#f92672">=</span> light.ambient <span style="color:#f92672">*</span> material.ambient;
+<span style="color:#75715e">//可能有人会疑惑，light.ambient是一个向量，material.ambient也是一个向量，为什么两个向量相乘不是一个数字，而是另外一个向量呢？</span>
+<span style="color:#75715e">//这里就要区分向量的三种乘法了，在OpenGL中&#39;*&#39;表示的是Hadamard乘法，也就是每一个分量之间相乘，具体操作很像向量加法，而向量点乘用的是dot()函数，向量叉乘是cross()函数</span>
+<span style="color:#66d9ef">vec3</span> diffuse  <span style="color:#f92672">=</span> light.diffuse <span style="color:#f92672">*</span> (diff <span style="color:#f92672">*</span> material.diffuse);
+<span style="color:#66d9ef">vec3</span> specular <span style="color:#f92672">=</span> light.specular <span style="color:#f92672">*</span> (spec <span style="color:#f92672">*</span> material.specular);
+<span style="color:#75715e">//可以看到，光照强度的向量代替了之前的float类型的强度的位置</span>
+</code></pre></div><p>下面附上完整代码，结合这两张内容，相信不需要注释你也能看的懂：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version 330 core</span>
+
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> Normal;
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> FragPos;
+
+<span style="color:#66d9ef">out</span> <span style="color:#66d9ef">vec4</span> color;
+
+<span style="color:#66d9ef">struct</span> Material {
+ <span style="color:#66d9ef">vec3</span> ambient;
+ <span style="color:#66d9ef">vec3</span> diffuse;
+ <span style="color:#66d9ef">vec3</span> specular;
+ <span style="color:#66d9ef">float</span> shininess;
+};
+
+<span style="color:#66d9ef">struct</span> Light {
+ <span style="color:#66d9ef">vec3</span> position;
+ <span style="color:#66d9ef">vec3</span> ambient;
+ <span style="color:#66d9ef">vec3</span> diffuse;
+ <span style="color:#66d9ef">vec3</span> specular;
+};
+
+<span style="color:#66d9ef">uniform</span> <span style="color:#66d9ef">vec3</span> viewPos;
+<span style="color:#66d9ef">uniform</span> Material material;
+<span style="color:#66d9ef">uniform</span> Light light;
+
+<span style="color:#66d9ef">void</span> main(){
+ <span style="color:#66d9ef">float</span> ambientStrength <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>;
+ <span style="color:#66d9ef">float</span> specularStrength <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.8</span>;
+
+ <span style="color:#66d9ef">vec3</span> ambient <span style="color:#f92672">=</span> light.ambient <span style="color:#f92672">*</span> material.ambient;
+
+ <span style="color:#66d9ef">vec3</span> lightDir <span style="color:#f92672">=</span> normalize(light.position <span style="color:#f92672">-</span> FragPos);
+ <span style="color:#66d9ef">vec3</span> norm <span style="color:#f92672">=</span> normalize(Normal);
+ <span style="color:#66d9ef">float</span> diff <span style="color:#f92672">=</span> max(dot(norm, lightDir), <span style="color:#ae81ff">0.0</span>);
+ <span style="color:#66d9ef">vec3</span> diffuse <span style="color:#f92672">=</span> light.diffuse <span style="color:#f92672">*</span> (diff <span style="color:#f92672">*</span> material.diffuse);
+
+ <span style="color:#66d9ef">vec3</span> viewDir <span style="color:#f92672">=</span> normalize(viewPos <span style="color:#f92672">-</span> FragPos);
+ <span style="color:#66d9ef">vec3</span> reflectDir <span style="color:#f92672">=</span> reflect(<span style="color:#f92672">-</span>lightDir, norm);
+ <span style="color:#66d9ef">float</span> spec <span style="color:#f92672">=</span> pow(max(dot(viewDir, reflectDir), <span style="color:#ae81ff">0.0</span>), material.shininess);
+ <span style="color:#66d9ef">vec3</span> specular <span style="color:#f92672">=</span> light.specular <span style="color:#f92672">*</span> spec <span style="color:#f92672">*</span> material.specular;
+
+ <span style="color:#66d9ef">vec3</span> result <span style="color:#f92672">=</span> ambient <span style="color:#f92672">+</span> diffuse <span style="color:#f92672">+</span> specular;
+ color <span style="color:#f92672">=</span> <span style="color:#66d9ef">vec4</span>(result, <span style="color:#ae81ff">1.0</span>);
+}
+</code></pre></div><h2 id="光照贴图">光照贴图</h2>
+<p>上面的光照贴图确实很好的反射了光照，但是现实生活中一个物体可能会以不同的方式反射光，因为物体的每个部分材质贴图都是不同的，所以我们接下来要引入<strong>漫反射</strong>和<strong>镜面光贴图</strong>。</p>
+<p>漫反射贴图从原理上来说就是一个纹理，在着色器中使用漫反射贴图的方法也和纹理贴图一样，此处我们把它也加到Material中：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">struct</span> Material {
+    <span style="color:#66d9ef">sampler2D</span> diffuse;
+    <span style="color:#75715e">//这里补充一点不透明类型的知识，如果要把不透明类型声明到结构体种，那么这个结构体必须要被声明为uniform，详见：https://www.khronos.org/opengl/wiki/Data_Type_(GLSL)#Opaque_types</span>
+    <span style="color:#66d9ef">vec3</span>      specular;
+    <span style="color:#66d9ef">float</span>     shininess;
+}; 
+...
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec2</span> TexCoords;
+</code></pre></div><p>C++代码没有变多少，不过还是展示一下封装过的加载贴图代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">loadTexture</span>(<span style="color:#66d9ef">char</span> <span style="color:#66d9ef">const</span> <span style="color:#f92672">*</span> path)
+{
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> textureID;
+   glGenTextures(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>textureID);
+
+   <span style="color:#66d9ef">int</span> width, height, nrComponents;
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>data <span style="color:#f92672">=</span> SOIL_load_image(path, <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height, <span style="color:#f92672">&amp;</span>nrComponents, <span style="color:#ae81ff">0</span>);
+    <span style="color:#75715e">//请注意这里最后一个参数是0，表示我们不限定load图片的通道数
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">if</span> (data)
+   {
+       GLenum format;
+       <span style="color:#66d9ef">if</span> (nrComponents <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+           format <span style="color:#f92672">=</span> GL_RED;
+       <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (nrComponents <span style="color:#f92672">==</span> <span style="color:#ae81ff">3</span>)
+           format <span style="color:#f92672">=</span> GL_RGB;
+       <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (nrComponents <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>)
+           format <span style="color:#f92672">=</span> GL_RGBA;
+
+       glBindTexture(GL_TEXTURE_2D, textureID);
+       glTexImage2D(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>, format, width, height, <span style="color:#ae81ff">0</span>, format, GL_UNSIGNED_BYTE, data);
+       <span style="color:#75715e">//因为没有限定load图片的通道数，这里的格式也需要自适应了
+</span><span style="color:#75715e"></span>       glGenerateMipmap(GL_TEXTURE_2D);
+
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+       SOIL_free_image_data(data);
+   }
+   <span style="color:#66d9ef">else</span>
+   {
+       std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Texture failed to load at path: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> path <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+       SOIL_free_image_data(data);
+   }
+
+   <span style="color:#66d9ef">return</span> textureID;
+}
+</code></pre></div><p>片段着色器只需要小改动：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">vec3</span> diffuse <span style="color:#f92672">=</span> light.diffuse <span style="color:#f92672">*</span> diff <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, TexCoords));
+<span style="color:#66d9ef">vec3</span> ambient <span style="color:#f92672">=</span> light.ambient <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, TexCoords));
+</code></pre></div><p>虽然这下立方体有颜色了，但是却很假，因为木头是不应该有高光的，但如果直接把高光的材质设为0，那金属框也不会反射高光了，这个时候我们就需要引入镜面光贴图了。</p>
+<p><img src="https://learnopengl-cn.github.io/img/02/04/container2_specular.png" alt="img"></p>
+<p>镜面高光的强度取决于每个像素的亮度，这个像素约白，那它反射高光就越强，可以看到木头是不反光的，所以中间都是黑的。</p>
+<p>除了镜面发光，我们还可以做放射光贴图，也就是自发光的效果，贴图如下：</p>
+<p><img src="https://learnopengl-cn.github.io/img/02/04/matrix.jpg" alt="img"></p>
+<p>明白这些贴图各自的作用后，我们回顾一下在循环中怎么传贴图：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+   fflush(stdout);
+   currentFrame <span style="color:#f92672">=</span> glfwGetTime();
+   deltaFrame <span style="color:#f92672">=</span> currentFrame <span style="color:#f92672">-</span> lastFrame;
+   lastFrame <span style="color:#f92672">=</span> currentFrame;
+   glfwPollEvents();
+   pos_update();
+   glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+   glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT);
+
+   mat4 view <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+   view <span style="color:#f92672">=</span> camera.GetViewMatrix();
+   mat4 projection <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+   projection <span style="color:#f92672">=</span> perspective(camera.Zoom, (<span style="color:#66d9ef">float</span>)WIDTH<span style="color:#f92672">/</span>(<span style="color:#66d9ef">float</span>)HEIGHT, <span style="color:#ae81ff">0.1f</span>, <span style="color:#ae81ff">100.0f</span>);
+   vec3 <span style="color:#a6e22e">lightPos</span>(<span style="color:#ae81ff">1.2f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">2.0f</span>);
+   vec3 <span style="color:#a6e22e">resize</span>(<span style="color:#ae81ff">0.5f</span>);
+
+   glBindTexture(GL_TEXTURE_2D, texture);
+    <span style="color:#75715e">//这里省略了激活Texture0的代码，因为如果没有还没有激活别的贴图，那么默认当前的激活Texture就是0
+</span><span style="color:#75715e"></span>
+   glActiveTexture(GL_TEXTURE1);
+    <span style="color:#75715e">//切换当前激活Texture为1并绑定对应贴图
+</span><span style="color:#75715e"></span>   glBindTexture(GL_TEXTURE_2D, texture1);
+
+   glActiveTexture(GL_TEXTURE2);
+   glBindTexture(GL_TEXTURE_2D, texture2);
+
+   myShader.Use();
+   myShader.setMat4(<span style="color:#e6db74">&#34;view&#34;</span>, view);
+   myShader.setMat4(<span style="color:#e6db74">&#34;projection&#34;</span>, projection);
+   glBindVertexArray(VAO);
+   mat4 model <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+   myShader.setMat4(<span style="color:#e6db74">&#34;model&#34;</span>, model);
+
+   myShader.setInt(<span style="color:#e6db74">&#34;material.diffuse&#34;</span>, <span style="color:#ae81ff">0</span>);
+   myShader.setInt(<span style="color:#e6db74">&#34;material.specular&#34;</span>, <span style="color:#ae81ff">1</span>);
+   myShader.setInt(<span style="color:#e6db74">&#34;material.emission&#34;</span>, <span style="color:#ae81ff">2</span>);
+    <span style="color:#75715e">//这里告诉对应sampler它的采样目标是Texture几
+</span><span style="color:#75715e"></span>   myShader.setFloat(<span style="color:#e6db74">&#34;material.shininess&#34;</span>, <span style="color:#ae81ff">64.0f</span>);
+
+
+   myShader.setVec3(<span style="color:#e6db74">&#34;light.ambient&#34;</span>, vec3(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.2f</span>));
+   myShader.setVec3(<span style="color:#e6db74">&#34;light.diffuse&#34;</span>, vec3(<span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>, <span style="color:#ae81ff">0.5f</span>));
+   myShader.setVec3(<span style="color:#e6db74">&#34;light.specular&#34;</span>, vec3(<span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>));
+
+   vec3 emission <span style="color:#f92672">=</span> vec3(abs(sin(glfwGetTime())));
+   myShader.setVec3(<span style="color:#e6db74">&#34;light.emission&#34;</span>, emission);
+   myShader.setVec3(<span style="color:#e6db74">&#34;light.position&#34;</span>, lightPos);
+   myShader.setVec3(<span style="color:#e6db74">&#34;viewPos&#34;</span>, camera.Position);
+
+   myShader.setFloat(<span style="color:#e6db74">&#34;movement&#34;</span>, glfwGetTime() <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.5</span>);
+
+   glDrawArrays(GL_TRIANGLES, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">36</span>);
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+   lightShader.Use();
+
+   model <span style="color:#f92672">=</span> translate(model, lightPos);
+   model <span style="color:#f92672">=</span> scale(model, resize);
+   lightShader.setMat4(<span style="color:#e6db74">&#34;view&#34;</span>, view);
+   lightShader.setMat4(<span style="color:#e6db74">&#34;projection&#34;</span>, projection);
+   lightShader.setMat4(<span style="color:#e6db74">&#34;model&#34;</span>, model);
+   glBindVertexArray(lightVAO);
+   glDrawArrays(GL_TRIANGLES, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">36</span>);
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+
+   glfwSwapBuffers(window);
+}
+</code></pre></div><p>对应的着色器代码是：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version 330 core</span>
+
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> Normal;
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> FragPos;
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec2</span> myTex;
+
+<span style="color:#66d9ef">out</span> <span style="color:#66d9ef">vec4</span> color;
+
+<span style="color:#66d9ef">struct</span> Material {
+ <span style="color:#66d9ef">sampler2D</span> diffuse;
+ <span style="color:#66d9ef">sampler2D</span> specular;
+ <span style="color:#66d9ef">sampler2D</span> emission;
+ <span style="color:#66d9ef">float</span> shininess;
+};
+
+<span style="color:#66d9ef">struct</span> Light {
+ <span style="color:#66d9ef">vec3</span> position;
+ <span style="color:#66d9ef">vec3</span> ambient;
+ <span style="color:#66d9ef">vec3</span> diffuse;
+ <span style="color:#66d9ef">vec3</span> specular;
+ <span style="color:#66d9ef">vec3</span> emission;
+};
+
+<span style="color:#66d9ef">uniform</span> <span style="color:#66d9ef">vec3</span> viewPos;
+<span style="color:#66d9ef">uniform</span> Material material;
+<span style="color:#66d9ef">uniform</span> Light light;
+<span style="color:#66d9ef">uniform</span> <span style="color:#66d9ef">sampler2D</span> sam;
+<span style="color:#66d9ef">uniform</span> <span style="color:#66d9ef">float</span> movement;
+
+<span style="color:#66d9ef">void</span> main(){
+ <span style="color:#66d9ef">float</span> ambientStrength <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.1</span>;
+ <span style="color:#66d9ef">float</span> specularStrength <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.8</span>;
+
+ <span style="color:#66d9ef">vec3</span> ambient <span style="color:#f92672">=</span> light.ambient <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, myTex));
+
+ <span style="color:#66d9ef">vec3</span> lightDir <span style="color:#f92672">=</span> normalize(light.position <span style="color:#f92672">-</span> FragPos);
+ <span style="color:#66d9ef">vec3</span> norm <span style="color:#f92672">=</span> normalize(Normal);
+ <span style="color:#66d9ef">float</span> diff <span style="color:#f92672">=</span> max(dot(norm, lightDir), <span style="color:#ae81ff">0.0</span>);
+ <span style="color:#66d9ef">vec3</span> diffuse <span style="color:#f92672">=</span> light.diffuse <span style="color:#f92672">*</span> (diff <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, myTex)));
+
+ <span style="color:#66d9ef">vec3</span> viewDir <span style="color:#f92672">=</span> normalize(viewPos <span style="color:#f92672">-</span> FragPos);
+ <span style="color:#66d9ef">vec3</span> reflectDir <span style="color:#f92672">=</span> reflect(<span style="color:#f92672">-</span>lightDir, norm);
+ <span style="color:#66d9ef">float</span> spec <span style="color:#f92672">=</span> pow(max(dot(viewDir, reflectDir), <span style="color:#ae81ff">0.0</span>), material.shininess);
+ <span style="color:#66d9ef">vec3</span> specular <span style="color:#f92672">=</span> light.specular <span style="color:#f92672">*</span> spec <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.specular, myTex));
+
+ <span style="color:#66d9ef">vec3</span> emission <span style="color:#f92672">=</span> light.emission <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.emission, <span style="color:#66d9ef">vec2</span>(myTex.x, myTex.y <span style="color:#f92672">+</span> movement)));
+
+ <span style="color:#66d9ef">vec3</span> result <span style="color:#f92672">=</span> ambient <span style="color:#f92672">+</span> diffuse <span style="color:#f92672">+</span> specular <span style="color:#f92672">+</span> emission;
+ color <span style="color:#f92672">=</span> <span style="color:#66d9ef">vec4</span>(result, <span style="color:#ae81ff">1.0</span>);
+}
+</code></pre></div><p>应该不难看懂，就不解释了。</p>
+<h2 id="光源">光源</h2>
+<p>如标题所示，这节我们会讨论三种光：<strong>定向光</strong>（Directional Light），<strong>点光源</strong>（Point Light），<strong>聚光</strong>（Spotlight）。</p>
+<h3 id="定向光">定向光</h3>
+<p>如果光源位置足够远，我们就可以假设它的每条光线是平行的，现实中的例子就是太阳。</p>
+<p><img src="https://learnopengl-cn.github.io/img/02/05/light_casters_directional.png" alt="img"></p>
+<p>因为所有光线都平行，所以光源的位置就不重要了，因为对于场景中每一个物体，光的方向都是一致的，所以说代码里我们用光线方向来替代光源位置。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">struct</span> Light {
+    <span style="color:#75715e">// vec3 position; // 使用定向光就不再需要了</span>
+    <span style="color:#66d9ef">vec3</span> direction;
+
+    <span style="color:#66d9ef">vec3</span> ambient;
+    <span style="color:#66d9ef">vec3</span> diffuse;
+    <span style="color:#66d9ef">vec3</span> specular;
+};
+...
+<span style="color:#66d9ef">void</span> main()
+{
+  <span style="color:#66d9ef">vec3</span> lightDir <span style="color:#f92672">=</span> normalize(<span style="color:#f92672">-</span>light.direction);
+    <span style="color:#75715e">//至于这里为什么要取反，请看之前计算漫反射的图</span>
+  ...
+}
+</code></pre></div><p>然后再在c++代码中设置direction就行了，对于direction的设计，可以用vec3也可以用vec4，正如之前提到过的四分量向量的第四个分量w，可以在glsl代码中检测，如果w为0就作为定向光处理，如果w为1就作为位置光处理。</p>
+<h3 id="点光源">点光源</h3>
+<p>点光源和位置光是特别像的，除了一点，衰减。</p>
+<p>之前的位置光无论物体放在哪里，光线的强度都一样，这样是不符合物理常理的，而<strong>衰减</strong>（Attenuation）是会让光照强度随着距离而减少的一种线性方程：
+$$
+F_{att}=\frac{1.0}{K_c+K_l<em>d+K_q</em>d^2}
+$$
+在这里d代表了片段距离光源的距离，而三个K则是我们为了计算衰减值的可配置数值：</p>
+<ul>
+<li>常数项$K_c$通常为1，它的作用是保证分母永远大于1.</li>
+<li>一次项以线性方式减少强度。</li>
+<li>二次项在近距离时影响较小，远距离影响更大。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">覆盖距离</th>
+<th style="text-align:left">常数项</th>
+<th style="text-align:left">一次项</th>
+<th style="text-align:left">二次项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.7</td>
+<td style="text-align:left">1.8</td>
+</tr>
+<tr>
+<td style="text-align:left">13</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.35</td>
+<td style="text-align:left">0.44</td>
+</tr>
+<tr>
+<td style="text-align:left">20</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.22</td>
+<td style="text-align:left">0.20</td>
+</tr>
+<tr>
+<td style="text-align:left">32</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.14</td>
+<td style="text-align:left">0.07</td>
+</tr>
+<tr>
+<td style="text-align:left">50</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.09</td>
+<td style="text-align:left">0.032</td>
+</tr>
+<tr>
+<td style="text-align:left">65</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.07</td>
+<td style="text-align:left">0.017</td>
+</tr>
+<tr>
+<td style="text-align:left">100</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.045</td>
+<td style="text-align:left">0.0075</td>
+</tr>
+<tr>
+<td style="text-align:left">160</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.027</td>
+<td style="text-align:left">0.0028</td>
+</tr>
+<tr>
+<td style="text-align:left">200</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.022</td>
+<td style="text-align:left">0.0019</td>
+</tr>
+<tr>
+<td style="text-align:left">325</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.014</td>
+<td style="text-align:left">0.0007</td>
+</tr>
+<tr>
+<td style="text-align:left">600</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.007</td>
+<td style="text-align:left">0.0002</td>
+</tr>
+<tr>
+<td style="text-align:left">3250</td>
+<td style="text-align:left">1.0</td>
+<td style="text-align:left">0.0014</td>
+<td style="text-align:left">0.000007</td>
+</tr>
+</tbody>
+</table>
+<p>代码很简单，只需要新加几个参数到结构体就行：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">struct</span> Light {
+    <span style="color:#66d9ef">vec3</span> position;  
+
+    <span style="color:#66d9ef">vec3</span> ambient;
+    <span style="color:#66d9ef">vec3</span> diffuse;
+    <span style="color:#66d9ef">vec3</span> specular;
+
+    <span style="color:#66d9ef">float</span> constant;
+    <span style="color:#66d9ef">float</span> linear;
+    <span style="color:#66d9ef">float</span> quadratic;
+};
+    
+<span style="color:#66d9ef">int</span> main(){
+    ...
+    <span style="color:#66d9ef">float</span> distance    <span style="color:#f92672">=</span> length(light.position <span style="color:#f92672">-</span> FragPos);
+    <span style="color:#66d9ef">float</span> attenuation <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> (light.constant <span style="color:#f92672">+</span> light.linear <span style="color:#f92672">*</span> distance <span style="color:#f92672">+</span> light.quadratic <span style="color:#f92672">*</span> (distance <span style="color:#f92672">*</span> distance));
+    ambient  <span style="color:#f92672">*=</span> attenuation; 
+    diffuse  <span style="color:#f92672">*=</span> attenuation;
+    specular <span style="color:#f92672">*=</span> attenuation;
+}
+</code></pre></div><h3 id="聚光">聚光</h3>
+<p>聚光时位于一个特定位置朝着特定方向照射的光线，可以想象成手电筒和路灯。</p>
+<p>在OpenGL中，聚光由一个世界坐标，一个方向和一个<strong>切光角</strong>（Cutoff Angle）来表示，切光角定义了圆锥的半径，对于每个片段，我们会计算它在不在切光方向之内。</p>
+<p><img src="https://learnopengl-cn.github.io/img/02/05/light_casters_spotlight_angles.png" alt="img"></p>
+<ul>
+<li><code>LightDir</code>：从片段指向光源的向量。</li>
+<li><code>SpotDir</code>： 聚光指向的方向。</li>
+<li><code>Phi</code>$\phi$：切光角。</li>
+<li><code>Theta</code>$\theta$ ：LightDir和SportDir之间的夹角，如果在聚光范围内，这个角度应该要比$\phi$更小。</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">#version 330 core</span>
+
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> Normal;
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec3</span> FragPos;
+<span style="color:#66d9ef">in</span> <span style="color:#66d9ef">vec2</span> myTex;
+
+<span style="color:#66d9ef">out</span> <span style="color:#66d9ef">vec4</span> color;
+
+<span style="color:#66d9ef">struct</span> Material {
+ <span style="color:#66d9ef">sampler2D</span> diffuse;
+ <span style="color:#66d9ef">sampler2D</span> specular;
+ <span style="color:#66d9ef">float</span> shininess;
+};
+
+<span style="color:#66d9ef">struct</span> Light {
+ <span style="color:#66d9ef">vec3</span> position;
+ <span style="color:#66d9ef">vec3</span> direction;
+ <span style="color:#66d9ef">float</span> cutOff;
+
+ <span style="color:#66d9ef">vec3</span> ambient;
+ <span style="color:#66d9ef">vec3</span> diffuse;
+ <span style="color:#66d9ef">vec3</span> specular;
+
+ <span style="color:#66d9ef">float</span> constant;
+ <span style="color:#66d9ef">float</span> linear;
+ <span style="color:#66d9ef">float</span> quadratic;
+};
+
+<span style="color:#66d9ef">uniform</span> <span style="color:#66d9ef">vec3</span> viewPos;
+<span style="color:#66d9ef">uniform</span> Material material;
+<span style="color:#66d9ef">uniform</span> Light light;
+
+<span style="color:#66d9ef">void</span> main(){
+ <span style="color:#66d9ef">vec3</span> lightDir <span style="color:#f92672">=</span> normalize(light.position <span style="color:#f92672">-</span> FragPos);
+ <span style="color:#66d9ef">float</span> theta <span style="color:#f92672">=</span> dot(lightDir, normalize(<span style="color:#f92672">-</span>light.direction));
+ <span style="color:#66d9ef">vec3</span> ambient <span style="color:#f92672">=</span> light.ambient <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, myTex));
+ <span style="color:#66d9ef">vec3</span> result;
+ <span style="color:#66d9ef">if</span>(theta <span style="color:#f92672">&gt;</span> light.cutOff){
+     <span style="color:#75715e">//唯一需要注意的一点，为什么这里是&gt;号</span>
+     <span style="color:#75715e">//原因是我们在这里用的是cos，cos里，越接近1的数值，角度越小，如果对此有疑问请查看cos函数的图像</span>
+     <span style="color:#66d9ef">vec3</span> norm <span style="color:#f92672">=</span> normalize(Normal);
+     <span style="color:#66d9ef">float</span> diff <span style="color:#f92672">=</span> max(dot(norm, lightDir), <span style="color:#ae81ff">0.0</span>);
+     <span style="color:#66d9ef">vec3</span> diffuse <span style="color:#f92672">=</span> light.diffuse <span style="color:#f92672">*</span> diff <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, myTex));
+
+     <span style="color:#66d9ef">vec3</span> viewDir <span style="color:#f92672">=</span> normalize(viewPos <span style="color:#f92672">-</span> FragPos);
+     <span style="color:#66d9ef">vec3</span> reflectDir <span style="color:#f92672">=</span> reflect(<span style="color:#f92672">-</span>lightDir, norm);
+     <span style="color:#66d9ef">float</span> spec <span style="color:#f92672">=</span> pow(max(dot(viewDir, reflectDir), <span style="color:#ae81ff">0.0</span>), material.shininess);
+     <span style="color:#66d9ef">vec3</span> specular <span style="color:#f92672">=</span> light.specular <span style="color:#f92672">*</span> spec <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.specular, myTex));
+
+     <span style="color:#66d9ef">float</span> distance    <span style="color:#f92672">=</span> length(light.position <span style="color:#f92672">-</span> FragPos);
+     <span style="color:#66d9ef">float</span> attenuation <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> (light.constant <span style="color:#f92672">+</span> light.linear <span style="color:#f92672">*</span> distance <span style="color:#f92672">+</span> light.quadratic <span style="color:#f92672">*</span> (distance <span style="color:#f92672">*</span> distance));
+
+     diffuse   <span style="color:#f92672">*=</span> attenuation;
+     specular <span style="color:#f92672">*=</span> attenuation;
+
+     result <span style="color:#f92672">=</span> ambient <span style="color:#f92672">+</span> diffuse <span style="color:#f92672">+</span> specular;
+ } <span style="color:#66d9ef">else</span> {
+     result <span style="color:#f92672">=</span> ambient;
+ }
+
+ color <span style="color:#f92672">=</span> <span style="color:#66d9ef">vec4</span>(result, <span style="color:#ae81ff">1.0</span>);
+}
+</code></pre></div><p>然而这样的效果还不够真实，主要原因光的边缘太硬了，真实的效果应该是越接近聚光方向的光强越大，约边缘光强越弱，这时候就要用到这个函数：
+$$
+I = \frac{\theta - \gamma}{\epsilon}
+$$
+这里$\epsilon=\phi-\gamma$，内圆锥和外圆锥的余弦值差，最后的结果是当前片段的聚光强度。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">$\theta$</th>
+<th style="text-align:left">$\theta$（角度）</th>
+<th style="text-align:left">$\phi$（内光切）</th>
+<th style="text-align:left">$\phi$（角度）</th>
+<th style="text-align:left">$\gamma$（外光切）</th>
+<th style="text-align:left">$\gamma$（角度）</th>
+<th style="text-align:left">$\epsilon$</th>
+<th style="text-align:left">$I$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">0.87</td>
+<td style="text-align:left">30</td>
+<td style="text-align:left">0.91</td>
+<td style="text-align:left">25</td>
+<td style="text-align:left">0.82</td>
+<td style="text-align:left">35</td>
+<td style="text-align:left">0.91 - 0.82 = 0.09</td>
+<td style="text-align:left">0.87 - 0.82 / 0.09 = 0.56</td>
+</tr>
+<tr>
+<td style="text-align:left">0.9</td>
+<td style="text-align:left">26</td>
+<td style="text-align:left">0.91</td>
+<td style="text-align:left">25</td>
+<td style="text-align:left">0.82</td>
+<td style="text-align:left">35</td>
+<td style="text-align:left">0.91 - 0.82 = 0.09</td>
+<td style="text-align:left">0.9 - 0.82 / 0.09 = 0.89</td>
+</tr>
+<tr>
+<td style="text-align:left">0.97</td>
+<td style="text-align:left">14</td>
+<td style="text-align:left">0.91</td>
+<td style="text-align:left">25</td>
+<td style="text-align:left">0.82</td>
+<td style="text-align:left">35</td>
+<td style="text-align:left">0.91 - 0.82 = 0.09</td>
+<td style="text-align:left">0.97 - 0.82 / 0.09 = 1.67</td>
+</tr>
+<tr>
+<td style="text-align:left">0.83</td>
+<td style="text-align:left">34</td>
+<td style="text-align:left">0.91</td>
+<td style="text-align:left">25</td>
+<td style="text-align:left">0.82</td>
+<td style="text-align:left">35</td>
+<td style="text-align:left">0.91 - 0.82 = 0.09</td>
+<td style="text-align:left">0.83 - 0.82 / 0.09 = 0.11</td>
+</tr>
+<tr>
+<td style="text-align:left">0.64</td>
+<td style="text-align:left">50</td>
+<td style="text-align:left">0.91</td>
+<td style="text-align:left">25</td>
+<td style="text-align:left">0.82</td>
+<td style="text-align:left">35</td>
+<td style="text-align:left">0.91 - 0.82 = 0.09</td>
+<td style="text-align:left">0.64 - 0.82 / 0.09 = -2.0</td>
+</tr>
+<tr>
+<td style="text-align:left">0.966</td>
+<td style="text-align:left">15</td>
+<td style="text-align:left">0.9978</td>
+<td style="text-align:left">12.5</td>
+<td style="text-align:left">0.953</td>
+<td style="text-align:left">17.5</td>
+<td style="text-align:left">0.966 - 0.953 = 0.0448</td>
+<td style="text-align:left">0.966 - 0.953 / 0.0448 = 0.29</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到，越接近边缘，$I$越接近1，反之越大，最后给出代码，应该不难理解：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl">    <span style="color:#75715e">// spotlight (soft edges)</span>
+    <span style="color:#66d9ef">float</span> theta <span style="color:#f92672">=</span> dot(lightDir, normalize(<span style="color:#f92672">-</span>light.direction)); 
+    <span style="color:#66d9ef">float</span> epsilon <span style="color:#f92672">=</span> (light.cutOff <span style="color:#f92672">-</span> light.outerCutOff);
+    <span style="color:#66d9ef">float</span> intensity <span style="color:#f92672">=</span> clamp((theta <span style="color:#f92672">-</span> light.outerCutOff) <span style="color:#f92672">/</span> epsilon, <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">1.0</span>);
+    <span style="color:#75715e">//clamp 保证最后结果在0 - 1之间</span>
+    diffuse  <span style="color:#f92672">*=</span> intensity;
+    specular <span style="color:#f92672">*=</span> intensity;
+    
+    <span style="color:#75715e">// attenuation</span>
+    <span style="color:#66d9ef">float</span> distance    <span style="color:#f92672">=</span> length(light.position <span style="color:#f92672">-</span> FragPos);
+    <span style="color:#66d9ef">float</span> attenuation <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> (light.constant <span style="color:#f92672">+</span> light.linear <span style="color:#f92672">*</span> distance <span style="color:#f92672">+</span> light.quadratic <span style="color:#f92672">*</span> (distance <span style="color:#f92672">*</span> distance));    
+    ambient  <span style="color:#f92672">*=</span> attenuation; 
+    diffuse   <span style="color:#f92672">*=</span> attenuation;
+    specular <span style="color:#f92672">*=</span> attenuation;  
+</code></pre></div><h2 id="多光源">多光源</h2>
+<p>最后，我们把之前学过的几个光源封装成函数，这样就方便多光源的整合计算了。</p>
+<h3 id="定向光-1">定向光</h3>
+<p>结构体</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">struct</span> DirLight{
+    <span style="color:#66d9ef">vec3</span> direction;
+    <span style="color:#66d9ef">vec3</span> ambient;
+    <span style="color:#66d9ef">vec3</span> diffuse;
+    <span style="color:#66d9ef">vec3</span> specular;
+}
+</code></pre></div><p>封装函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">vec3</span> CalcDirLight(DirLight light, <span style="color:#66d9ef">vec3</span> normal, <span style="color:#66d9ef">vec3</span> viewDir)
+{
+    <span style="color:#66d9ef">vec3</span> lightDir <span style="color:#f92672">=</span> normalize(<span style="color:#f92672">-</span>light.direction);
+    <span style="color:#75715e">// 漫反射着色</span>
+    <span style="color:#66d9ef">float</span> diff <span style="color:#f92672">=</span> max(dot(normal, lightDir), <span style="color:#ae81ff">0.0</span>);
+    <span style="color:#75715e">// 镜面光着色</span>
+    <span style="color:#66d9ef">vec3</span> reflectDir <span style="color:#f92672">=</span> reflect(<span style="color:#f92672">-</span>lightDir, normal);
+    <span style="color:#66d9ef">float</span> spec <span style="color:#f92672">=</span> pow(max(dot(viewDir, reflectDir), <span style="color:#ae81ff">0.0</span>), material.shininess);
+    <span style="color:#75715e">// 合并结果</span>
+    <span style="color:#66d9ef">vec3</span> ambient  <span style="color:#f92672">=</span> light.ambient  <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, TexCoords));
+    <span style="color:#66d9ef">vec3</span> diffuse  <span style="color:#f92672">=</span> light.diffuse  <span style="color:#f92672">*</span> diff <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, TexCoords));
+    <span style="color:#66d9ef">vec3</span> specular <span style="color:#f92672">=</span> light.specular <span style="color:#f92672">*</span> spec <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.specular, TexCoords));
+    <span style="color:#66d9ef">return</span> (ambient <span style="color:#f92672">+</span> diffuse <span style="color:#f92672">+</span> specular);
+}
+</code></pre></div><h3 id="点光源-1">点光源</h3>
+<p>结构体</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">struct</span> PointLight {
+    <span style="color:#66d9ef">vec3</span> position;
+
+    <span style="color:#66d9ef">float</span> constant;
+    <span style="color:#66d9ef">float</span> linear;
+    <span style="color:#66d9ef">float</span> quadratic;
+
+    <span style="color:#66d9ef">vec3</span> ambient;
+    <span style="color:#66d9ef">vec3</span> diffuse;
+    <span style="color:#66d9ef">vec3</span> specular;
+};  
+</code></pre></div><p>封装函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">vec3</span> CalcPointLight(PointLight light, <span style="color:#66d9ef">vec3</span> normal, <span style="color:#66d9ef">vec3</span> fragPos, <span style="color:#66d9ef">vec3</span> viewDir)
+{
+    <span style="color:#66d9ef">vec3</span> lightDir <span style="color:#f92672">=</span> normalize(light.position <span style="color:#f92672">-</span> fragPos);
+    <span style="color:#75715e">// 漫反射着色</span>
+    <span style="color:#66d9ef">float</span> diff <span style="color:#f92672">=</span> max(dot(normal, lightDir), <span style="color:#ae81ff">0.0</span>);
+    <span style="color:#75715e">// 镜面光着色</span>
+    <span style="color:#66d9ef">vec3</span> reflectDir <span style="color:#f92672">=</span> reflect(<span style="color:#f92672">-</span>lightDir, normal);
+    <span style="color:#66d9ef">float</span> spec <span style="color:#f92672">=</span> pow(max(dot(viewDir, reflectDir), <span style="color:#ae81ff">0.0</span>), material.shininess);
+    <span style="color:#75715e">// 衰减</span>
+    <span style="color:#66d9ef">float</span> distance    <span style="color:#f92672">=</span> length(light.position <span style="color:#f92672">-</span> fragPos);
+    <span style="color:#66d9ef">float</span> attenuation <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> (light.constant <span style="color:#f92672">+</span> light.linear <span style="color:#f92672">*</span> distance <span style="color:#f92672">+</span> 
+                 light.quadratic <span style="color:#f92672">*</span> (distance <span style="color:#f92672">*</span> distance));    
+    <span style="color:#75715e">// 合并结果</span>
+    <span style="color:#66d9ef">vec3</span> ambient  <span style="color:#f92672">=</span> light.ambient  <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, TexCoords));
+    <span style="color:#66d9ef">vec3</span> diffuse  <span style="color:#f92672">=</span> light.diffuse  <span style="color:#f92672">*</span> diff <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, TexCoords));
+    <span style="color:#66d9ef">vec3</span> specular <span style="color:#f92672">=</span> light.specular <span style="color:#f92672">*</span> spec <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.specular, TexCoords));
+    ambient  <span style="color:#f92672">*=</span> attenuation;
+    diffuse  <span style="color:#f92672">*=</span> attenuation;
+    specular <span style="color:#f92672">*=</span> attenuation;
+    <span style="color:#66d9ef">return</span> (ambient <span style="color:#f92672">+</span> diffuse <span style="color:#f92672">+</span> specular);
+}
+</code></pre></div><h3 id="聚光-1">聚光</h3>
+<p>结构体</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">struct</span> SpotLight {
+    <span style="color:#66d9ef">vec3</span> position;
+    <span style="color:#66d9ef">vec3</span> direction;
+    <span style="color:#66d9ef">float</span> cutOff;
+    <span style="color:#66d9ef">float</span> outerCutOff;
+  
+    <span style="color:#66d9ef">float</span> constant;
+    <span style="color:#66d9ef">float</span> linear;
+    <span style="color:#66d9ef">float</span> quadratic;
+  
+    <span style="color:#66d9ef">vec3</span> ambient;
+    <span style="color:#66d9ef">vec3</span> diffuse;
+    <span style="color:#66d9ef">vec3</span> specular;       
+};
+</code></pre></div><p>封装函数</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#66d9ef">vec3</span> CalcSpotLight(SpotLight light, <span style="color:#66d9ef">vec3</span> normal, <span style="color:#66d9ef">vec3</span> fragPos, <span style="color:#66d9ef">vec3</span> viewDir)
+{
+    <span style="color:#66d9ef">vec3</span> lightDir <span style="color:#f92672">=</span> normalize(light.position <span style="color:#f92672">-</span> fragPos);
+    <span style="color:#75715e">// diffuse shading</span>
+    <span style="color:#66d9ef">float</span> diff <span style="color:#f92672">=</span> max(dot(normal, lightDir), <span style="color:#ae81ff">0.0</span>);
+    <span style="color:#75715e">// specular shading</span>
+    <span style="color:#66d9ef">vec3</span> reflectDir <span style="color:#f92672">=</span> reflect(<span style="color:#f92672">-</span>lightDir, normal);
+    <span style="color:#66d9ef">float</span> spec <span style="color:#f92672">=</span> pow(max(dot(viewDir, reflectDir), <span style="color:#ae81ff">0.0</span>), material.shininess);
+    <span style="color:#75715e">// attenuation</span>
+    <span style="color:#66d9ef">float</span> distance <span style="color:#f92672">=</span> length(light.position <span style="color:#f92672">-</span> fragPos);
+    <span style="color:#66d9ef">float</span> attenuation <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> (light.constant <span style="color:#f92672">+</span> light.linear <span style="color:#f92672">*</span> distance <span style="color:#f92672">+</span> light.quadratic <span style="color:#f92672">*</span> (distance <span style="color:#f92672">*</span> distance));    
+    <span style="color:#75715e">// spotlight intensity</span>
+    <span style="color:#66d9ef">float</span> theta <span style="color:#f92672">=</span> dot(lightDir, normalize(<span style="color:#f92672">-</span>light.direction)); 
+    <span style="color:#66d9ef">float</span> epsilon <span style="color:#f92672">=</span> light.cutOff <span style="color:#f92672">-</span> light.outerCutOff;
+    <span style="color:#66d9ef">float</span> intensity <span style="color:#f92672">=</span> clamp((theta <span style="color:#f92672">-</span> light.outerCutOff) <span style="color:#f92672">/</span> epsilon, <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">1.0</span>);
+    <span style="color:#75715e">// combine results</span>
+    <span style="color:#66d9ef">vec3</span> ambient <span style="color:#f92672">=</span> light.ambient <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, TexCoords));
+    <span style="color:#66d9ef">vec3</span> diffuse <span style="color:#f92672">=</span> light.diffuse <span style="color:#f92672">*</span> diff <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.diffuse, TexCoords));
+    <span style="color:#66d9ef">vec3</span> specular <span style="color:#f92672">=</span> light.specular <span style="color:#f92672">*</span> spec <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec3</span>(texture(material.specular, TexCoords));
+    ambient <span style="color:#f92672">*=</span> attenuation <span style="color:#f92672">*</span> intensity;
+    diffuse <span style="color:#f92672">*=</span> attenuation <span style="color:#f92672">*</span> intensity;
+    specular <span style="color:#f92672">*=</span> attenuation <span style="color:#f92672">*</span> intensity;
+    <span style="color:#66d9ef">return</span> (ambient <span style="color:#f92672">+</span> diffuse <span style="color:#f92672">+</span> specular);
+}
+</code></pre></div><h2 id="投影纹理">投影纹理</h2>
+<p>本章最后补充一个知识点，投影纹理。</p>
+<p>投影纹理的效果就和现实中的投影仪一样，可以将图片映射到物体上。</p>
+<p>首先，我们以投影源位置为中心定义一个坐标系统，因为经过投影变换的点的范围是<code>[-1,1]</code>，所以要通过以下的变换将其转换成范围为<code>[0,1]</code>的UV坐标，变换矩阵如下：
+$$
+M=\left[
+\begin{array}{cccc}
+0.5 &amp; 0   &amp; 0   &amp; 0.5 \\\<br>
+0   &amp; 0.5 &amp; 0   &amp; 0.5 \\\<br>
+0   &amp; 0   &amp; 0.5 &amp; 0.5 \\\<br>
+0   &amp; 0   &amp; 0   &amp; 1
+\end{array}
+\right]PV
+$$
+其中P为透视矩阵，V为投影源的LookAt矩阵。</p>
+<p>想象一下不难解释为什么需要用到透视矩阵（实际上正交也可以，但是效果不真实），投影的几何体和摄像机的几何体都是锥体。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/2949750-eda51a2abcae9209.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/566/format/webp" alt="img"></p>
+<p>最后附上关键代码：</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">mat4 projScaleTran <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+projScaleTran <span style="color:#f92672">=</span> translate(projScaleTran, vec3(<span style="color:#ae81ff">0.5f</span>));
+projScaleTran <span style="color:#f92672">=</span> scale(projScaleTran, vec3(<span style="color:#ae81ff">0.5f</span>));
+...
+<span style="color:#66d9ef">while</span>(...){
+    ...
+    mat4 m <span style="color:#f92672">=</span> projScaleTran <span style="color:#f92672">*</span> perspective(<span style="color:#ae81ff">30.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">1000.0f</span>) <span style="color:#f92672">*</span> camera.GetViewMatrix();
+    myShader.setMat4(<span style="color:#e6db74">&#34;projectorMatrix&#34;</span>, m);
+    ...
+}
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl"><span style="color:#75715e">//vertex</span>
+ ProjTexCoord <span style="color:#f92672">=</span> projectorMatrix <span style="color:#f92672">*</span> (model <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec4</span>(position, <span style="color:#ae81ff">1.0</span>f));
+ <span style="color:#75715e">//要随着物体，物体空间变换到世界空间，所以这一步是必要的</span>
+<span style="color:#75715e">//fragment</span>
+ <span style="color:#66d9ef">vec4</span> projTexColor <span style="color:#f92672">=</span> <span style="color:#66d9ef">vec4</span>(<span style="color:#ae81ff">0.0</span>);
+ projTexColor <span style="color:#f92672">=</span> textureProj(material.projectorTex, ProjTexCoord);
+
+</code></pre></div><h2 id="assimp">Assimp</h2>
+<p>在导入模型之前，我们先要了解一个模型导入库：<strong><code>Assimp</code></strong>。<code>Assimp</code>可以导入多种不同的模型格式，并将模型数据加载到它的通用数据结构中，加载完之后，我们就可以从这个数据结构中读取我们需要的数据了。</p>
+<blockquote>
+<p>一个模型通常包括多个网格，通常每个模型都由几个子模型、形状组合而成，每个单独的形状就是一个网格。网格是OpenGL中绘制物体所需的最小单位（顶点数据，索引，材质属性）。</p>
+</blockquote>
+<p><img src="https://learnopengl-cn.github.io/img/03/01/assimp_structure.png" alt="img"></p>
+<ul>
+<li>和材质于网格一样，所有的场景、模型都包含在Scene对象中，Scene对象也包括了对根节点的引用。</li>
+<li>根节点可能包括一些列指向场景对象中存储的网格数据的索引<code>mMeshes</code>的子节点，<code>mMeshes</code>下存储了真正的Mesh对象。</li>
+<li>一个Mesh对象本身包括了渲染所需要的所有数据，包括顶点向量，法向量，纹理坐标，面和物体的材质。</li>
+<li>一个网格包含了多个面，一个面包含了组成物体的渲染图元（三角，方形，点）的顶点的索引，所以利用EBO来渲染非常简单。</li>
+<li>如上一条提到，网格是包括Material对象的，它包含了一些函数让我们能获取到物体的材质属性。</li>
+</ul>
+<h2 id="网格">网格</h2>
+<p>正如上一节所说，网格代表的是单个可绘制的实体，回想一下网格需要的数据：一系列顶点，每个顶点拥有对应的的位置向量，法向量和纹理坐标向量。用于索引绘制的索引和纹理形式的材质数据。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">//
+</span><span style="color:#75715e">// Created by herain on 7/12/21.
+</span><span style="color:#75715e">//
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">#ifndef OPENGL_MESH_H
+</span><span style="color:#75715e">#define OPENGL_MESH_H
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/glm.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/gtc/matrix_transform.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Shader.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> glm;
+<span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Vertex</span>{
+   vec3 Position;
+   vec3 Normal;
+   vec2 TexCoords;
+};
+
+<span style="color:#66d9ef">struct</span> <span style="color:#a6e22e">Texture</span>{
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> id;
+   <span style="color:#75715e">//这个id指的是以前我们用SOIL读取图片之后的返回值，即索引texture的值
+</span><span style="color:#75715e"></span>   string type;
+   <span style="color:#75715e">//这个type会指明这个材质是漫反射还是镜面反射，之后这个会被用于命名
+</span><span style="color:#75715e"></span>   string path;
+};
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Mesh</span>{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+   <span style="color:#75715e">//网格数据
+</span><span style="color:#75715e"></span>   vector<span style="color:#f92672">&lt;</span>Vertex<span style="color:#f92672">&gt;</span> vertices;
+   vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> indices;
+   vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> textures;
+   <span style="color:#75715e">//函数
+</span><span style="color:#75715e"></span>   Mesh(vector<span style="color:#f92672">&lt;</span>Vertex<span style="color:#f92672">&gt;</span> vertices, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> indices, vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> textures);
+   <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Draw</span>(Shader shader);
+
+<span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+   <span style="color:#75715e">//渲染数据
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> VAO, VBO, EBO;
+   <span style="color:#75715e">//函数
+</span><span style="color:#75715e"></span>   <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">setupMesh</span>();
+};
+
+Mesh<span style="color:#f92672">::</span>Mesh(vector<span style="color:#f92672">&lt;</span>Vertex<span style="color:#f92672">&gt;</span> vertices, vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> indices, vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> textures){
+   <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>vertices <span style="color:#f92672">=</span> vertices;
+   <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>indices <span style="color:#f92672">=</span> indices;
+   <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>textures <span style="color:#f92672">=</span> textures;
+   setupMesh();
+}
+
+<span style="color:#66d9ef">void</span> Mesh<span style="color:#f92672">::</span>setupMesh() {
+   glGenVertexArrays(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VAO);
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>VBO);
+   glGenBuffers(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>EBO);
+
+   glBindVertexArray(VAO);
+   glBindBuffer(GL_ARRAY_BUFFER, VBO);
+   glBufferData(GL_ARRAY_BUFFER, vertices.size() <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(Vertex), <span style="color:#f92672">&amp;</span>vertices[<span style="color:#ae81ff">0</span>], GL_STATIC_DRAW);
+
+   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+   glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() <span style="color:#f92672">*</span> <span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span>), <span style="color:#f92672">&amp;</span>indices[<span style="color:#ae81ff">0</span>], GL_STATIC_DRAW);
+
+   glEnableVertexAttribArray(<span style="color:#ae81ff">0</span>);
+   glVertexAttribPointer(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#66d9ef">sizeof</span>(Vertex), (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) <span style="color:#ae81ff">0</span>);
+
+   glEnableVertexAttribArray(<span style="color:#ae81ff">1</span>);
+   glVertexAttribPointer(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, GL_FLOAT, GL_FALSE, <span style="color:#66d9ef">sizeof</span>(Vertex), (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) offsetof(Vertex, Normal));
+
+   glEnableVertexAttribArray(<span style="color:#ae81ff">2</span>);
+   glVertexAttribPointer(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>, GL_FLOAT, GL_FALSE, <span style="color:#66d9ef">sizeof</span>(Vertex), (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) offsetof(Vertex, TexCoords));
+
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+}
+
+<span style="color:#66d9ef">void</span> Mesh<span style="color:#f92672">::</span>Draw(Shader shader) {
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> diffuseNr <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> specularNr <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+   <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> textures.size(); i<span style="color:#f92672">++</span>){
+       glActiveTexture(GL_TEXTURE0 <span style="color:#f92672">+</span> i);
+       string number;
+       string name <span style="color:#f92672">=</span> textures[i].type;
+       <span style="color:#66d9ef">if</span>(name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;texture_diffuse&#34;</span>)
+           number <span style="color:#f92672">=</span> to_string(diffuseNr<span style="color:#f92672">++</span>);
+       <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span>(name <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;texture_specular&#34;</span>)
+           number <span style="color:#f92672">=</span> to_string(specularNr<span style="color:#f92672">++</span>);
+
+       shader.setFloat((<span style="color:#e6db74">&#34;material.&#34;</span><span style="color:#f92672">+</span>name<span style="color:#f92672">+</span>number).c_str(), i);
+       <span style="color:#75715e">//每个漫反射纹理会被命名为texture_diffuseN，每个镜面反射纹理会被命名为texture_specularN
+</span><span style="color:#75715e"></span>       glBindTexture(GL_TEXTURE_2D, textures[i].id);
+       <span style="color:#75715e">//将纹理数据传入到缓冲中，此时缓冲绑定着某个纹理
+</span><span style="color:#75715e"></span>   }
+   glActiveTexture(GL_TEXTURE0);
+
+   glBindVertexArray(VAO);
+   glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, <span style="color:#ae81ff">0</span>);
+   glBindVertexArray(<span style="color:#ae81ff">0</span>);
+}
+
+<span style="color:#75715e">#endif </span><span style="color:#75715e">//OPENGL_MESH_H
+</span></code></pre></div><h2 id="模型">模型</h2>
+<p>如之前所说，一个模型是由多个网格构成的，所以在模型类中，就一定会包含一个网格的vector。在这一节中，我们会学习如何将3D模型转换成Mesh对象。</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#ifndef MODEL_H
+</span><span style="color:#75715e">#define MODEL_H
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/glm.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;glm/gtc/matrix_transform.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;stb/stb_image.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;assimp/Importer.hpp&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;assimp/scene.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;assimp/postprocess.h&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;string&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;fstream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;sstream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;map&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;vector&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;Mesh.h&#34;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+
+<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">TextureFromFile</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path, <span style="color:#66d9ef">const</span> string <span style="color:#f92672">&amp;</span>directory);
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Model</span>
+{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+   vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> textures_loaded;
+    <span style="color:#75715e">//存储已经加载过的贴图，因为很多情况下同一张贴图会被用很多次，所以不重复加载贴图能在一定程度上提升性能
+</span><span style="color:#75715e"></span>   vector<span style="color:#f92672">&lt;</span>Mesh<span style="color:#f92672">&gt;</span>    meshes;
+   string directory;
+
+   Model(string <span style="color:#66d9ef">const</span> <span style="color:#f92672">&amp;</span>path, <span style="color:#66d9ef">bool</span> gamma <span style="color:#f92672">=</span> false)
+   {
+       loadModel(path);
+   }
+
+   <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">Draw</span>(Shader <span style="color:#f92672">&amp;</span>shader)
+   {
+       <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> meshes.size(); i<span style="color:#f92672">++</span>)
+           meshes[i].Draw(shader);
+   }
+    <span style="color:#75715e">//渲染模型实际上就是把它下面的网格一个个都绘制好
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+   <span style="color:#66d9ef">void</span> loadModel(string <span style="color:#66d9ef">const</span> <span style="color:#f92672">&amp;</span>path)
+   {
+       Assimp<span style="color:#f92672">::</span>Importer importer;
+       <span style="color:#66d9ef">const</span> aiScene<span style="color:#f92672">*</span> scene <span style="color:#f92672">=</span> importer.ReadFile(path, aiProcess_Triangulate<span style="color:#f92672">|</span>aiProcess_GenSmoothNormals<span style="color:#f92672">|</span>aiProcess_FlipUVs);
+       <span style="color:#75715e">//声明了一个加载器，用于加载模型，正如之前提到过，大部分信息都会存在scene里面
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//aiProcess_Triangulate表示如果模型不是完全由三角形组成，就先把它们变成三角形
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//aiProcess_GenSmoothNormals给所有顶点生成平滑的法线
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//aiProcess_FlipUVs会反转贴图的y轴，因为OpenGL里面很多图像都是反的
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//aiProcess_GenNormals如果模型不包含法线就为每个顶点创建法线
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//aiProcess_SplitLargeMeshes将大的网格分成小网格
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//aiProcess_OptimizeMeshes将小网格合并为大的网格，减少绘制调用次数
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//更多的flags可以在这里找到：http://assimp.sourceforge.net/lib_html/postprocess_8h.html
+</span><span style="color:#75715e"></span>       <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>scene <span style="color:#f92672">||</span> scene<span style="color:#f92672">-&gt;</span>mFlags <span style="color:#f92672">&amp;</span> AI_SCENE_FLAGS_INCOMPLETE <span style="color:#f92672">||</span> <span style="color:#f92672">!</span>scene<span style="color:#f92672">-&gt;</span>mRootNode)
+       {
+           cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;ERROR::ASSIMP:: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> importer.GetErrorString() <span style="color:#f92672">&lt;&lt;</span> endl;
+           <span style="color:#66d9ef">return</span>;
+       }
+       <span style="color:#75715e">//在这一步我们会检查场景和根节点有没有正确读取，以及用一个标记来检查数据完不完整
+</span><span style="color:#75715e"></span>
+       directory <span style="color:#f92672">=</span> path.substr(<span style="color:#ae81ff">0</span>, path.find_last_of(<span style="color:#e6db74">&#39;/&#39;</span>));
+       processNode(scene<span style="color:#f92672">-&gt;</span>mRootNode, scene);
+       <span style="color:#75715e">//将根节点传入递归的函数一个个处理
+</span><span style="color:#75715e"></span>   }
+
+   <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">processNode</span>(aiNode <span style="color:#f92672">*</span>node, <span style="color:#66d9ef">const</span> aiScene <span style="color:#f92672">*</span>scene)
+   {
+       <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> node<span style="color:#f92672">-&gt;</span>mNumMeshes; i<span style="color:#f92672">++</span>)
+       {
+           aiMesh<span style="color:#f92672">*</span> mesh <span style="color:#f92672">=</span> scene<span style="color:#f92672">-&gt;</span>mMeshes[node<span style="color:#f92672">-&gt;</span>mMeshes[i]];
+           meshes.push_back(processMesh(mesh, scene));
+           <span style="color:#75715e">//处理当前节点下的每一个网格，并把处理完的网格存储起来
+</span><span style="color:#75715e"></span>       }
+
+       <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> node<span style="color:#f92672">-&gt;</span>mNumChildren; i<span style="color:#f92672">++</span>)
+       {
+           processNode(node<span style="color:#f92672">-&gt;</span>mChildren[i], scene);
+           <span style="color:#75715e">//递归处理下面的节点
+</span><span style="color:#75715e"></span>       }
+
+   }
+
+    <span style="color:#75715e">//下面是将aimesh对象转换成我们自己的网格对象，我们需要访问网格的相关属性并把它们对应放进我们的对象中
+</span><span style="color:#75715e"></span>   Mesh <span style="color:#a6e22e">processMesh</span>(aiMesh <span style="color:#f92672">*</span>mesh, <span style="color:#66d9ef">const</span> aiScene <span style="color:#f92672">*</span>scene)
+   {
+       vector<span style="color:#f92672">&lt;</span>Vertex<span style="color:#f92672">&gt;</span> vertices;
+       vector<span style="color:#f92672">&lt;</span><span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span><span style="color:#f92672">&gt;</span> indices;
+       vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> textures;
+
+       <span style="color:#75715e">//对于网格下每一个节点，我们逐个处理
+</span><span style="color:#75715e"></span>       <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> mesh<span style="color:#f92672">-&gt;</span>mNumVertices; i<span style="color:#f92672">++</span>)
+       {
+           Vertex vertex;
+           glm<span style="color:#f92672">::</span>vec3 vector;
+           
+           <span style="color:#75715e">//将节点位置读取出来
+</span><span style="color:#75715e"></span>           vector.x <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mVertices[i].x;
+           vector.y <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mVertices[i].y;
+           vector.z <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mVertices[i].z;
+           vertex.Position <span style="color:#f92672">=</span> vector;
+           
+           <span style="color:#75715e">//如果有法线，就把法线数据读取出来
+</span><span style="color:#75715e"></span>           <span style="color:#66d9ef">if</span> (mesh<span style="color:#f92672">-&gt;</span>HasNormals())
+           {
+               vector.x <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mNormals[i].x;
+               vector.y <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mNormals[i].y;
+               vector.z <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mNormals[i].z;
+               vertex.Normal <span style="color:#f92672">=</span> vector;
+           }
+           
+           <span style="color:#75715e">//如果有纹理信息，就把纹理位置信息读取出来，在这里我们假设只会用到一组纹理位置，请不要搞混这里的纹理位置和纹理，纹理位置是描述了纹理应该怎么贴，纹理是描述了贴什么
+</span><span style="color:#75715e"></span>           <span style="color:#66d9ef">if</span>(mesh<span style="color:#f92672">-&gt;</span>mTextureCoords[<span style="color:#ae81ff">0</span>])
+           {
+               glm<span style="color:#f92672">::</span>vec2 vec;
+               vec.x <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mTextureCoords[<span style="color:#ae81ff">0</span>][i].x;
+               vec.y <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mTextureCoords[<span style="color:#ae81ff">0</span>][i].y;
+               vertex.TexCoords <span style="color:#f92672">=</span> vec;
+           }
+           <span style="color:#66d9ef">else</span>
+               vertex.TexCoords <span style="color:#f92672">=</span> glm<span style="color:#f92672">::</span>vec2(<span style="color:#ae81ff">0.0f</span>, <span style="color:#ae81ff">0.0f</span>);
+           vertices.push_back(vertex);
+       }
+      
+       <span style="color:#75715e">//在Assimp中，每一个面代表了一个图元，我们之前定义过，所以在这个示例中，图元永远是三角形
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">//一个面包括了多个索引，索引描述了我们绘制面的顺序，我们只需要把这些顺序存起来就行了
+</span><span style="color:#75715e"></span>       <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> mesh<span style="color:#f92672">-&gt;</span>mNumFaces; i<span style="color:#f92672">++</span>)
+       {
+           aiFace face <span style="color:#f92672">=</span> mesh<span style="color:#f92672">-&gt;</span>mFaces[i];
+           <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> face.mNumIndices; j<span style="color:#f92672">++</span>)
+               indices.push_back(face.mIndices[j]);
+       }
+       
+       <span style="color:#75715e">//下面处理材质
+</span><span style="color:#75715e"></span>       aiMaterial<span style="color:#f92672">*</span> material <span style="color:#f92672">=</span> scene<span style="color:#f92672">-&gt;</span>mMaterials[mesh<span style="color:#f92672">-&gt;</span>mMaterialIndex];
+       <span style="color:#75715e">//下面我们假设采样器的名字为texture_材质类型N
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">// diffuse: texture_diffuseN
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">// specular: texture_specularN
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">// normal: texture_normalN
+</span><span style="color:#75715e"></span>
+       <span style="color:#75715e">//纹理的索引被存在mMaterials里，下面我们从mMaterials中读取对应的贴图
+</span><span style="color:#75715e"></span>       <span style="color:#75715e">// 1. diffuse maps
+</span><span style="color:#75715e"></span>       vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> diffuseMaps <span style="color:#f92672">=</span> loadMaterialTextures(material, aiTextureType_DIFFUSE, <span style="color:#e6db74">&#34;texture_diffuse&#34;</span>);
+       textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
+       <span style="color:#75715e">// 2. specular maps
+</span><span style="color:#75715e"></span>       vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> specularMaps <span style="color:#f92672">=</span> loadMaterialTextures(material, aiTextureType_SPECULAR, <span style="color:#e6db74">&#34;texture_specular&#34;</span>);
+       textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
+
+       <span style="color:#66d9ef">return</span> Mesh(vertices, indices, textures);
+       <span style="color:#75715e">//返回网格信息
+</span><span style="color:#75715e"></span>   }
+
+   
+   vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> loadMaterialTextures(aiMaterial <span style="color:#f92672">*</span>mat, aiTextureType type, string typeName)
+   {
+       vector<span style="color:#f92672">&lt;</span>Texture<span style="color:#f92672">&gt;</span> textures;
+       <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> mat<span style="color:#f92672">-&gt;</span>GetTextureCount(type); i<span style="color:#f92672">++</span>)
+       {
+           <span style="color:#75715e">//这里GetTextureCount会检测储存在材质中纹理的数量
+</span><span style="color:#75715e"></span>           aiString str;
+           mat<span style="color:#f92672">-&gt;</span>GetTexture(type, i, <span style="color:#f92672">&amp;</span>str);
+           <span style="color:#75715e">//获取具体文件的位置
+</span><span style="color:#75715e"></span>           <span style="color:#66d9ef">bool</span> skip <span style="color:#f92672">=</span> false;
+           
+           <span style="color:#75715e">//下面会在textures_loaded里面找有没有同样路径的贴图，如果有就代表已经加载过了
+</span><span style="color:#75715e"></span>           <span style="color:#66d9ef">for</span>(<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> j <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; j <span style="color:#f92672">&lt;</span> textures_loaded.size(); j<span style="color:#f92672">++</span>)
+           {
+               <span style="color:#66d9ef">if</span>(std<span style="color:#f92672">::</span>strcmp(textures_loaded[j].path.data(), str.C_Str()) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+               {
+                   textures.push_back(textures_loaded[j]);
+                   skip <span style="color:#f92672">=</span> true;
+                   <span style="color:#66d9ef">break</span>;
+               }
+           }
+           <span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>skip)
+           {
+               <span style="color:#75715e">//如果还没加载过则加载
+</span><span style="color:#75715e"></span>               Texture texture;
+               texture.id <span style="color:#f92672">=</span> TextureFromFile(str.C_Str(), <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>directory);
+               texture.type <span style="color:#f92672">=</span> typeName;
+               texture.path <span style="color:#f92672">=</span> str.C_Str();
+               textures.push_back(texture);
+               textures_loaded.push_back(texture);
+           }
+       }
+       <span style="color:#66d9ef">return</span> textures;
+   }
+};
+
+
+<span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> <span style="color:#a6e22e">TextureFromFile</span>(<span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path, <span style="color:#66d9ef">const</span> string <span style="color:#f92672">&amp;</span>directory)
+{
+   string filename <span style="color:#f92672">=</span> string(path);
+   filename <span style="color:#f92672">=</span> directory <span style="color:#f92672">+</span> <span style="color:#e6db74">&#39;/&#39;</span> <span style="color:#f92672">+</span> filename;
+
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> textureID;
+   glGenTextures(<span style="color:#ae81ff">1</span>, <span style="color:#f92672">&amp;</span>textureID);
+
+   <span style="color:#66d9ef">int</span> width, height, nrComponents;
+   <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>data <span style="color:#f92672">=</span> stbi_load(filename.c_str(), <span style="color:#f92672">&amp;</span>width, <span style="color:#f92672">&amp;</span>height, <span style="color:#f92672">&amp;</span>nrComponents, <span style="color:#ae81ff">0</span>);
+   <span style="color:#66d9ef">if</span> (data)
+   {
+       GLenum format;
+       <span style="color:#66d9ef">if</span> (nrComponents <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+           format <span style="color:#f92672">=</span> GL_RED;
+       <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (nrComponents <span style="color:#f92672">==</span> <span style="color:#ae81ff">3</span>)
+           format <span style="color:#f92672">=</span> GL_RGB;
+       <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (nrComponents <span style="color:#f92672">==</span> <span style="color:#ae81ff">4</span>)
+           format <span style="color:#f92672">=</span> GL_RGBA;
+
+       glBindTexture(GL_TEXTURE_2D, textureID);
+       glTexImage2D(GL_TEXTURE_2D, <span style="color:#ae81ff">0</span>, format, width, height, <span style="color:#ae81ff">0</span>, format, GL_UNSIGNED_BYTE, data);
+       glGenerateMipmap(GL_TEXTURE_2D);
+
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+       stbi_image_free(data);
+   }
+   <span style="color:#66d9ef">else</span>
+   {
+       std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;Texture failed to load at path: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> path <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+       stbi_image_free(data);
+   }
+
+   <span style="color:#66d9ef">return</span> textureID;
+}
+<span style="color:#75715e">#endif
+</span></code></pre></div><h2 id="后记">后记</h2>
+<p>到此为止第二部分翻译和改编也完成了，下面的内容会更深入地讨论一些关于着色器的问题</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>

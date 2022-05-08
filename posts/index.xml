@@ -18,5 +18,61 @@ Question Recently I am reviewing the memory layout of C++ class and I have encou
   When we query the size of a class, why size of member functions (not virtual) don&amp;rsquo;t occupy memory. When a class derive from a class that has virtual functions, how many virtual table point does it has.</description>
     </item>
     
+    <item>
+      <title>Code Learn OpenGL Chapter1</title>
+      <link>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%80%E7%AB%A0/</link>
+      <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
+      
+      <guid>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%80%E7%AB%A0/</guid>
+      <description>OpenGL第一章 OpenGL OpenGL是一个API，由Khronos组织制定和维护，具体实现方法由显卡开发商自行实现。相比早期OpenGL使用的立即渲染模式（固定渲染管线），现在的OpenGL使用的是更为灵活的核心模式（core-profile）。
+OpenGL本身是一个状态机，用一系列的变量去告知OpenGL应该如何运作。规范来说，OpenGL的状态被称作上下文，开发者通过状态设置函数来改变上下文，从而使用OpenGL。
+使用OpenGL时，最好用OpenGL定义的类型，也就是在原本的类型前加上GL，例如GLfloat，从而保证在不同平台上程序都能正常运行。
+配置环境 本人所使用的环境是Ubuntu20.04，运行命令如下：
+sudo apt-get install build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev cmake xorg-dev libglew-dev 这些依赖库包括了OpenGL的Library，Utilities，Utility Toolkit以及GLEW和GLFW。
+ GLFW是一个图形库框架，主要包括了创建，管理窗口，管理OpenGL上下文，处理手柄，键盘，鼠标输入的功能 GLEW是一个跨平台的拓展库，有助于查询和加载OpenGL的拓展，用于管理OpenGL的函数指针，在调用任何OpenGL函数前都需要初始化GLEW。  安装完之后也要记得把库的引用加入到CMakeLists里，如果你用的不是IDE，那在链接的时候记得使用-l链接这些库。
+target_link_libraries(&amp;lt;project name&amp;gt; glfw GL GLEW ${GL_LIBRARY} m) 创建窗口 #include &amp;lt;GL/glew.h&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;GLFW/glfw3.h&amp;gt;//在包含GLFW的头文件之前，GLEW需要先被包含，正如先前所说，GLFW依赖于OpenGL  const GLuint WIDTH = 800, HEIGHT = 600; void key_callback(GLFWwindow *window, int key, int scancode, int action, int mode); int main() { glfwInit(); //初始化GLFW  //下面一系列glfwWindowHint用于配置GLFW，这个函数接受两个值，第一个是一个枚举值，用于指向想要更改的选项，第二个参数是一个整型，也就是具体要更改的值。  //具体的枚举值可以在https://www.glfw.org/docs/latest/window.html#window_hints查看。  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3); glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3); //设定我们要用的OpenGL版本  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE); //设定渲染模式，明确告诉了GLFW后如果再使用老版本的函数就会报错  glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); //不允许用户调整窗口的大小  //如果是macOS，还需要启用GLFW_OPENGL_FORWARD_COMPAT以指定OpenGL是否前向兼容之前的上下文，具体代码还请自行尝试。  GLFWwindow *window = glfwCreateWindow(WIDTH, HEIGHT, &amp;#34;LearnOpenGL&amp;#34;, nullptr, nullptr); //创建窗口，前两个函数指的是窗口的宽高，第三个函数是窗口名称，第四个函数在需要全屏时指定屏幕，第五个函数指向另外一个window，这个新建的window会共享指定window的对象（材质，顶点等等）  if(window == nullptr){ fprintf(stderr, &amp;#34;Failed to create GLFW window&amp;#34;); glfwTerminate(); return -1; } glfwMakeContextCurrent(window); glfwSetKeyCallback(window, key_callback); //设置当前窗口的键盘响应事件，响应函数的原型为：  //void function_name(GLFWwindow* window, int key, int scancode, int action, int mods)  //key参数表示按下的按键，scancode是键盘扫描码，action表示它是按下还是释放，mods表示是否支持带有Ctrl，Shift等组合键的操作  glewExperimental = GL_TRUE; //初始化GLEW，允许使用更多实验性功能  if(glewInit() !</description>
+    </item>
+    
+    <item>
+      <title>Code Learn OpenGL Chapter2</title>
+      <link>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%BA%8C%E7%AB%A0/</link>
+      <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
+      
+      <guid>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%BA%8C%E7%AB%A0/</guid>
+      <description>OpenGL第二章 因为第一章写了一万多字Typora就开始有点卡了，所以决定一章一个文件，从现在开始第二章就逐渐进入光照的介绍了。
+颜色 OpenGL里对颜色的处理是符合生活常理的，即：眼睛看到的颜色是物体拒绝吸收的光的颜色，也就是说一个蓝色的物体其实是它拒绝吸收蓝色。
+ 当我们把光源的颜色与物体的颜色值相乘，所得到的就是这个物体所反射的颜色（也就是我们所感知到的颜色）。
+ glm::vec3 lightColor(1.0f, 1.0f, 1.0f); glm::vec3 toyColor(1.0f, 0.5f, 0.31f); glm::vec3 result = lightColor * toyColor; // = (1.0f, 0.5f, 0.31f); 基础光照 现实中的光照非常复杂，出于性能考量，我们在OpenGL中使用的是简化的光照模型，其中一个常用的模型叫做冯氏光照模型（Phong Lighting Model），这种模型由三个分量组成：
+ 环境（Ambient） 漫反射（Diffuse） 镜面（Specular）  环境光照
+float ambientStrength = 0.1; //常量环境因子 vec3 ambient = ambientStrength * lightColor; 漫反射
+漫反射的原理是，光照越垂直一个物体，它对物体的影响会越大，为了测量这个垂直程度，我们要用到法向量，正如先前所说，两角点乘越接近1，它们的夹角越小，这里用的就是这个原理。
+vec3 norm = normalize(Normal); vec3 lightDir = normalize(lightPos - FragPos); float diff = max(dot(norm, lightDir), 0.0); //如果两角为钝角，点乘会返回负数，但是这不是我们想要的结果 vec3 diffuse = diff * lightColor; 在万事大吉之前，还有一件事要注意一下，还记得我们处理模型位置的时候，第一步做了什么吗？从模型空间转换到世界空间。既然模型位置需要转换，法向量要不要转换呢？答案是要。</description>
+    </item>
+    
+    <item>
+      <title>Code Learn OpenGL Chapter3</title>
+      <link>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%89%E7%AB%A0/</link>
+      <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
+      
+      <guid>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%89%E7%AB%A0/</guid>
+      <description>OpenGL第三章 混合 混合顾名思义就是把颜色混合起来，这种技术一半应用在透明或半透明的效果中，目前我们在使用颜色的时候经常只会用到它前三个通道，但其实第四个通道也是有用的，那就是指示该点的透明度。
+比如上图这个草，除了草本体的透明度（后面统称alpha值）为1，其他地方的透明度都为0，为了更直观的观察，建议将背景切换成不同颜色看看效果。</description>
+    </item>
+    
+    <item>
+      <title>Code Learn OpenGL Chapter4</title>
+      <link>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E5%9B%9B%E7%AB%A0/</link>
+      <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
+      
+      <guid>https://herainyang.github.io/posts/codelearnopengl/opengl%E7%AC%AC%E5%9B%9B%E7%AB%A0/</guid>
+      <description>OpenGL第四章 深度测试 深度缓冲和颜色缓冲一样，每个片段都储存了对应的信息，通常是24位的。
+当进行深度测试的时候，OpenGL会将一个片段的深度值和深度缓冲的内容（深度缓冲是一块内存区域，它包括了每个像素的深度值）对比，OpenGL会执行一个深度测试，如果这个测试通过了，深度缓冲会更新为新的深度值，反之则丢弃该片段。
+深度测试位于片段着色器和模板测试后，在屏幕空间中运行的，所以和glViewport定义的视口息息相关，并且可以通过gl_FragCoord直接访问，其中(0,0)定义的是屏幕左下角，gl_FragCoord中包含的z分量则是片段的深度值。
+ 目前的GPU都支持一个叫做提前深度测试的功能，它会在片段着色器前运行，如果确定一个片段永远不可见（对于当前帧），就提前丢弃。当然如果我们更改了片段的深度值，这个功能就不会运作了。
+ glEnable(GL_DEPTH_TEST); //开启深度测试 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //每帧调用，清除深度缓冲 glDepthMask(GL_FALSE); //如果不希望更新深度缓冲，我们可以设定禁用深度缓冲的写入 glDepthFunc(GL_LESS); //如果我们想更改深度缓冲的比较方法，可以参考下表来设定这个函数，当然，这个函数不能和上一个同时使用    函数 描述     GL_ALWAYS 永远通过深度测试   GL_NEVER 永远不通过深度测试   GL_LESS 在片段深度值小于缓冲的深度值时通过测试   GL_EQUAL 在片段深度值等于缓冲区的深度值时通过测试   GL_LEQUAL 在片段深度值小于等于缓冲区的深度值时通过测试   GL_GREATER 在片段深度值大于缓冲区的深度值时通过测试   GL_NOTEQUAL 在片段深度值不等于缓冲区的深度值时通过测试   GL_GEQUAL 在片段深度值大于等于缓冲区的深度值时通过测试    深度值精度 深度缓冲包含一个介于[0.0,1.0]之间的深度值，它会和观察者视角的所有片段的z值进行比较，将物体变换到这个范围的方法是： $$ F_{depth}=\frac{1/z-1/near}{1/far-1/near} $$ 其中如果忘了far和near是什么，请查看坐标系统一章。为什么要用这么一个非线性的函数呢，由下图可以看出，这样一个方程可以在距离接近近平面的时候提供更大的精度。
+深度冲突 深度冲突指的是当物体比较近的时候，可能会出现闪烁现象，这是因为精度不够计算它们的先后顺序，要解决这个问题有三种方法：
+ 不要把多个物体放得太近。 将近平面设置的远一点。 使用更高的精度。  模板测试 在细说模板测试之前，我们需要了解关于测试的两个东西，一个是模板缓冲，一个是片段/像素的模板值。</description>
+    </item>
+    
   </channel>
 </rss>
