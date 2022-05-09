@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.80.0" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainic.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainic.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainic.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainic.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainic.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainic.com/css/bootstrap.min.css" />
+
+  
+  <title>Strong And Weak Symbol | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+    <a href="/friends/">Friends</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Strong And Weak Symbol</h1>
+<p>While I was writing my last article, I found a <code>.weak</code> label in assembly program. According to <a href="http://downloads.ti.com/docs/esd/SPNU118/weak-symbols-sprui029023.html,">http://downloads.ti.com/docs/esd/SPNU118/weak-symbols-sprui029023.html,</a> it is the same as <code>#pragma weak</code> in C/C++.</p>
+<h1 id="what-is-weak-symbol">What is weak symbol</h1>
+<p>The definition of weak symbol in C and C++ is different:</p>
+<ul>
+<li>In C, any global variables that are uninitiated is an weak symbol.</li>
+<li>In C++, if you don&rsquo;t declare it as a weak symbol, everything is strong symbol.</li>
+</ul>
+<h1 id="what-properties-does-it-have">What properties does it have</h1>
+<p>Simply put, it allows functions or variables with the same name to be multiple defined in multiple files, as long as:</p>
+<ul>
+<li>
+<p>Only one strong symbol in the program.</p>
+</li>
+<li>
+<p>If we have multiple weak symbols, the linker (depends on the implement of the linker) will choose the first linked weak symbol. This also means that the same name can be defined for different types, since the first one linked will actually be defined.</p>
+</li>
+</ul>
+<p>Consider we have such program:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">// test.cpp
+</span><span style="color:#75715e"></span><span style="color:#75715e">#pragma weak ijkkl
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">float</span> ijkkl <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>;
+<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printType</span>(){
+    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">typeid</span>(ijkkl).name() <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+}
+<span style="color:#75715e">// main.cpp
+</span><span style="color:#75715e"></span><span style="color:#75715e">#pragma weak ijkkl
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> ijkkl <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+<span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printType</span>();
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">typeid</span>(ijkkl).name() <span style="color:#f92672">&lt;&lt;</span> endl;
+    printType();
+}
+</code></pre></div><p>What is the actual size of variable <code>ijkkl</code>?</p>
+<p>The answer is the size of <code>float</code> (in 64 machine, size of <code>float</code> is the same as size of <code>int</code>, but you know what I mean), we can check it by checking the binary memory view of the program.</p>
+<p>What is the output of this program?</p>
+<p>The answer is <code>i</code> indicate to <code>int</code>, and then <code>f</code> indicate to <code>float</code>.</p>
+<p>So in conclusion, if we have multiple weak definition of a variable, the actual size of it will depends on the first linked file, and for each file that contain this variable, they think the variable&rsquo;s type and size is the same as the definition in their own file. In this case, because float and int are encoded in different way, the output will be unreadable, so I suggest trying not to cause such confusion.</p>
+<p>For weak symbol function, the actual function in the memory depends on the first linked file, and for each file that contain this function, they think the return type (parameter type is not included, since that will trigger function overload) of the function is the same as the definition in their own file. Which means if you have different definition of a function in  different files, you might be unable to obtain the return value correctly.</p>
+<p>No matter what kind of weak symbol it is, if it is undefined (no strong symbol with the same name in the whole project), it will be set to 0, so we have below good example:</p>
+<h1 id="a-useful-example">A useful example</h1>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">// test.cpp
+</span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">printType</span>(){
+    printf(<span style="color:#e6db74">&#34;Hello test</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1129387</span>;
+}
+<span style="color:#75715e">// main.cpp
+</span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">__attribute__</span>((weak)) printType();
+
+<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#66d9ef">if</span> (printType){
+        printType();
+    }
+}
+</code></pre></div><p>In <code>main.cpp</code>, we test if <code>printType</code> equal to 0, if there isn&rsquo;t a strong definition for this function, it will be set to 0.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>
