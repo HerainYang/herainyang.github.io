@@ -251,7 +251,7 @@ global:
 global:
 	.long	10 /* Initialoized to 10 */
 </code></pre><h3 id="const-global-variables">Const Global Variables</h3>
-<p>Basically same behavior as [Const Local Variables](#Const Local Variables), but it is stored in <strong>Read-only code segment</strong>, specifically, <strong><code>.rodata</code></strong> segment. It means if we want to change a data inside <code>.rodata</code>, we will get a error during the runtime. There are two way to extract it from <code>.rodata</code>:</p>
+<p>Basically same behavior as const local variables, but it is stored in <strong>Read-only code segment</strong>, specifically, <strong><code>.rodata</code></strong> segment. It means if we want to change a data inside <code>.rodata</code>, we will get a error during the runtime. There are two way to extract it from <code>.rodata</code>:</p>
 <ol>
 <li>Initialize it with a non const variable.</li>
 <li>Using <code>volatile</code>.</li>
@@ -277,7 +277,7 @@ _ZN9testClass9variableAE:
 	.long	123234
 </code></pre><p>As shown, it is labeled by <code>.globl</code>, so if we try to initialize it in other file, an error will occur. But wait, <strong>Can we initialize it in other file?</strong> As argue in <a href="https://herainic.com/posts/howclassesarestoredinmemory/">Previous Blog</a>, a class is just a set of <code>.weak</code> function to the assembly program, so we can redefine a class in many different files, however, the static variable is not a <code>.weak</code> type at default, but since we are enforced to initialize it outside of the class for every file that define this class, we will have multiple initialization for this variable, and then the linker will report an error.</p>
 <h3 id="const-static-variables">Const Static Variables</h3>
-<p>As mention before, const will remove <code>.globl</code> label, so const static &lsquo;global&rsquo; variables are exactly the same as [Const Global Variables](#Const Global Variables), and const static &lsquo;local&rsquo; variables are only different by naming method.</p>
+<p>As mention before, const will remove <code>.globl</code> label, so const static &lsquo;global&rsquo; variables are exactly the same as const global variables, and const static &lsquo;local&rsquo; variables are only different by naming method.</p>
 <p>For member const static variables, since the compiler is very sure about the value of it, it allows programmers to declare it in the class, and will simply replace every references to this variable to the actual value. In this case, the variables are stored in the <code>.rodata</code> segment.</p>
 
     </article>
