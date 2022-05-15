@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.80.0" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainic.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainic.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainic.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainic.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainic.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainic.com/css/bootstrap.min.css" />
+
+  
+  <title>Fantastic Variables and Where to Find Them | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+    <a href="/friends/">Friends</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Fantastic Variables and Where to Find Them</h1>
+<p>To understand the scope and the behaviors of each kind of variables in C++, we need to look further into assembly language to find out where they are stored, as assembly language is so close to the machine language.</p>
+<img src="https://i.stack.imgur.com/Ufj7o.png" alt="c - Why are instructions addresses on the top of the memory user space  contrary to the linux process memory layout? - Stack Overflow" style="zoom:50%;" />
+<h2 id="local-variables">Local Variables</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+    <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">123456</span>;
+    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+}
+</code></pre></div><p>With no doubt, this kind of variables will be store in <strong>stack</strong>, as in assembly program:</p>
+<pre><code class="language-assembly" data-lang="assembly">	movl	$123456, -4(%rbp)
+</code></pre><p>It is very clear that <code>rbp</code> is the frame pointer points to the base of the current stack frame, by the way, <code>rsp</code> points to the top of the current stack from and it has a lower address than <code>rbp</code> because the stack starts at a high memory address and grows downwards.</p>
+<h3 id="const-local-variables">Const Local Variables</h3>
+<p>Generally, this kind of variables will be store in <strong>stack</strong>, but different way of definition leads to different behaviors in the assembly:</p>
+<ol>
+<li>
+<p>Define by a constant number or a const variable:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">const</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+<span style="color:#960050;background-color:#1e0010">\\</span> or
+<span style="color:#66d9ef">const</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+<span style="color:#66d9ef">const</span> j <span style="color:#f92672">=</span> i;
+</code></pre></div><p>Will reserve a chunk of memory in the stack, but since the compiler are pretty sure about the value of a const variable, it wouldn&rsquo;t read the memory, it will just replace every usage of this variable to the actual number. We can change the data in the memory, but since it wouldn&rsquo;t check the memory, it will be useless.</p>
+<pre><code class="language-assembly" data-lang="assembly">	movl	$1234567, -4(%rbp)
+	movl	$1234567, %esi
+	movl	$.LC0, %edi
+	movl	$0, %eax
+	call	printf
+</code></pre><p>Here the compiler reserve <code>-4(%rbp)</code> for the variable, but when calling function <code>printf</code>, it directly add the actual number into the register.</p>
+</li>
+<li>
+<p>Define by a variables which is not const:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">int</span> a <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+<span style="color:#66d9ef">const</span> i <span style="color:#f92672">=</span> a;
+</code></pre></div><p>Because the value of <code>a</code> is unsure, the value of <code>i</code> is unsure. So every time the compiler want to know the value of <code>i</code>, it has to check the memory. Then we have such a problem: <strong>Could we change the value of <code>i</code>?</strong>. The answer is no and yes.</p>
+<ul>
+<li>We cannot change the value of <code>i</code> directly by assigning a new constant to it, the compiler will make sure such illegal operation doesn&rsquo;t take place in the code.</li>
+<li>We can change it by write a constant into the memory of <code>i</code>. To access the memory, we can create a new pointer points to the address <code>&amp;i</code>, we might need to cast the type of <code>&amp;i</code> but after that we can rewrite the value of <code>i</code>.</li>
+</ul>
+</li>
+</ol>
+<h2 id="member-variables">Member variables</h2>
+<p>Member variable can be stored in the <strong>stack</strong> or the <strong>heap</strong> depends on how does programmer declare it.</p>
+<h3 id="const-member-variables">Const Member Variables</h3>
+<p>No matter how is it declared, it will always hold a chunk of memory and visit it very time it is accessed. The reason is the value of the variable is unsure until the class or the structure is constructed.</p>
+<h2 id="global-variables">Global Variables</h2>
+<p>This kind of variables are stored in the <strong>Read/write segment</strong>, if it is initialized, it will be stored in <code>.data</code> and it is is not, it will be stored in <code>.bss</code>. In addition, normal global variables will be label as <code>.global</code>, then it will be visible to the linker <code>ld</code>, so it will also be available to other programs linked with it.</p>
+<p>This symbol also explain why we cannot have global variables with the same name across multiple files.</p>
+<pre><code class="language-assembly" data-lang="assembly">/* Without initialization*/	
+	.globl	global
+	.bss
+	.align 4
+	.type	global, @object
+	.size	global, 4
+global:
+	.zero	4 /* Declare 4 bytes initialized to 0 */
+	
+/* With initialization*/	
+	.globl	global
+	.data
+	.align 4
+	.type	global, @object
+	.size	global, 4
+global:
+	.long	10 /* Initialoized to 10 */
+</code></pre><h3 id="const-global-variables">Const Global Variables</h3>
+<p>Basically same behavior as [Const Local Variables](#Const Local Variables), but it is stored in <strong>Read-only code segment</strong>, specifically, <strong><code>.rodata</code></strong> segment. It means if we want to change a data inside <code>.rodata</code>, we will get a error during the runtime. There are two way to extract it from <code>.rodata</code>:</p>
+<ol>
+<li>Initialize it with a non const variable.</li>
+<li>Using <code>volatile</code>.</li>
+</ol>
+<p>Good to know: const keyword will remove <code>.globl</code> label for variables, so if you declared a variable as const, it will be not visible to other files.</p>
+<h2 id="volatile">Volatile</h2>
+<p>Using <code>volatile</code> keyword can enforce the compile to read the value of a variable from memory every time it try to access the variable. So it will not just replace the variable to its value, also it will not place a const global variable to <code>.rodata</code> segment.</p>
+<h2 id="static-variables">Static Variables</h2>
+<p>There are not much different between a local static variable and a &lsquo;global&rsquo; static variable (not really global) except the way they are named in the assembly program. They are stored in <strong>Read/write segment</strong> and without <strong><code>.global</code></strong>. Which means they can be accessed anywhere in the file, but not across the file. Yes, if you return the address of a local static variable, you can access it out of the function.</p>
+<p>For member static variables, because you want all instances shared the same memory of these variables, so we always want to make sure that these variables have memories before any instance is constructed. To do this, the compiler enforce the programmer to initialize the member static variables outside of the class:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">testClass</span>{
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> variableA;
+};
+
+<span style="color:#66d9ef">int</span> testClass<span style="color:#f92672">::</span>variableA <span style="color:#f92672">=</span><span style="color:#ae81ff">123234</span>;
+</code></pre></div><p>And it will be stored as:</p>
+<pre><code class="language-assembly" data-lang="assembly">	.globl	_ZN9testClass9variableAE
+	.data
+	.align 4
+	.type	_ZN9testClass9variableAE, @object
+	.size	_ZN9testClass9variableAE, 4
+_ZN9testClass9variableAE:
+	.long	123234
+</code></pre><p>As shown, it is labeled by <code>.globl</code>, so if we try to initialize it in other file, an error will occur. But wait, <strong>Can we initialize it in other file?</strong> As argue in <a href="https://herainic.com/posts/howclassesarestoredinmemory/">Previous Blog</a>, a class is just a set of <code>.weak</code> function to the assembly program, so we can redefine a class in many different files, however, the static variable is not a <code>.weak</code> type at default, but since we are enforced to initialize it outside of the class for every file that define this class, we will have multiple initialization for this variable, and then the linker will report an error.</p>
+<h3 id="const-static-variables">Const Static Variables</h3>
+<p>As mention before, const will remove <code>.globl</code> label, so const static &lsquo;global&rsquo; variables are exactly the same as [Const Global Variables](#Const Global Variables), and const static &lsquo;local&rsquo; variables are only different by naming method.</p>
+<p>For member const static variables, since the compiler is very sure about the value of it, it allows programmers to declare it in the class, and will simply replace every references to this variable to the actual value. In this case, the variables are stored in the <code>.rodata</code> segment.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Memory on Herain&#39;s Blog</title>
-    <link>https://herainic.com/tags/memory/</link>
-    <description>Recent content in Memory on Herain&#39;s Blog</description>
+    <title>Variables on Herain&#39;s Blog</title>
+    <link>https://herainic.com/tags/variables/</link>
+    <description>Recent content in Variables on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 May 2022 12:46:18 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/memory/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 May 2022 12:46:18 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/variables/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Fantastic Variables and Where to Find Them</title>
       <link>https://herainic.com/posts/fantasticvariablesandwheretofindthem/</link>
@@ -16,16 +16,6 @@
       <description>To understand the scope and the behaviors of each kind of variables in C++, we need to look further into assembly language to find out where they are stored, as assembly language is so close to the machine language.
 Local Variables int main() { int i = 123456; return 0; } With no doubt, this kind of variables will be store in stack, as in assembly program:
 movl	$123456, -4(%rbp) It is very clear that rbp is the frame pointer points to the base of the current stack frame, by the way, rsp points to the top of the current stack from and it has a lower address than rbp because the stack starts at a high memory address and grows downwards.</description>
-    </item>
-    
-    <item>
-      <title>How classes are stored in memory</title>
-      <link>https://herainic.com/posts/howclassesarestoredinmemory/</link>
-      <pubDate>Mon, 09 May 2022 12:58:30 +1000</pubDate>
-      
-      <guid>https://herainic.com/posts/howclassesarestoredinmemory/</guid>
-      <description>We only talk about member variables and member functions here, others such as static function or const stuffs will make this topic much more difficult to discuss, I&amp;rsquo;ll argue it in the future (maybe lol).
-We know that during the runtime, the instance is stored in the stack or heap (precisely, most of the variables are in the stack), but before a class is instantiate, where is it and how does it go into stack.</description>
     </item>
     
   </channel>

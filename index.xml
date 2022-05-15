@@ -6,7 +6,18 @@
     <description>Recent content on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 09 May 2022 14:07:04 +1000</lastBuildDate><atom:link href="https://herainic.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 May 2022 12:46:18 +1000</lastBuildDate><atom:link href="https://herainic.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Fantastic Variables and Where to Find Them</title>
+      <link>https://herainic.com/posts/fantasticvariablesandwheretofindthem/</link>
+      <pubDate>Tue, 10 May 2022 12:46:18 +1000</pubDate>
+      
+      <guid>https://herainic.com/posts/fantasticvariablesandwheretofindthem/</guid>
+      <description>To understand the scope and the behaviors of each kind of variables in C++, we need to look further into assembly language to find out where they are stored, as assembly language is so close to the machine language.
+Local Variables int main() { int i = 123456; return 0; } With no doubt, this kind of variables will be store in stack, as in assembly program:
+movl	$123456, -4(%rbp) It is very clear that rbp is the frame pointer points to the base of the current stack frame, by the way, rsp points to the top of the current stack from and it has a lower address than rbp because the stack starts at a high memory address and grows downwards.</description>
+    </item>
+    
     <item>
       <title>Strong And Weak Symbol</title>
       <link>https://herainic.com/posts/strongandweaksymbol/</link>
