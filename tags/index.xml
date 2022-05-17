@@ -6,13 +6,31 @@
     <description>Recent content in Tags on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 May 2022 12:46:18 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 17 May 2022 21:19:00 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>C&#43;&#43;</title>
       <link>https://herainic.com/tags/c&#43;&#43;/</link>
-      <pubDate>Tue, 10 May 2022 12:46:18 +1000</pubDate>
+      <pubDate>Tue, 17 May 2022 21:19:00 +1000</pubDate>
       
       <guid>https://herainic.com/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Programming Technique</title>
+      <link>https://herainic.com/tags/programming-technique/</link>
+      <pubDate>Tue, 17 May 2022 21:19:00 +1000</pubDate>
+      
+      <guid>https://herainic.com/tags/programming-technique/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RAII</title>
+      <link>https://herainic.com/tags/raii/</link>
+      <pubDate>Tue, 17 May 2022 21:19:00 +1000</pubDate>
+      
+      <guid>https://herainic.com/tags/raii/</guid>
       <description></description>
     </item>
     

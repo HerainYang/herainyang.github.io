@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Programming Technique on Herain&#39;s Blog</title>
+    <link>https://herainic.com/tags/programming-technique/</link>
+    <description>Recent content in Programming Technique on Herain&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 17 May 2022 21:19:00 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/programming-technique/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Brief Introduction To RAII</title>
+      <link>https://herainic.com/posts/briefintroductiontoraii/</link>
+      <pubDate>Tue, 17 May 2022 21:19:00 +1000</pubDate>
+      
+      <guid>https://herainic.com/posts/briefintroductiontoraii/</guid>
+      <description>RAII, not RALL, not RAIL, not RALI, is the abbreviation of &amp;ldquo;Resource Acquisition Is Initialization&amp;rdquo;. It is a C++ programming technique, which means if your code follow fellow requirement, you are a RAII programmer:
+ Encapsulate each resources into a class.  The constructor acquires the resource. The destructor release the resource.   The instance should has temporary lifetime (in anyway).  So what does it mean in practice? Well lets see.</description>
+    </item>
+    
+  </channel>
+</rss>
