@@ -3,12 +3,27 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://herainic.com/tags/computational-geometry/</loc>
+    <lastmod>2022-05-20T14:29:20+10:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://herainic.com/</loc>
     <lastmod>2022-05-20T14:29:20+10:00</lastmod>
   </url>
   
   <url>
     <loc>https://herainic.com/posts/</loc>
+    <lastmod>2022-05-20T14:29:20+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://herainic.com/tags/</loc>
+    <lastmod>2022-05-20T14:29:20+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://herainic.com/tags/unity/</loc>
     <lastmod>2022-05-20T14:29:20+10:00</lastmod>
   </url>
   
@@ -34,11 +49,6 @@
   
   <url>
     <loc>https://herainic.com/tags/raii/</loc>
-    <lastmod>2022-05-17T21:19:00+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://herainic.com/tags/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
   </url>
   

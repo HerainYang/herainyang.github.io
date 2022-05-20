@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Unity on Herain&#39;s Blog</title>
+    <link>https://herainic.com/tags/unity/</link>
+    <description>Recent content in Unity on Herain&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 20 May 2022 14:29:20 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/unity/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Unity Collision Detection</title>
+      <link>https://herainic.com/posts/unitycollisiondetection/</link>
+      <pubDate>Fri, 20 May 2022 14:29:20 +1000</pubDate>
+      
+      <guid>https://herainic.com/posts/unitycollisiondetection/</guid>
+      <description>About three or four years ago, I was development my first indie game, and my main character have a gun, well if you know something about unity, you know what happened, the bullet go through enemy because of the tunnel effect because of the velocity is too large. At that time I know little about unity so my solution was just slow down the bullet.
+However, there is a solution provided by Unity itself somehow I missed it, so I decided to write something about it.</description>
+    </item>
+    
+  </channel>
+</rss>
