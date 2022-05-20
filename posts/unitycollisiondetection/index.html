@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.80.0" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainic.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainic.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainic.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainic.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainic.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainic.com/css/bootstrap.min.css" />
+
+  
+  <title>Unity Collision Detection | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] },
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+    <a href="/friends/">Friends</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Unity Collision Detection</h1>
+<p>About three or four years ago, I was development my first indie game, and my main character have a gun, well if you know something about unity, you know what happened, the bullet go through enemy because of the tunnel effect because of the velocity is too large. At that time I know little about unity so my solution was just slow down the bullet.</p>
+<p>However, there is a solution provided by Unity itself somehow I missed it, so I decided to write something about it.</p>
+<p>In Rigidbody component, there is a setting of collision detection that you can choose one of four detection mode:</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Discrete</strong></td>
+<td>Use <strong>discrete collision detection</strong> against all other Colliders in the <strong>Scene</strong> . Other colliders will use discrete collision detection when testing for collision against it. Used for normal collisions (This is the default value).</td>
+</tr>
+<tr>
+<td><strong>Continuous</strong></td>
+<td>Use Discrete collision detection against dynamic Colliders (with a Rigidbody) and sweep-based <strong>continuous collision detection</strong>  against static Colliders (without a Rigidbody). Rigidbodies set to <strong>Continuous Dynamic</strong> will use continuous collision detection when testing for collision against this rigidbody. Other rigidbodies will use Discrete Collision detection. Used for objects which the <strong>Continuous Dynamic</strong> detection needs to collide with. (This has a big impact on physics performance, leave it set to <strong>Discrete</strong>, if you don’t have issues with collisions of fast objects)</td>
+</tr>
+<tr>
+<td><strong>Continuous Dynamic</strong></td>
+<td>Use sweep-based continuous collision detection against GameOjects set to <strong>Continuous</strong> and <strong>Continuous Dynamic</strong> collision. It will also use continuous collision detection against static Colliders (without a Rigidbody). For all other colliders, it uses discrete collision detection. Used for fast moving objects.</td>
+</tr>
+<tr>
+<td><strong>Continuous Speculative</strong></td>
+<td>Use <strong>speculative continuous collision detection</strong>  against Rigidbodies and Colliders. This is also the only CCD mode that you can set kinematic bodies. This method tends to be less expensive than sweep-based continuous collision detection.</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<p>Before look into these mode, let&rsquo;s review some collision algorithm. Consider a situation, we have a mess number of object in our space, and we want to report all object that intersect with others, if we compare every pair of objects, it will takes $O(n^2)$, not bad, but if we calculate it every frame, for Unity, it will be calculated in <code>FixedUpdate</code> which is called 50 times per second by default, it will be come a problem, so we would like to filter some object that&rsquo;s unlikely to collide.</p>
+<p>For <strong>broad phase</strong> of collision detection, we combine 3 methods:</p>
+<ul>
+<li>Simplify the collision mesh.</li>
+<li>Index the world space into some sort of data structure.</li>
+<li>Sweep and Prune.</li>
+</ul>
+<h2 id="aabb-box-collision">AABB-Box collision</h2>
+<p>AABB, stand for Axis align bounding box, is a technology that bounding object with the minimal rectangle or cuboid which edges parallel to the x, y and maybe z axis.</p>
+<p><img src="/postimage/UnityCollisionDetection/AABB.png" alt="AABB"></p>
+<p>By this simplification, we don&rsquo;t care about the detail of object anymore and the collision detection algorithm will become very simple and fast: we just need to check whether these object&rsquo;s projections overlap in the x, y and maybe z axes.</p>
+<h2 id="space-division">Space division</h2>
+<p>After bounding objects, do we need to check each pair of object? If so, the time complexity wouldn&rsquo;t improve much. We can construct the world space to some data structure which is easy for insert, delete and query, and we only check collision in a certain sub-area that contain more than one object. Well then the answer will be clear, we can use <strong>range-tree</strong>, <strong>kd-tree</strong>, <strong>quadtree</strong>, <strong>octree</strong> and many other solutions. Another problem we need to care about is the granularity of the space division.</p>
+<h2 id="sweep-and-prune">Sweep and Prune</h2>
+<p>Now suppose we found a sub-area that need to do collision check, by observation, two objects collide if and only if all of their projections to the axis have intersection, which means if two objects are not collide, their projects has no intersection in at least one axis. Since we are doing broad phase collision detection, we can just check intersection in only one axis, and that will be come an 1-D line intersection detection problem, which can be solved by <strong>sweep-line algorithm</strong>.</p>
+<p><img src="/postimage/UnityCollisionDetection/Sweep.png" alt="Sweep"></p>
+<p>So what about the time complexity? Well sweep-line algorithm takes $O(n)$ but the data need to be sorted, which takes another $O(n\log n)$, but according to the <strong>frame coherence</strong>, the relative position between objects wouldn&rsquo;t change much in two adjacent frames, so we can consider that every sort algorithm is run under a good enough situation, and some algorithm for example insert sorting algorithm can be done in $O(n)$, so the overall time complexity is $O(n)$.</p>
+<hr>
+<h2 id="discrete">Discrete</h2>
+<p>Discrete mode simply check collision in each frame by treat objects as static, it doesn&rsquo;t consider any velocity or physics stuff, so if a wall is very thin and a object might pass through it in one frame.</p>
+<h2 id="continuous-collision-detection">Continuous collision detection</h2>
+<p>This algorithm is equivalent to finding the limit of the movement of an object in unit time and judging its collision with other objects</p>
+<h3 id="sweep-based">Sweep-based</h3>
+<p>Calculate the position of the object in next frame using the linear motion&rsquo;s velocity, and check if there exists any object between these two position.</p>
+<p><img src="/postimage/UnityCollisionDetection/Bullet.png" alt="Bullet"></p>
+<p>However, this algorithm ignore the angular motion of the object and that might cause fellow problem:</p>
+<img src="https://docs.unity3d.com/uploads/Main/SpeculativeCCD1.gif" alt="A thin stick GameObject with its Continuous Dynamic property enabled. When rotating quickly around the pivot point, the stick doesn’t make contact with the sphere." style="zoom:50%;" />
+<h3 id="speculative">Speculative</h3>
+<p>This algorithm includes two part:</p>
+<ul>
+<li>
+<p>A new AABB-box bounding the object this frame and the object in the potential position in next frame, calculating with not only the linear motion but also the angular motion: (The red rectangle is the AABB-box).</p>
+<p><img src="https://docs.unity3d.com/uploads/Main/SpeculativeCCD2.png" alt="img"></p>
+</li>
+<li>
+<p>A solver that collect all potential contacts and makes sure that all contact constraints are satisfied. In image above, $n1$ and $n2$ are the force constrains.</p>
+<p>However because potential contact are are calculate by the closet point algorithm (Can be done by divide and conquer, Delaney triangulation), and the implementation of this algorithm done by Unity is somehow inaccurate, which means the actual collision mesh will be bigger, it might cause ghost collision when it shouldn&rsquo;t collide.</p>
+<p><img src="https://docs.unity3d.com/uploads/Main/SpeculativeCCD4.png" alt="The solver assumes that the contact point at c0 is a ramp because the closest point algorithm generated an inaccurate contact normal"></p>
+<p>Another problem (Gosh you got so many problem) is that because the solver only works while collision happen, and it only consider potential contacts it meet so far, if some object slams into this object, it might fly out of the AABB-box, and have no collision with objects on the path.</p>
+<p><img src="https://docs.unity3d.com/uploads/Main/SpeculativeCCD6.png" alt="The sphere with inflated AABB using speculative CCD, which only computes contacts during the collision detection phase, so tunnelling may occur"></p>
+</li>
+</ul>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>

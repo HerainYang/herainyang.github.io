@@ -3,22 +3,27 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://herainic.com/</loc>
+    <lastmod>2022-05-20T14:29:20+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://herainic.com/posts/</loc>
+    <lastmod>2022-05-20T14:29:20+10:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://herainic.com/posts/unitycollisiondetection/</loc>
+    <lastmod>2022-05-20T14:29:20+10:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://herainic.com/posts/briefintroductiontoraii/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
   </url>
   
   <url>
     <loc>https://herainic.com/tags/c&#43;&#43;/</loc>
-    <lastmod>2022-05-17T21:19:00+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://herainic.com/</loc>
-    <lastmod>2022-05-17T21:19:00+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://herainic.com/posts/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
   </url>
   
