@@ -261,7 +261,16 @@ _ZN5BaseA9Function1Ev:
 </ul>
 <p>The second part is the member function of this class.</p>
 <p>In conclusion, a class is stored as a set of function (basically, construction function and member function) in the Read-Only code segment, it won&rsquo;t assign memory to its member variables until we initiate it, and the memory assignment will be in the construction function.</p>
+<p>Here comes the problem: <strong>What if we want to prevent the implementation of a member function be changed by other files</strong>. Local function aren&rsquo;t declare as weak by default, so we can declare a member function using the method we declare local function:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">test</span>{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">void</span> AddData();
+};
 
+<span style="color:#66d9ef">void</span> test<span style="color:#f92672">::</span>AddData() {
+    number <span style="color:#f92672">=</span> number <span style="color:#f92672">+</span> <span style="color:#ae81ff">20</span>;
+}
+</code></pre></div>
     </article>
   </div>
 

@@ -261,7 +261,7 @@ global:
 <p>Using <code>volatile</code> keyword can enforce the compile to read the value of a variable from memory every time it try to access the variable. So it will not just replace the variable to its value, also it will not place a const global variable to <code>.rodata</code> segment.</p>
 <h2 id="static-variables">Static Variables</h2>
 <p>There are not much different between a local static variable and a &lsquo;global&rsquo; static variable (not really global) except the way they are named in the assembly program. They are stored in <strong>Read/write segment</strong> and without <strong><code>.global</code></strong>. Which means they can be accessed anywhere in the file, but not across the file. Yes, if you return the address of a local static variable, you can access it out of the function.</p>
-<p>For member static variables, because you want all instances shared the same memory of these variables, so we always want to make sure that these variables have memories before any instance is constructed. To do this, the compiler enforce the programmer to initialize the member static variables outside of the class:</p>
+<p>For member static variables, because the static member variables of all instances are actually the same, so we always want to make sure that these variables have memories before any instance is constructed. To do this, C++ enforce (Notice, I didn&rsquo;t say compiler enforce) programmers to initialize the member static variables outside of the class:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">testClass</span>{
     <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> variableA;
 };
@@ -275,7 +275,28 @@ global:
 	.size	_ZN9testClass9variableAE, 4
 _ZN9testClass9variableAE:
 	.long	123234
-</code></pre><p>As shown, it is labeled by <code>.globl</code>, so if we try to initialize it in other file, an error will occur. But wait, <strong>Can we initialize it in other file?</strong> As argue in <a href="https://herainic.com/posts/howclassesarestoredinmemory/">Previous Blog</a>, a class is just a set of <code>.weak</code> function to the assembly program, so we can redefine a class in many different files, however, the static variable is not a <code>.weak</code> type at default, but since we are enforced to initialize it outside of the class for every file that define this class, we will have multiple initialization for this variable, and then the linker will report an error.</p>
+</code></pre><p>As shown, it is labeled by <code>.globl</code>, here comes the question: <strong>Can we initialize it in other file since the linker will link all files together eventually?</strong> The answer is YES, as argue in <a href="https://herainic.com/posts/howclassesarestoredinmemory/">Previous Blog</a>, a class is just a set of <code>.weak</code> function to the assembly program, so we can redefine a class in many different files, for example:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">// in main.cpp
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">test</span>{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> number;
+    <span style="color:#75715e">//[...anything...]
+</span><span style="color:#75715e"></span>};
+</code></pre></div><p>As I emphasized before, initialization of the static member ain&rsquo;t enforced by the compiler, so we have no problem with compiling this file, but if we run this program we will have the problem saying <code>number</code> is undefined. Now we require a global definition of <code>number</code>, and we can define it in any other files:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">// any other file
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span>  <span style="color:#a6e22e">test</span>{
+<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+    <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">int</span> number;
+};
+<span style="color:#75715e">// we have to redefined the class and the variable here because when compiling this file, compiler don&#39;t care about other files so it don&#39;t know the existence of test::number, then we will fail the compilation.
+</span><span style="color:#75715e"></span>
+<span style="color:#66d9ef">int</span> test<span style="color:#f92672">::</span>number <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</code></pre></div><p>It works based on three propoties of C++:</p>
+<ol>
+<li>The definition of static member variables isn&rsquo;t check by the compiler.</li>
+<li>Classes are stored as a set of <code>.weak</code> function in the memory structure.</li>
+<li>Static member variables are visible to the linker.</li>
+</ol>
 <h3 id="const-static-variables">Const Static Variables</h3>
 <p>As mention before, const will remove <code>.globl</code> label, so const static &lsquo;global&rsquo; variables are exactly the same as const global variables, and const static &lsquo;local&rsquo; variables are only different by naming method.</p>
 <p>For member const static variables, since the compiler is very sure about the value of it, it allows programmers to declare it in the class, and will simply replace every references to this variable to the actual value. In this case, the variables are stored in the <code>.rodata</code> segment.</p>
