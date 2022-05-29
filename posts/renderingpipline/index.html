@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.80.0" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainic.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainic.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainic.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainic.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainic.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainic.com/css/bootstrap.min.css" />
+
+  
+  <title>Rendering Pipline Introduction | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] },
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+    <a href="/friends/">Friends</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Rendering Pipline Introduction</h1>
+<p>I have written a note about this topic last year, but that was in Chinese, as I&rsquo;m rewriting my blog in English, I think it&rsquo;s necessary make a translation as this one is so important. It is probably the last blog before the end of my this semester examination.</p>
+<p>The graphics pipeline can be roughly divide to three steps:</p>
+<ul>
+<li>Application</li>
+<li>Geometry</li>
+<li>Rasterization</li>
+</ul>
+<p>There is a image of rendering pipeline, it is so perfect but I cannot found the English version of it:</p>
+<p><img src="https://pic3.zhimg.com/v2-579bdb7ac479bbbcf52358ca67725bd6_1440w.jpg?source=172ae18b" alt="img"></p>
+<h2 id="application-step">Application Step</h2>
+<p>This step runs in CPU and fully programmable. In Unity, we use <code>struct appdata_t</code> to declare what kinds of data we want to obtain from CPU, and pass to GPU, this structure typically includes:</p>
+<ul>
+<li>Position.</li>
+<li>Tangent.</li>
+<li>Normal.</li>
+<li>At most 4 texture coordinate, which is known as UV coordinate.</li>
+<li>Color</li>
+</ul>
+<h2 id="geometry-step">Geometry Step</h2>
+<p>This step runs in GPU and includes many sub-steps, some of them are programmable, some of them are configurable, and some of them are unnecessary.</p>
+<h3 id="draw-call">Draw Call</h3>
+<p>This is not a sub-step but also an important thing to know. Draw calls are instruction for rendering, every time CPU send a batch of mesh vertex data to GPU, it will also send a draw call with it to tell GPU how to process the data.</p>
+<p>Here comes a problem, as we know GPU is way faster than CPU, so if there is a large number of batches, CPU will waste a lots of time in sending data and draw call and GPU will waste a lots of time in waiting. The solution is <strong>batching</strong>, merge many small draw call to a bigger one, there are two implementation in Unity:</p>
+<ul>
+<li>Make game object static, all static object will be submit in one draw call.</li>
+<li>Identical objects that are created dynamically will be submit in one draw call, but comes with many restriction, for example, a simple rescale will affect the batching and create a new draw call.</li>
+</ul>
+<h3 id="vertex-shader">Vertex Shader</h3>
+<p>The first step in the Geometry step, it is fully programmable and necessary.</p>
+<p>In this step each vertex will be treated separately, we can do such as position transformation and color information processing (just calculation some color information, not coloring) in this step.</p>
+<p>The pipeline also do <strong>camera transformation</strong> in this step.</p>
+<h3 id="tessellation-stage">Tessellation Stage</h3>
+<p>Fully programmable and unnecessary. In this step programmer can add more vertices based on the vertices they already have.</p>
+<p><img src="https://pic3.zhimg.com/80/v2-325dd2c1ddb0d1aee54bbcd24ec7056e_720w.png" alt="img"></p>
+<p><img src="https://pic3.zhimg.com/80/v2-48a7536912d34e959671f67b65f5eade_720w.png" alt="img"></p>
+<h3 id="geometry-shader">Geometry Shader</h3>
+<p>Fully programmable and unnecessary. In this step programmer can add, delete and modify vertices, but the efficiency of modification is much lower than Vertex Shader.</p>
+<p>It will also classify vertices into three arrays:</p>
+<ul>
+<li>triStream</li>
+<li>lineStream</li>
+<li>pointSteam</li>
+</ul>
+<p>Points will be assembled to corresponding shapes in Primitive Assembly step.</p>
+<h3 id="projection">Projection</h3>
+<p>Not programmable and necessary. In this step GPU transform vertices from camera space to clip space based on one of two methods, this procedure is a preparation for the following Clipping step:</p>
+<ul>
+<li>
+<p>Perspective Projection: Define a <strong>frustum</strong>, GPU only rendering objects that inside the frustum. When defining the frustum we need to consider the <strong>Far Clipping Plane</strong>, <strong>Near Clipping Plane</strong>, <strong>Field of View</strong>.</p>
+<p><img src="https://learnopengl.com/img/getting-started/perspective_frustum.png" alt="img"></p>
+</li>
+<li>
+<p>Orthographic Projection Matrix: The frustum will be a cuboid in this case and we need to consider the <strong>Size</strong> of it.</p>
+<p><img src="https://learnopengl-cn.github.io/img/01/08/orthographic_frustum.png" alt="orthographic projection frustum"></p>
+</li>
+</ul>
+<p>The transformation matrix will be introduced in another blog.</p>
+<h3 id="clipping">Clipping</h3>
+<p>Configurable and necessary. As shown in the images above, we only need to render objects that the camera can see, which is the objects in the frustum, to do this, we need to use the fourth coordinate in the <strong>homogeneous coordinates</strong>, we introduced it to solved translation problem (no matrix in 3D space can represent translation transformation).</p>
+<p>According to the definition we know before transformation of projection, $w\in[0,1]$ (because for points, $w$ equal to 1 and for lines, $w$ equal to 0, in affine space, point plus point is meaningless), thanks to the transformation matrix of projection, we have following nice properties:</p>
+<ul>
+<li>
+<p>Any point multiply by the orthographic projection matrix, it&rsquo;s $w$ coordinates will remains 1, all points inside the frustum will have:
+$$
+x,y,z\in[-w,w]
+$$</p>
+</li>
+<li>
+<p>Any point multiply by the perspective projection matrix, it&rsquo;s $w$ coordinates will be no longer 1, but points inside the frustum will also have:
+$$
+x,y,z\in [-w,w]
+$$
+In addition, $w$ in perspective projection means the distance between camera and the points.</p>
+</li>
+</ul>
+<p>Now GPU will transform the homogeneous coordinates into <strong>Normalized Device Coordinates</strong>, for every points in NDC, they have $x,y,z\in[-1,1]$, to scale clip space into such a coordinates, we can:</p>
+<ul>
+<li>
+<p>For orthographic matrix, we can just remove the $w$ coordinate, the rest will be in $[-1,1]$.</p>
+</li>
+<li>
+<p>For perspective matrix, we need to do the <strong>homogeneous division</strong> which is $(X,Y,Z)=(\frac{x}{w},\frac{y}{w},\frac{z}{w})$, and we will have $X,Y,Z\in[-1,1]$</p>
+<p><img src="https://cdn.jsdelivr.net/gh/codingriver/cdn/texs/%e9%80%8f%e8%a7%86%e6%8a%95%e5%bd%b1%e5%8f%98%e6%8d%a2%e6%8e%a8%e5%af%bc/20210421231724.png" alt="https://cdn.jsdelivr.net/gh/codingriver/cdn/texs/透视投影变换推导/20210421231724.png"></p>
+</li>
+</ul>
+<h3 id="screen-mapping">Screen Mapping</h3>
+<p>Since GPU already have the <strong>Normalized Device Coordinates</strong>, the next step is just map them into the screen.</p>
+<h2 id="rasterization-step">Rasterization Step</h2>
+<h3 id="primitive-assembly">Primitive Assembly</h3>
+<p>Configurable and necessary. Assemble points according to the output of Geometry Shader.</p>
+<h3 id="triangle-traversal">Triangle Traversal</h3>
+<p>Configurable and necessary. For each pixel, check if it is bounded by any triangle, we generate a <strong>fragment</strong> for a group of pixels that is bounded by the same triangle. For those pixel that partly bounded by a fragment, we have following solution:</p>
+<ul>
+<li>Standard Rasterization</li>
+<li>Outer-conservative Rasterization</li>
+<li>Inner-conservative Rasterization</li>
+</ul>
+<p>This step also involve contents such as <strong>anti-aliasing</strong> and <strong>Depth Interpolation Calculation</strong> (Color calculation scheme for pixels cover by multiple triangles).</p>
+<h3 id="fragment-shader">Fragment Shader</h3>
+<p>Fully programmable and necessary. Determine color for each fragment, for pixels whose color we don&rsquo;t know, a common approach is using <strong>linear Interpolation</strong>, calculate the color from its adjacent vertices.</p>
+<h3 id="per-fragment-operations">Per-Fragment Operations</h3>
+<p>Configurable and necessary. In this step we apply operation on each fragment (including <strong>testing</strong> and <strong>merging</strong>).</p>
+<h4 id="scissor-test">Scissor Test</h4>
+<p>2D clipping, programmer can declare a clipping frame, only fragment that inside the frame will be displayed.</p>
+<h4 id="alpha-test">Alpha Test</h4>
+<p>API is Abandoned, only fragments whose alpha value larger than the threshold will be displayed.</p>
+<h4 id="stencil-test">Stencil Test</h4>
+<p>In this test, we have a stencil buffer, which is a mask that cover the whole screen, for each run of render, we can design a batch of rules that rewrite the buffer, or only render model follow some stencil value comparison rules (such as bigger, smaller, equal or always).</p>
+<h4 id="depth-test">Depth Test</h4>
+<p>Depth testing allows programmers to set the occlusion relationships between rendered objects. Typically a lot of objects need to be culled in this step, so here comes a technology that can bring the depth test forward, <strong>early-z</strong>, however, it can only be used with opaque object because it conflicts with alpha test (when closer object has alpha value 0).</p>
+<p><strong>Merge</strong></p>
+<p>After all these test, GPU will merge the color of fragments into pixels. There are two method in common, one is replace directly, one is doing arithmetic calculation on fragment color (multiplication, addition).</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>

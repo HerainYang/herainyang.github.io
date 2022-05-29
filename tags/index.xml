@@ -6,7 +6,34 @@
     <description>Recent content in Tags on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 20 May 2022 14:29:20 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 29 May 2022 14:11:19 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Graphics</title>
+      <link>https://herainic.com/tags/graphics/</link>
+      <pubDate>Sun, 29 May 2022 14:11:19 +1000</pubDate>
+      
+      <guid>https://herainic.com/tags/graphics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Math</title>
+      <link>https://herainic.com/tags/math/</link>
+      <pubDate>Sun, 29 May 2022 14:11:19 +1000</pubDate>
+      
+      <guid>https://herainic.com/tags/math/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>OpenGL</title>
+      <link>https://herainic.com/tags/opengl/</link>
+      <pubDate>Sun, 29 May 2022 14:11:19 +1000</pubDate>
+      
+      <guid>https://herainic.com/tags/opengl/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Computational Geometry</title>
       <link>https://herainic.com/tags/computational-geometry/</link>
@@ -85,15 +112,6 @@
       <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
       
       <guid>https://herainic.com/tags/codelearnopengl/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>OpenGL</title>
-      <link>https://herainic.com/tags/opengl/</link>
-      <pubDate>Fri, 01 Jan 2021 20:06:32 +1000</pubDate>
-      
-      <guid>https://herainic.com/tags/opengl/</guid>
       <description></description>
     </item>
     

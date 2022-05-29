@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Graphics on Herain&#39;s Blog</title>
+    <link>https://herainic.com/tags/graphics/</link>
+    <description>Recent content in Graphics on Herain&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 29 May 2022 14:11:19 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/graphics/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Rendering Pipline Introduction</title>
+      <link>https://herainic.com/posts/renderingpipline/</link>
+      <pubDate>Sun, 29 May 2022 14:11:19 +1000</pubDate>
+      
+      <guid>https://herainic.com/posts/renderingpipline/</guid>
+      <description>I have written a note about this topic last year, but that was in Chinese, as I&amp;rsquo;m rewriting my blog in English, I think it&amp;rsquo;s necessary make a translation as this one is so important. It is probably the last blog before the end of my this semester examination.
+The graphics pipeline can be roughly divide to three steps:
+ Application Geometry Rasterization  There is a image of rendering pipeline, it is so perfect but I cannot found the English version of it:</description>
+    </item>
+    
+  </channel>
+</rss>
