@@ -272,7 +272,7 @@ _ZN5BaseA9Function1Ev:
     number <span style="color:#f92672">=</span> number <span style="color:#f92672">+</span> <span style="color:#ae81ff">20</span>;
 }
 </code></pre></div><hr>
-<p>Another problem, Although different compiler have different optimization strategy, but most of them will optimized out unused member function, <strong>what if my member function is actually useful in other file but compiler optimized it out?</strong> the answer is the same as the above question, but be aware of the multi-definition problem of strong type and the link order problem of multiple weak type. See <a href="https://herainic.com/posts/strongandweaksymbol/">Strong and weak Symbol</a>.</p>
+<p>Another problem, Although different compiler have different optimization strategy, but most of them will optimized out unused member function, <strong>what if my member function is actually useful in other file but compiler optimized it out?</strong> the answer is the same as the above question, because compiler wouldn&rsquo;t optimize unused public function, as it might be useful in other files. But be aware of the multi-definition problem of strong type and the link order problem of multiple weak type. See <a href="https://herainic.com/posts/strongandweaksymbol/">Strong and weak Symbol</a>.</p>
 
     </article>
   </div>
