@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.80.0" />
+  <meta name="generator" content="Hugo 0.93.3" />
 
   
   <meta name="description" content="Some description">
@@ -188,7 +188,7 @@ blockquote,
   <div class="container">
     <article>
       <h1>Strong And Weak Symbol</h1>
-<p>While I was writing my last article, I found a <code>.weak</code> label in assembly program. According to <a href="http://downloads.ti.com/docs/esd/SPNU118/weak-symbols-sprui029023.html,">http://downloads.ti.com/docs/esd/SPNU118/weak-symbols-sprui029023.html,</a> it is the same as <code>#pragma weak</code> in C/C++.</p>
+<p>While I was writing my last article, I found a <code>.weak</code> label in assembly program. According to <a href="http://downloads.ti.com/docs/esd/SPNU118/weak-symbols-sprui029023.html">http://downloads.ti.com/docs/esd/SPNU118/weak-symbols-sprui029023.html</a>, it is the same as <code>#pragma weak</code> in C/C++.</p>
 <h1 id="what-is-weak-symbol">What is weak symbol</h1>
 <p>The definition of weak symbol in C and C++ is different:</p>
 <ul>
@@ -206,22 +206,22 @@ blockquote,
 </li>
 </ul>
 <p>Consider we have such program:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">// test.cpp
-</span><span style="color:#75715e"></span><span style="color:#75715e">#pragma weak ijkkl
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">float</span> ijkkl <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>;
-<span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printType</span>(){
-    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">typeid</span>(ijkkl).name() <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
-}
-<span style="color:#75715e">// main.cpp
-</span><span style="color:#75715e"></span><span style="color:#75715e">#pragma weak ijkkl
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
-<span style="color:#66d9ef">int</span> ijkkl <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
-<span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printType</span>();
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
-    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">typeid</span>(ijkkl).name() <span style="color:#f92672">&lt;&lt;</span> endl;
-    printType();
-}
-</code></pre></div><p>What is the actual size of variable <code>ijkkl</code>?</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// test.cpp
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#pragma weak ijkkl
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">float</span> ijkkl <span style="color:#f92672">=</span> <span style="color:#ae81ff">10000</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printType</span>(){
+</span></span><span style="display:flex;"><span>    std<span style="color:#f92672">::</span>cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">typeid</span>(ijkkl).name() <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// main.cpp
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#pragma weak ijkkl
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> ijkkl <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">printType</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    cout <span style="color:#f92672">&lt;&lt;</span> <span style="color:#66d9ef">typeid</span>(ijkkl).name() <span style="color:#f92672">&lt;&lt;</span> endl;
+</span></span><span style="display:flex;"><span>    printType();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>What is the actual size of variable <code>ijkkl</code>?</p>
 <p>The answer is the size of <code>float</code> (in 64 machine, size of <code>float</code> is the same as size of <code>int</code>, but you know what I mean), we can check it by checking the binary memory view of the program.</p>
 <p>What is the output of this program?</p>
 <p>The answer is <code>i</code> indicate to <code>int</code>, and then <code>f</code> indicate to <code>float</code>.</p>
@@ -229,23 +229,23 @@ blockquote,
 <p>For weak symbol function, the actual function in the memory depends on the first linked file, and for each file that contain this function, they think the return type (parameter type is not included, since that will trigger function overload) of the function is the same as the definition in their own file. Which means if you have different definition of a function in  different files, you might be unable to obtain the return value correctly.</p>
 <p>No matter what kind of weak symbol it is, if it is undefined (no strong symbol with the same name in the whole project), it will be set to 0, so we have below good example:</p>
 <h1 id="a-useful-example">A useful example</h1>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">// test.cpp
-</span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">printType</span>(){
-    printf(<span style="color:#e6db74">&#34;Hello test</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
-    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1129387</span>;
-}
-<span style="color:#75715e">// main.cpp
-</span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
-<span style="color:#66d9ef">int</span>   <span style="color:#a6e22e">printType</span>();
-
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
-    <span style="color:#66d9ef">if</span> (printType){
-        printType();
-    }
-}
-</code></pre></div><p>In <code>main.cpp</code>, we test if <code>printType</code> equal to 0, if there isn&rsquo;t a strong definition for this function, it will be set to 0.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">// test.cpp
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">printType</span>(){
+</span></span><span style="display:flex;"><span>    printf(<span style="color:#e6db74">&#34;Hello test</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1129387</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// main.cpp
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span>   <span style="color:#a6e22e">printType</span>();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (printType){
+</span></span><span style="display:flex;"><span>        printType();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>In <code>main.cpp</code>, we test if <code>printType</code> equal to 0, if there isn&rsquo;t a strong definition for this function, it will be set to 0.</p>
 
     </article>
   </div>

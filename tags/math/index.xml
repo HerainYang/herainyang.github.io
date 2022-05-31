@@ -6,7 +6,19 @@
     <description>Recent content in Math on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 29 May 2022 14:11:19 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/math/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 30 May 2022 13:15:09 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/math/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Basic Linear Algebra</title>
+      <link>https://herainic.com/posts/basiclinearalgebra/</link>
+      <pubDate>Mon, 30 May 2022 13:15:09 +1000</pubDate>
+      
+      <guid>https://herainic.com/posts/basiclinearalgebra/</guid>
+      <description>Week 1 For any vector: $$ \overrightarrow{AB}=\overrightarrow{OB}-\overrightarrow{OA} $$ Can be denoted as: $$ \left[ \begin{matrix} b_1 - a_1 \\\ b_2 - a_2 \end{matrix} \right] or \left[ \begin{matrix} b_1 - a_1 , b_2 - a_2 \end{matrix} \right] $$
+ $\overrightarrow{OA}$ is the position vector of A. $\overrightarrow{AB}$ is the displacement vector from A to B.  Vector addition supports:
+ Commutativity Associativity  Scalar multiplication supports distributivity.
+A vector space is a set $V$ that:</description>
+    </item>
+    
     <item>
       <title>Rendering Pipline Introduction</title>
       <link>https://herainic.com/posts/renderingpipline/</link>

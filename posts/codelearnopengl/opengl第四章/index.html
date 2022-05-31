@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.80.0" />
+  <meta name="generator" content="Hugo 0.93.3" />
 
   
   <meta name="description" content="Some description">
@@ -214,15 +214,15 @@ MathJax.Hub.Config({
 <blockquote>
 <p>目前的GPU都支持一个叫做提前深度测试的功能，它会在片段着色器前运行，如果确定一个片段永远不可见（对于当前帧），就提前丢弃。当然如果我们更改了片段的深度值，这个功能就不会运作了。</p>
 </blockquote>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glEnable(GL_DEPTH_TEST);
-<span style="color:#75715e">//开启深度测试
-</span><span style="color:#75715e"></span>glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT);
-<span style="color:#75715e">//每帧调用，清除深度缓冲
-</span><span style="color:#75715e"></span>glDepthMask(GL_FALSE);
-<span style="color:#75715e">//如果不希望更新深度缓冲，我们可以设定禁用深度缓冲的写入
-</span><span style="color:#75715e"></span>glDepthFunc(GL_LESS);
-<span style="color:#75715e">//如果我们想更改深度缓冲的比较方法，可以参考下表来设定这个函数，当然，这个函数不能和上一个同时使用
-</span></code></pre></div><table>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>glEnable(GL_DEPTH_TEST);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//开启深度测试
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//每帧调用，清除深度缓冲
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>glDepthMask(GL_FALSE);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//如果不希望更新深度缓冲，我们可以设定禁用深度缓冲的写入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>glDepthFunc(GL_LESS);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//如果我们想更改深度缓冲的比较方法，可以参考下表来设定这个函数，当然，这个函数不能和上一个同时使用
+</span></span></span></code></pre></div><table>
 <thead>
 <tr>
 <th style="text-align:left">函数</th>
@@ -298,24 +298,24 @@ $$
 <li>渲染其他物体，但根据模板缓冲丢弃特定片段。</li>
 </ul>
 <p>和深度测试一样，模板测试也有以下函数用法：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glEnable(GL_STENCIL_TEST);
-glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT <span style="color:#f92672">|</span> GL_STENCIL_BUFFER_BIT);
-<span style="color:#75715e">//对应深度测试的glDepthMask(GL_FALSE)，在模板测试中禁用模板缓冲的写入用的是：
-</span><span style="color:#75715e"></span>glStencilMask(<span style="color:#ae81ff">0x00</span>);
-<span style="color:#75715e">//这样设置，输入的值会和0x00做AND运算，输出的结果就都是0x00，相反，如果要完整保留输入，则应该设置为0xFF，注意0x00会导致glClear不能正常清空
-</span></code></pre></div><h3 id="模板函数">模板函数</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>glEnable(GL_STENCIL_TEST);
+</span></span><span style="display:flex;"><span>glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT <span style="color:#f92672">|</span> GL_STENCIL_BUFFER_BIT);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//对应深度测试的glDepthMask(GL_FALSE)，在模板测试中禁用模板缓冲的写入用的是：
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>glStencilMask(<span style="color:#ae81ff">0x00</span>);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//这样设置，输入的值会和0x00做AND运算，输出的结果就都是0x00，相反，如果要完整保留输入，则应该设置为0xFF，注意0x00会导致glClear不能正常清空
+</span></span></span></code></pre></div><h3 id="模板函数">模板函数</h3>
 <p>说完了模板的设置，那如何具体应用模板呢，这就涉及到模板函数。从上文我们可以知道，“应用”模板包括两个部分：设置比较方法，设置比较完之后的动作。</p>
 <p>我们通过<code>glStencilFunc(GLenum func, GLint ref, GLuint mask)</code>来设置模板测试通过的条件，通过<code>glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass)</code>来设置之后的行为。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++">glStencilFunc(GLenum func, GLint ref, GLuint mask);
-<span style="color:#75715e">//第一个参数表示如何比较，在上文我们提到过
-</span><span style="color:#75715e">//第二个参数设置了模板测试的参考值，它会被用来和模板缓冲比较
-</span><span style="color:#75715e">//第三个参数是一个掩码，在输入的参考值会和它做AND运算，然后再被存储
-</span><span style="color:#75715e"></span>
-glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass);
-<span style="color:#75715e">//第一个参数表示模板测试失败时采取的行为
-</span><span style="color:#75715e">//第二个参数表示模板测试通过但深度测试失败时采取的行为
-</span><span style="color:#75715e">//第三个参数表示两者都通过的行为
-</span></code></pre></div><table>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>glStencilFunc(GLenum func, GLint ref, GLuint mask);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//第一个参数表示如何比较，在上文我们提到过
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//第二个参数设置了模板测试的参考值，它会被用来和模板缓冲比较
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//第三个参数是一个掩码，在输入的参考值会和它做AND运算，然后再被存储
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass);
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//第一个参数表示模板测试失败时采取的行为
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//第二个参数表示模板测试通过但深度测试失败时采取的行为
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//第三个参数表示两者都通过的行为
+</span></span></span></code></pre></div><table>
 <thead>
 <tr>
 <th style="text-align:left">行为</th>
@@ -359,92 +359,92 @@ glStencilOp(GLenum sfail, GLenum dpfail, GLenum dppass);
 </table>
 <h3 id="描绘物体轮廓">描绘物体轮廓</h3>
 <p>下面会给出一段代码，它实现了物体的描边功能：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
-    
-   ...
-
-   glEnable(GL_DEPTH_TEST);
-   glEnable(GL_STENCIL_TEST);
-    <span style="color:#75715e">//开启模板测试
-</span><span style="color:#75715e"></span>
-   glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-
-   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, WIDTH, HEIGHT);
-
-   Shader myShader(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/model.vertex&#34;</span>, <span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/model.fragment&#34;</span>);
-   Shader singleShader(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/model.vertex&#34;</span>, <span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/singleColor.fragment&#34;</span>);;
-    <span style="color:#75715e">//加载一个只会上单色的片段着色器，用于描边
-</span><span style="color:#75715e"></span>
-   Model ourModel(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/obj/nanosuit.obj&#34;</span>);
-
-   vec3 lightPos(<span style="color:#ae81ff">1.2f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">2.0f</span>);
-
-   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
-       currentFrame <span style="color:#f92672">=</span> glfwGetTime();
-       deltaFrame <span style="color:#f92672">=</span> currentFrame <span style="color:#f92672">-</span> lastFrame;
-       lastFrame <span style="color:#f92672">=</span> currentFrame;
-
-       pos_update();
-
-       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
-       glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT <span style="color:#f92672">|</span> GL_STENCIL_BUFFER_BIT);
-
-       glStencilFunc(GL_ALWAYS, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0xFF</span>);
-       glStencilMask(<span style="color:#ae81ff">0xFF</span>);
-       <span style="color:#75715e">//绘制下面模型的时候，把这个模型所占区域的模板值改成1，可以看到这里始终通过模板测试，看向第9行，我们设置了当通过测试之后，缓冲里面对应区域会更改模板值的选项
-</span><span style="color:#75715e"></span>
-       myShader.use();
-
-       myShader.setVec3(<span style="color:#e6db74">&#34;viewPos&#34;</span>, camera.Position);
-       myShader.setVec3(<span style="color:#e6db74">&#34;light.position&#34;</span>, lightPos);
-       myShader.setVec3(<span style="color:#e6db74">&#34;light.ambient&#34;</span>, vec3(<span style="color:#ae81ff">0.2f</span>));
-       myShader.setVec3(<span style="color:#e6db74">&#34;light.diffuse&#34;</span>, vec3(<span style="color:#ae81ff">0.5f</span>));
-       myShader.setVec3(<span style="color:#e6db74">&#34;light.specular&#34;</span>, vec3(<span style="color:#ae81ff">1.0f</span>));
-       myShader.setFloat(<span style="color:#e6db74">&#34;shininess&#34;</span>, <span style="color:#ae81ff">32</span>);
-
-       mat4 projection <span style="color:#f92672">=</span> perspective(radians(camera.Zoom), (<span style="color:#66d9ef">float</span>)WIDTH <span style="color:#f92672">/</span> (<span style="color:#66d9ef">float</span>)HEIGHT, <span style="color:#ae81ff">0.1f</span>, <span style="color:#ae81ff">100.0f</span>);
-       mat4 view <span style="color:#f92672">=</span> camera.GetViewMatrix();
-       myShader.setMat4(<span style="color:#e6db74">&#34;projection&#34;</span>, projection);
-       myShader.setMat4(<span style="color:#e6db74">&#34;view&#34;</span>, view);
-
-       mat4 model <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
-       model <span style="color:#f92672">=</span> translate(model, vec3(<span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>));
-       model <span style="color:#f92672">=</span> scale(model, vec3(<span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>));
-       myShader.setMat4(<span style="color:#e6db74">&#34;model&#34;</span>, model);
-       ourModel.Draw(myShader);
-
-       glStencilFunc(GL_NOTEQUAL, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0xFF</span>);
-       <span style="color:#75715e">//上面一次绘制我们把在模型范围内的片段都设置了为1的模板值，其他的地方目前都是0，为了绘制边框的时候不会遮挡原本的模型，我们只在模板值为0的地方绘制边框
-</span><span style="color:#75715e"></span>       glStencilMask(<span style="color:#ae81ff">0x00</span>);
-       glDisable(GL_DEPTH_TEST);
-       <span style="color:#75715e">//想象一下市面上应用模型描边的地方，基本都是在模型被其他物体遮挡的时候，所以如果开着深度测试，那么边框就会被遮挡而不会被绘制，所以此处为了穿墙效果，我们暂时把它关掉
-</span><span style="color:#75715e"></span>
-       singleShader.use();
-
-       mat4 model1 <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
-       model1 <span style="color:#f92672">=</span> translate(model, vec3(<span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>));
-       model1 <span style="color:#f92672">=</span> scale(model, vec3(<span style="color:#ae81ff">1.01f</span>, <span style="color:#ae81ff">1.01f</span>, <span style="color:#ae81ff">1.01f</span>));
-       singleShader.setMat4(<span style="color:#e6db74">&#34;model&#34;</span>, model1);
-       singleShader.setMat4(<span style="color:#e6db74">&#34;projection&#34;</span>, projection);
-       singleShader.setMat4(<span style="color:#e6db74">&#34;view&#34;</span>, view);
-       ourModel.Draw(singleShader);
-       <span style="color:#75715e">//绘制一个体积大一点的模型，这个模型会全方面包裹真正用于显示的模型
-</span><span style="color:#75715e"></span>
-       glStencilFunc(GL_ALWAYS, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0xFF</span>);
-       glStencilMask(<span style="color:#ae81ff">0xFF</span>);
-       glEnable(GL_DEPTH_TEST);
-       <span style="color:#75715e">//最后，为了下一次循环能够正常清空模板值，我们要把模板值设置回可以被更改，另外也要重新打开深度测试
-</span><span style="color:#75715e"></span>
-       glfwSwapBuffers(window);
-       glfwPollEvents();
-   }
-
-   glfwTerminate();
-   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
-}
-</code></pre></div><p>最后，有的人可能发现，画出来的边框并没有包括住模型，而是朝某个方向偏移了，这是因为模型的中心点不在正中间。为了解决这个问题，我们可以把边框的顶点沿法线方向进行一个平移，即：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-glsl" data-lang="glsl">gl_Position <span style="color:#f92672">=</span> projection <span style="color:#f92672">*</span> view <span style="color:#f92672">*</span> model <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec4</span>(aPos <span style="color:#f92672">+</span> aNormal <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.1</span>f, <span style="color:#ae81ff">1.0</span>);
-</code></pre></div><h2 id="阴影映射">阴影映射</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>   ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   glEnable(GL_DEPTH_TEST);
+</span></span><span style="display:flex;"><span>   glEnable(GL_STENCIL_TEST);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//开启模板测试
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>   glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   glViewport(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, WIDTH, HEIGHT);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   Shader myShader(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/model.vertex&#34;</span>, <span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/model.fragment&#34;</span>);
+</span></span><span style="display:flex;"><span>   Shader singleShader(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/model.vertex&#34;</span>, <span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/singleColor.fragment&#34;</span>);;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//加载一个只会上单色的片段着色器，用于描边
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>   Model ourModel(<span style="color:#e6db74">&#34;/home/herain/Documents/opengl/model/obj/nanosuit.obj&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   vec3 lightPos(<span style="color:#ae81ff">1.2f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">2.0f</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>glfwWindowShouldClose(window)){
+</span></span><span style="display:flex;"><span>       currentFrame <span style="color:#f92672">=</span> glfwGetTime();
+</span></span><span style="display:flex;"><span>       deltaFrame <span style="color:#f92672">=</span> currentFrame <span style="color:#f92672">-</span> lastFrame;
+</span></span><span style="display:flex;"><span>       lastFrame <span style="color:#f92672">=</span> currentFrame;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       pos_update();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       glClearColor(<span style="color:#ae81ff">0.2f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">0.3f</span>, <span style="color:#ae81ff">1.0f</span>);
+</span></span><span style="display:flex;"><span>       glClear(GL_COLOR_BUFFER_BIT <span style="color:#f92672">|</span> GL_DEPTH_BUFFER_BIT <span style="color:#f92672">|</span> GL_STENCIL_BUFFER_BIT);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       glStencilFunc(GL_ALWAYS, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0xFF</span>);
+</span></span><span style="display:flex;"><span>       glStencilMask(<span style="color:#ae81ff">0xFF</span>);
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">//绘制下面模型的时候，把这个模型所占区域的模板值改成1，可以看到这里始终通过模板测试，看向第9行，我们设置了当通过测试之后，缓冲里面对应区域会更改模板值的选项
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>       myShader.use();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       myShader.setVec3(<span style="color:#e6db74">&#34;viewPos&#34;</span>, camera.Position);
+</span></span><span style="display:flex;"><span>       myShader.setVec3(<span style="color:#e6db74">&#34;light.position&#34;</span>, lightPos);
+</span></span><span style="display:flex;"><span>       myShader.setVec3(<span style="color:#e6db74">&#34;light.ambient&#34;</span>, vec3(<span style="color:#ae81ff">0.2f</span>));
+</span></span><span style="display:flex;"><span>       myShader.setVec3(<span style="color:#e6db74">&#34;light.diffuse&#34;</span>, vec3(<span style="color:#ae81ff">0.5f</span>));
+</span></span><span style="display:flex;"><span>       myShader.setVec3(<span style="color:#e6db74">&#34;light.specular&#34;</span>, vec3(<span style="color:#ae81ff">1.0f</span>));
+</span></span><span style="display:flex;"><span>       myShader.setFloat(<span style="color:#e6db74">&#34;shininess&#34;</span>, <span style="color:#ae81ff">32</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       mat4 projection <span style="color:#f92672">=</span> perspective(radians(camera.Zoom), (<span style="color:#66d9ef">float</span>)WIDTH <span style="color:#f92672">/</span> (<span style="color:#66d9ef">float</span>)HEIGHT, <span style="color:#ae81ff">0.1f</span>, <span style="color:#ae81ff">100.0f</span>);
+</span></span><span style="display:flex;"><span>       mat4 view <span style="color:#f92672">=</span> camera.GetViewMatrix();
+</span></span><span style="display:flex;"><span>       myShader.setMat4(<span style="color:#e6db74">&#34;projection&#34;</span>, projection);
+</span></span><span style="display:flex;"><span>       myShader.setMat4(<span style="color:#e6db74">&#34;view&#34;</span>, view);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       mat4 model <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+</span></span><span style="display:flex;"><span>       model <span style="color:#f92672">=</span> translate(model, vec3(<span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>));
+</span></span><span style="display:flex;"><span>       model <span style="color:#f92672">=</span> scale(model, vec3(<span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>, <span style="color:#ae81ff">1.0f</span>));
+</span></span><span style="display:flex;"><span>       myShader.setMat4(<span style="color:#e6db74">&#34;model&#34;</span>, model);
+</span></span><span style="display:flex;"><span>       ourModel.Draw(myShader);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       glStencilFunc(GL_NOTEQUAL, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0xFF</span>);
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">//上面一次绘制我们把在模型范围内的片段都设置了为1的模板值，其他的地方目前都是0，为了绘制边框的时候不会遮挡原本的模型，我们只在模板值为0的地方绘制边框
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>       glStencilMask(<span style="color:#ae81ff">0x00</span>);
+</span></span><span style="display:flex;"><span>       glDisable(GL_DEPTH_TEST);
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">//想象一下市面上应用模型描边的地方，基本都是在模型被其他物体遮挡的时候，所以如果开着深度测试，那么边框就会被遮挡而不会被绘制，所以此处为了穿墙效果，我们暂时把它关掉
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>       singleShader.use();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       mat4 model1 <span style="color:#f92672">=</span> mat4(<span style="color:#ae81ff">1.0f</span>);
+</span></span><span style="display:flex;"><span>       model1 <span style="color:#f92672">=</span> translate(model, vec3(<span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>, <span style="color:#ae81ff">0.0</span>));
+</span></span><span style="display:flex;"><span>       model1 <span style="color:#f92672">=</span> scale(model, vec3(<span style="color:#ae81ff">1.01f</span>, <span style="color:#ae81ff">1.01f</span>, <span style="color:#ae81ff">1.01f</span>));
+</span></span><span style="display:flex;"><span>       singleShader.setMat4(<span style="color:#e6db74">&#34;model&#34;</span>, model1);
+</span></span><span style="display:flex;"><span>       singleShader.setMat4(<span style="color:#e6db74">&#34;projection&#34;</span>, projection);
+</span></span><span style="display:flex;"><span>       singleShader.setMat4(<span style="color:#e6db74">&#34;view&#34;</span>, view);
+</span></span><span style="display:flex;"><span>       ourModel.Draw(singleShader);
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">//绘制一个体积大一点的模型，这个模型会全方面包裹真正用于显示的模型
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>       glStencilFunc(GL_ALWAYS, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0xFF</span>);
+</span></span><span style="display:flex;"><span>       glStencilMask(<span style="color:#ae81ff">0xFF</span>);
+</span></span><span style="display:flex;"><span>       glEnable(GL_DEPTH_TEST);
+</span></span><span style="display:flex;"><span>       <span style="color:#75715e">//最后，为了下一次循环能够正常清空模板值，我们要把模板值设置回可以被更改，另外也要重新打开深度测试
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>       glfwSwapBuffers(window);
+</span></span><span style="display:flex;"><span>       glfwPollEvents();
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   glfwTerminate();
+</span></span><span style="display:flex;"><span>   <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>最后，有的人可能发现，画出来的边框并没有包括住模型，而是朝某个方向偏移了，这是因为模型的中心点不在正中间。为了解决这个问题，我们可以把边框的顶点沿法线方向进行一个平移，即：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-glsl" data-lang="glsl"><span style="display:flex;"><span>gl_Position <span style="color:#f92672">=</span> projection <span style="color:#f92672">*</span> view <span style="color:#f92672">*</span> model <span style="color:#f92672">*</span> <span style="color:#66d9ef">vec4</span>(aPos <span style="color:#f92672">+</span> aNormal <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.1</span>f, <span style="color:#ae81ff">1.0</span>);
+</span></span></code></pre></div><h2 id="阴影映射">阴影映射</h2>
 <p>阴影，是物体遮挡光线后，后面的物体没接收到光的部分会暗于接收到光的部分，而呈现出的效果。以目前技术来说，阴影是消耗性能的大头，目前行业中有用到不同的阴影算法，他们都有自己的优劣，在使用时需要多加斟酌考虑。</p>
 <p>游戏中使用较多的是<strong>阴影贴图</strong>技术，其效果和性能都不错，且容易拓展成更好的算法。</p>
 <p><img src="https://learnopengl-cn.github.io/img/05/03/01/shadow_mapping_theory.png" alt="img"></p>

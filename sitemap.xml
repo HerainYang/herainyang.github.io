@@ -1,149 +1,94 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
+    <loc>https://herainic.com/posts/basiclinearalgebra/</loc>
+    <lastmod>2022-05-30T13:15:09+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/</loc>
+    <lastmod>2022-05-30T13:15:09+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/math/</loc>
+    <lastmod>2022-05-30T13:15:09+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/posts/</loc>
+    <lastmod>2022-05-30T13:15:09+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/</loc>
+    <lastmod>2022-05-30T13:15:09+10:00</lastmod>
+  </url><url>
     <loc>https://herainic.com/tags/graphics/</loc>
     <lastmod>2022-05-29T14:11:19+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://herainic.com/</loc>
-    <lastmod>2022-05-29T14:11:19+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://herainic.com/tags/math/</loc>
-    <lastmod>2022-05-29T14:11:19+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/opengl/</loc>
     <lastmod>2022-05-29T14:11:19+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://herainic.com/posts/</loc>
-    <lastmod>2022-05-29T14:11:19+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/renderingpipline/</loc>
     <lastmod>2022-05-29T14:11:19+10:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://herainic.com/tags/</loc>
-    <lastmod>2022-05-29T14:11:19+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/computational-geometry/</loc>
     <lastmod>2022-05-20T14:29:20+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/unity/</loc>
     <lastmod>2022-05-20T14:29:20+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/unitycollisiondetection/</loc>
     <lastmod>2022-05-20T14:29:20+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/briefintroductiontoraii/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/c&#43;&#43;/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/programming-technique/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/raii/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/fantasticvariablesandwheretofindthem/</loc>
     <lastmod>2022-05-10T12:46:18+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/memory/</loc>
     <lastmod>2022-05-10T12:46:18+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/variables/</loc>
     <lastmod>2022-05-10T12:46:18+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/strongandweaksymbol/</loc>
     <lastmod>2022-05-09T14:07:04+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/howclassesarestoredinmemory/</loc>
     <lastmod>2022-05-09T12:58:30+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/about/</loc>
     <lastmod>2022-05-08T20:06:32+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/friends/</loc>
     <lastmod>2022-05-08T20:06:32+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/virtualfunctionandmemberfunction/</loc>
     <lastmod>2022-05-08T16:03:36+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/virtual-function/</loc>
     <lastmod>2022-05-08T16:03:36+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%80%E7%AB%A0/</loc>
     <lastmod>2021-01-01T20:06:32+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%BA%8C%E7%AB%A0/</loc>
     <lastmod>2021-01-01T20:06:32+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E4%B8%89%E7%AB%A0/</loc>
     <lastmod>2021-01-01T20:06:32+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/posts/codelearnopengl/opengl%E7%AC%AC%E5%9B%9B%E7%AB%A0/</loc>
     <lastmod>2021-01-01T20:06:32+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/tags/codelearnopengl/</loc>
     <lastmod>2021-01-01T20:06:32+10:00</lastmod>
-  </url>
-  
-  <url>
+  </url><url>
     <loc>https://herainic.com/categories/</loc>
   </url>
-  
 </urlset>

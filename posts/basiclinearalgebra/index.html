@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.93.3" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainic.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainic.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainic.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainic.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainic.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainic.com/css/bootstrap.min.css" />
+
+  
+  <title>Basic Linear Algebra | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] },
+  tex2jax: {
+    inlineMath: [['$','$']],
+    displayMath: [['$$','$$']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+  }
+});
+</script>
+<script type="text/javascript"
+  src="//cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+    <a href="/friends/">Friends</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Basic Linear Algebra</h1>
+<h2 id="week-1">Week 1</h2>
+<p>For any vector:
+$$
+\overrightarrow{AB}=\overrightarrow{OB}-\overrightarrow{OA}
+$$
+Can be denoted as:
+$$
+\left[
+\begin{matrix}
+b_1 - a_1 \\\
+b_2 - a_2
+\end{matrix}
+\right]
+or
+\left[
+\begin{matrix}
+b_1 - a_1 ,
+b_2 - a_2
+\end{matrix}
+\right]
+$$</p>
+<ul>
+<li>$\overrightarrow{OA}$ is the <strong>position vector</strong> of A.</li>
+<li>$\overrightarrow{AB}$ is the <strong>displacement vector</strong> from A to B.</li>
+</ul>
+<p>Vector addition supports:</p>
+<ul>
+<li>Commutativity</li>
+<li>Associativity</li>
+</ul>
+<p>Scalar multiplication supports distributivity.</p>
+<p>A <strong>vector space</strong> is a set $V$ that:</p>
+<ul>
+<li>For any $\vec v,\vec w \in V$, we have $\vec v+\vec w\in V$.</li>
+<li>For any $\vec v \in V, c \in R$, we have $c\vec v \in V$.</li>
+</ul>
+<p>Two vectors are parallel if $\vec u = c\vec v$.</p>
+<p>$\vec v$ is a <strong>linear combination</strong> of k vectors $\vec v_1, \vec v_2,\cdots,\vec v_k$ if $\vec v = c_1\vec v_1+c_2\vec v_2+\cdots+c_k\vec v_k$.</p>
+<hr>
+<h2 id="week-2">Week 2</h2>
+<p>The result of a dot product is a scalar:
+$$
+\vec u \cdot\vec v = u_1 \cdot v_1 + u_2 \cdot v_1 + \cdots + u_n\cdot v_n
+$$</p>
+<p>In $R^n$, the length of a vector is $\lVert \vec v \rVert = \sqrt{\vec v \cdot \vec v}$, so ${\lVert \vec v \rVert}^2=\vec v \cdot \vec v$.</p>
+<p>If $\vec u$ is orthogonal to $\vec v$, $\vec u \cdot \vec v = 0$.</p>
+<p><strong>The Cauchy-Schwartz inequality</strong>:</p>
+<p>For any vectors $\vec u, \vec v \in R^n$:
+$$
+\lVert \vec u \cdot\vec v \rVert \leq \lVert \vec u\rVert \lVert \vec v\rVert
+$$</p>
+<p><strong>The triangle inequality</strong>:</p>
+<p>For any vectors $\vec u, \vec v \in R^n$:
+$$
+\lVert \vec u +\vec v \rVert \leq \lVert \vec u\rVert + \lVert \vec v\rVert
+$$</p>
+<p>A <strong>unit vector</strong> is a vector of length 1.</p>
+<p>In $R ^n$, there are n <strong>standard unit vectors</strong>, given by $\vec e_1, \vec e_2, \cdots , \vec e_n$, where $\vec e_i$ has 1 as its $i^{th}$ components and 0 for all other components:
+$$
+\vec e_i=
+\left[
+\begin{matrix}
+0 \\\
+0 \\\
+\cdots \\\
+1 \\\
+\cdots \\\
+0
+\end{matrix}
+\right]
+$$
+The <strong>normalization</strong> of $\vec v$ is the unique vector $\widehat v$ with length 1 and direction the same as $\vec v$:
+$$
+\widehat v = \frac{1}{\lVert \vec v \rVert} \vec v
+$$</p>
+<p>The <strong>distance</strong> between two vectors $\vec u, \vec v \in R ^n$ is:
+$$
+\begin{align}
+d(\vec u, \vec v) &amp;= \lVert \vec u - \vec v\rVert \
+&amp;= \sqrt{(u_1-v_2)^2+\cdots+(u_n-v_n)^2}
+\end{align}
+$$
+The <strong>angle</strong> between $\vec u, \vec v \in R ^n$ is $\theta \in [-1,1]$:
+$$
+\cos \theta = \frac{\vec u \cdot \vec v}{\lVert u\rVert\cdot\lVert v\rVert}
+$$</p>
+<ul>
+<li>If $\vec u \cdot \vec v &gt; 0$, then $\cos \theta &gt; 0$, so $\theta$ is acute.</li>
+<li>If $\vec u \cdot \vec v &lt; 0$, then $\cos \theta &lt; 0$, so $\theta$ is obtuse.</li>
+<li>If $\vec u \cdot \vec v = 0$, then $\cos \theta = 0$, so $\theta$ is right angle, we say that these two vectors are orthogonal.</li>
+</ul>
+<p>For $\vec u,\vec v \in R^n$, with $\vec u \neq \vec 0$, the <strong>projection</strong> of the vector $\vec v$ onto $\vec u$ is denoted by $proj_{\vec u}(\vec v)$ and defined by:
+$$
+proj_{\vec u}(\vec v)=\frac{\vec u \cdot \vec v}{{\lVert \vec u\rVert}^2}\vec u
+$$
+We can always write $\vec v$ as:
+$$
+\vec v = \vec v_p + \vec v_0
+$$
+Where $\vec v_p$ is parallel to $\vec u$ and $\vec v_0$ is orthogonal to $\vec u$. Because $proj_{\vec u}(\vec v)$ is parallel to $\vec u$, $\vec v - proj_{\vec u}(\vec v)$ is orthogonal to $\vec u$.</p>
+<hr>
+<h2 id="week-3">Week 3</h2>
+<p>The <strong>cross product</strong> of two vectors $\vec u = [u_1, u_2, u_3]$, $\vec v=[v_1,v_2,v_3]$:
+$$
+\vec u \times \vec v =
+\left[
+\begin{matrix}
+u_2v_3 - u_3v_2 \\\
+u_3v_1 - u_1v_3 \\\
+u_1v_2 - u_2v_1
+\end{matrix}
+\right]
+$$
+For standard unit vectors:</p>
+<ul>
+<li>$\vec e_1 \times \vec e_2 = \vec e_3$.</li>
+<li>$\vec e_2 \times \vec e_3 = \vec e_1$.</li>
+<li>$\vec e_3 \times \vec e_1 = \vec e_2$.</li>
+</ul>
+<p><strong>Anti-commutativity</strong>: $\vec u \times \vec v = -\vec v \times \vec u$.</p>
+<p>$\vec u \times \vec u = \vec 0$.</p>
+<p>$\vec u \times \vec v$ is orthogonal to both $\vec u$ and $\vec v$.</p>
+<p>If $\vec u, \vec v$ is parallel, $\vec u \times \vec v = \vec 0$.</p>
+<p>The length of $\vec u \times \vec v$ is:
+$$
+\lVert\vec u \times \vec v\rVert=\lVert \vec u\lVert \lVert\vec v\lVert\sin\theta
+$$</p>
+<p>The area of the triangle spanned by $\vec u$ and $\vec v$ is $\frac{1}{2}\lVert\vec u\times\vec v\rVert$.</p>
+<p>The area of the parallelogram spanned by $\vec u$ and $\vec v$ is $\lVert \vec u\times \vec v\rVert$.</p>
+<p>The <strong>normal form</strong> of the line $l$ in $R^2$ is given by the equation:
+$$
+\vec x \cdot \vec m = \vec p \cdot\vec m
+$$</p>
+<p>$$
+\left[
+\begin{matrix}
+u_2v_3 - u_3v_2 \\\
+u_3v_1 - u_1v_3 \\\
+u_1v_2 - u_2v_1
+\end{matrix}
+\right]
+\cdot\vec m=\overrightarrow{OP}\cdot\vec m
+$$</p>
+<p>where $\vec m$ is a vector which is orthogonal to line $l$, $\vec p$ is one point on the line $l$.</p>
+<p>The <strong>general form​</strong> of the line $l$ in $R^2$ is given by the equation:
+$$
+l={(x,y)|ax+by=c},c=\overrightarrow{OP}\cdot\vec m
+$$</p>
+<p>The <strong>vector form</strong> of the line $l$ in $R^2$ is given by the equation:
+$$
+\vec x = \vec p + t\vec d \ for \ some \ t \in R
+$$
+where $\vec d$ is the direction vector of line $l$, $t\in R$ is called a parameter.</p>
+<p>The <strong>parametric form</strong> of the line $l$ in $R ^2$ is given by the equation:
+$$
+\begin{align}
+x &amp;= p_1 + td_1 \
+y &amp;= p_2 + td_2
+\end{align}
+\space t\in R
+$$
+The vector form and parametric form can be used in $R^3$.</p>
+<hr>
+<h2 id="week-4">Week 4</h2>
+<p>The <strong>normal form</strong> of the equation of the plane $P$ in $R^3$ is given by the equation:
+$$
+\begin{align}
+\vec m \cdot(\vec x - \vec p) &amp;= 0 \
+\vec m \cdot \vec x &amp;= \vec m \cdot \vec p
+\end{align}
+$$
+where $\vec m$ is a vector which is orthogonal to plane $P$, $\vec p$ is one point on the plane $P$.</p>
+<p>The <strong>general form</strong> of the equation of the plane $P$ in $R^3$ is given by the equation:
+$$
+ax+by+cz=d, where \ d=ap_1+bp_2+cp_3
+$$</p>
+<p>Given three points $P,Q,R\in R^n$, if there is a line $l$ which passes through all three of them, then $P,Q,R$ are <strong>collinear</strong>.</p>
+<p>The <strong>vector form</strong> of the equation of the plane $P$ in $R^3$ is given by the equation:
+$$
+\vec x = \vec p + s\vec v + t\vec u, s,t\in R
+$$
+where point $p$ is inside plain $P$, with two direction vectors $\vec u,\vec v$.</p>
+<p>The <strong>parametric form</strong> of the equation of the plane $P$ in $R^3$ is given by the equation:</p>
+<p>$$
+\left[
+\begin{matrix}
+x = p_1 + su_1 + tv_1 \\\
+y = p_2 + su_2 + tv_2 \\\
+z = p_3 + su_3 + tv_3
+\end{matrix}
+\right.
+\space
+, s,t\in R
+$$</p>
+<p>If $S={\vec v_1, \vec v_2, \cdots, \vec v_n}$ is a set of vectors in $R^n$, then the <strong>span</strong> of $\vec v_1, \vec v_2, \cdots, \vec v_n$ is denoted:
+$$
+span(S) \ or \ span(\vec v_1, \vec v_2, \cdots, \vec v_n) \
+span(S)={\vec v \in R^n | \vec v = c_1\vec v_1 + c_2\vec v_2 + \cdots + c_n\vec v_n}
+$$
+If $span(S)=R^n$, we say that $S$ is a <strong>spanning set</strong> for $R^n$, or the $\vec v_1, \cdots, \vec v_k$ span $R^n$.</p>
+<p>A set of vectors $\vec v_1, \cdots, \vec v_n$ is called <strong>linearly independent</strong> if the equation:
+$$
+c_1\vec v_1 + c_2\vec v_2 + \cdots + c_n\vec v_n = 0
+$$
+has exactly one solution:
+$$
+c_1=c_2=\cdots=c_n=0
+$$
+$\vec v_1, \vec v_2, \cdots, \vec v_n$ are linearly independent only if $\vec v_1, \vec v_2, \cdots, \vec v_n$ span $R^n$.</p>
+<p>A <strong>system of linear equations</strong> is a finite set of linear equations, each with the same variables.
+$$
+\begin{matrix}
+a_{11}x_1 &amp;+ a_{12}x_2 &amp;+ \cdots &amp;+ a_{1n}xn &amp;=b_1 \\\
+a_{21}x_1 &amp;+ a_{22}x_2 &amp;+ \cdots &amp;+ a_{2n}xn &amp;=b_2 \\\
+\cdots &amp; \cdots &amp;  &amp; \cdots &amp; \cdots\\\
+a_{m1}x_1 &amp;+ a_{m2}x_2 &amp;+ \cdots &amp;+ a_{mn}xn &amp;=b_m
+\end{matrix}
+$$</p>
+<ul>
+<li>$a_{ij}$ are called <strong>coefficients</strong>.</li>
+<li>$b_i$ are called <strong>constant terms​</strong>.</li>
+</ul>
+<p>The system is called <strong>homogeneous</strong> is all $b_i$ are 0.</p>
+<p>A system is said to be <strong>consistent​</strong> if it has at least one solution.</p>
+<p>Every system of linear equations has either:</p>
+<ul>
+<li>a unique solution</li>
+<li>infinitely many solutions</li>
+<li>no solution</li>
+</ul>
+<p>A system of m linear equations in n variables can also be written as
+$$
+\begin{matrix}
+\left[
+\begin{array}{cccc | c}
+a_{11} &amp; a_{12} &amp; \cdots &amp;a_{1n} &amp; b_1 \\\
+a_{21} &amp; a_{22} &amp; \cdots &amp;a_{2n} &amp; b_2 \\\
+\cdots &amp; \cdots &amp; \cdots &amp;\cdots &amp; \cdots\\\
+a_{m1} &amp; a_{m2} &amp; \cdots &amp;a_{mn} &amp; b_m
+\end{array}
+\right]
+\end{matrix}
+$$</p>
+<hr>
+<h2 id="week-5">Week 5</h2>
+<p>The following three <strong>row elementary operations</strong> don&rsquo;t change the solutions:</p>
+<ol>
+<li>
+<p>Swapping two equations.
+$$
+R_i \leftrightarrow R_j
+$$</p>
+</li>
+<li>
+<p>Multiplying both sides of one equation by a non-zero scalar $c\in R$.
+$$
+R_i \rightarrow cR_i
+$$</p>
+</li>
+<li>
+<p>Adding a multiple of one equation to another.
+$$
+R_i \rightarrow R_i + cR_j
+$$</p>
+</li>
+</ol>
+<p>An augmented matrix is in <strong>row echelon form</strong> if:</p>
+<ol>
+<li>Any rows in which all entries are 0 are at the bottom.</li>
+<li>In each non-zero row, the leftmost non-zero entry (called the <strong>leading entry</strong> or the <strong>pivot</strong>) has all zeros below it.</li>
+</ol>
+<p>In the REF the columns corresponding to $x,y,w$ have leading terms while the column corresponding to $z$ doesn&rsquo;t, we call $z$ a <strong>free variable</strong>.</p>
+<ul>
+<li>If the augmented matrix has a row of the form $[0 \cdots0|k]$, the system is inconsistent.</li>
+<li>If the REF of an augmented matrix has at least one free variable, it has Infinitely many solutions.</li>
+<li>Otherwise, it has exactly one solution.</li>
+</ul>
+<p>Use <strong>Gaussian elimination</strong> to approach REF.</p>
+<p>An augmented matrix is in <strong>reduced row echelon form</strong> if it satisfies the following conditions:</p>
+<ol>
+<li>It is in row echelon form.</li>
+<li>The leading entries are all ones.</li>
+<li>Each column containing a leading 1 has zeros everywhere else in this columns.</li>
+</ol>
+<p>Use <strong>Gauss-Jordan elimination</strong> to approach RREF.</p>
+<hr>
+<h2 id="week-6">Week 6</h2>
+<p>Let $A=(a_{ij})$ be an $m\times n$ matrix, the <strong>transpose</strong> of A is the $n \times m$ matrix $A^T=(a_{ji})$ denoted by swapping the rows and columns of A.</p>
+<p>transposition is <strong>self-inverse</strong>: for any matrix $A$,  $(A^T)^T=A$.</p>
+<ul>
+<li>$(A+B)^T=A^T+B^T$.</li>
+<li>$(\lambda A)^T=\lambda(A^T)$.</li>
+<li>$(AB)^T=B^TA^T$.</li>
+<li>$(A^k)^T=(A^T)^k$.</li>
+<li>If $AB=BA$, these two matrices commu</li>
+</ul>
+<p>Let $A$ be a square matrix:</p>
+<ul>
+<li>If $A^T=A$, we say that A is a <strong>symmetric matrix</strong>.</li>
+<li>If $A^T = -A$, we say that A is a <strong>stew-symmetric matrix</strong>.</li>
+</ul>
+<hr>
+<h2 id="week-7">Week 7</h2>
+<p>$$
+\left[
+\begin{matrix}
+ax_1 + bx_2 + cx_3 \\\
+dx_1 + ex_2 + fx_3 \\\
+gx_1 + hx_2 + ix_3
+\end{matrix}
+\right]=
+\left[
+\begin{matrix}
+a &amp; b &amp; c \\\
+d &amp; e &amp; f \\\
+g &amp; h &amp; i
+\end{matrix}
+\right]
+\left[
+\begin{matrix}
+x_1 \\\
+x_2 \\\
+x_3
+\end{matrix}
+\right]
+$$</p>
+<p>Let $A$ be a matrix, an <strong>inverse</strong> for $A$ is a matrix $B$ such that:
+$$
+AB=I \ and \ BA = I
+$$
+So that $A$ can only have an inverse if it is square.</p>
+<ul>
+<li>
+<p>If A has an inverse, then we say that A is <strong>invertible</strong>.</p>
+</li>
+<li>
+<p>Inverses are unique.</p>
+</li>
+</ul>
+<p>The inverse of A is denoted as $A^{-1}$, if $A^{-1}A=I$, $AA^{-1}=I$ must exist.</p>
+<p>Properties, suppose $A,B$ are invertible with inverse $A^{-1},B^{-1}$</p>
+<ul>
+<li>$A^{-1}$ is in invertible.</li>
+<li>$cA$ is invertible, $(cA)^{-1}=\frac{1}{c}A^{-1}$.</li>
+<li>$AB$ is invertible, $(AB)^{-1}=B^{-1}A^{-1}$.</li>
+<li>$A^{k}$ is invertible, $(A^k)^{-1}=(A^{-1})^k$.</li>
+<li>$A^T$ is invertible, $(A^T)^-1=(A^{-1})^T$.</li>
+</ul>
+<p>For $2\times 2$ matrices:</p>
+<ul>
+<li>$\det(AB)=\det(A)\det(B)$.</li>
+<li>$\det(A^{-1})=\frac{1}{\det(A)}$.</li>
+</ul>
+<p>Suppose $A=\left[\begin{matrix}a &amp; b \\\ c &amp; d\end{matrix}\right]$, then $\det(A)=ad-bc$, the inverse of $A$ is:
+$$
+A^{-1}=\frac{1}{\det(A)}
+\left[
+\begin{matrix}
+d &amp; -b \\\
+-c &amp; a
+\end{matrix}
+\right]
+$$</p>
+<p>To calculate the inverse of an $n \times n$ matrix $A$:</p>
+<ol>
+<li>Construct $[A|I]$.</li>
+<li>Do EROs on the whole augmented matrix until the left hand is in REF, if the left hand has a row of zeros (means the vectors are linearly dependent), then $A$ is not invertible.</li>
+<li>Continue until it has the form $[I|B]$, then $B=A^{-1}$.</li>
+</ol>
+<p>An $n\times n$ is invertible only if:</p>
+<ol>
+<li>Its REF doesn&rsquo;t have a row of zeros.</li>
+<li>Its RREF is $I_n$.</li>
+</ol>
+<p>Suppose A is an $n \times n$ matrix, giving a system of linear equations $A\vec x = \vec b$. If A is invertible, then the system has a unique solution, given by $\vec x = A^{-1}\vec b$.</p>
+<hr>
+<h2 id="week-8">Week 8</h2>
+<p>An <strong>elementary matrix</strong> is an $n\times n$ matrix that is obtained from the identity matrix $I_n$ by doing a single row operation, so there is three types of elementary matrix.</p>
+<p>Let $E$ be the elementary matrix, the result of $EA$ is the same as performing that ERO on A.</p>
+<p>Every elementary matrix $E$ is invertible, $E^{-1}$ is also an elementary matrix.</p>
+<p>To undo the effect of $E$, do $E^{-1}A$.</p>
+<p>A matrix which has a whole row or column of zeros cannot be invertible.</p>
+<p>$A$ is invertible only if $\det(A)\neq 0$.</p>
+<p>If $A$ is upper triangular or lower triangular, then $\det(A)$ is the product of the diagonal entries.</p>
+<hr>
+<h2 id="week-9">Week 9</h2>
+<p>Facts:</p>
+<ul>
+<li>If a matrix $A$ has one row which is a scalar multiple of a second row, then $\det(A)=0$.</li>
+<li>If a matrix $A$ has one column which is a scalar multiple of a second column, then$\det(A) = 0$.</li>
+<li>$\det(A)=\det(A^T)$.</li>
+</ul>
+<p>If $B$ is obtained from $A$ be swapping two rows, $\det(B)=-\det(A)$.</p>
+<p>If $B$ is obtained from $A$ by scaling one row by $\lambda$, $\det(B)=\lambda\det(A)$.</p>
+<p>If $B$ is obtained from A by adding a scalar multiple of one row to another, $\det(A)=\det(B)$.</p>
+<p>Let $A,B$ be $n\times n$ matrices, then $\det(A)\det(B)=\det(AB)$.</p>
+<p>Let $M$ be an $n \times n$ matrix, suppose $\vec v$ is a non-zero $n\times 1$ column vector, and $\lambda \in R$ is a scalar such that:
+$$
+M\vec v = \lambda \vec v
+$$</p>
+<ul>
+<li>$\lambda$ is an eigenvalue of $M$.</li>
+<li>$\vec v$ is an eigenvector of $M$.</li>
+</ul>
+<p>$$
+\det(M-\lambda I)=0
+$$</p>
+<p>This polynomial is called the <strong>characteristic polynomial</strong> of $M$.</p>
+<p>An $n \times n$ matrix has matrix has at most n distinct eigenvalues.</p>
+<hr>
+<h2 id="week-10">Week 10</h2>
+<p>The <strong>trace</strong> of $A$ is the sum of its diagonal entries:
+$$
+\operatorname{tr}(A) = a_{11}+a_{22}+\cdots+a_{nn}
+$$</p>
+<p>Let A be an $n\times n$ matrix, then:</p>
+<ul>
+<li>$\det(A)$ is the product of the eigenvalues.</li>
+<li>$\operatorname{tr}(A) $ is the sum of the eigenvalues.</li>
+</ul>
+<p>Let $U$ be a vector space, let $V\subset U$ be a non-empty subset. $V$ is called a <strong>subspace</strong> of $U$ if it satisfies the following two properties:</p>
+<ol>
+<li>if $v_1,v_2\in V$, then $v_1+v_2\in V$, $V$ is closed under addition.</li>
+<li>if $v\in V, c\in R$, then $cv\in V$, $V$ is closed under scalar multiplication.</li>
+</ol>
+<p>An $n\times n$ matrix $A$ has determinant not equal to 0:</p>
+<ol>
+<li>Its columns are linearly independent.</li>
+<li>Its rows are linearly independent.</li>
+</ol>
+<p>A <strong>basis</strong> of a vector space $V$ is a set $S={\vec v_1, \vec v_2, \cdots, \vec v_n}$ such that:</p>
+<ol>
+<li>$span(S)=V$.</li>
+<li>$S$ is linearly independent.</li>
+</ol>
+<p>Facts:</p>
+<ol>
+<li>Any two bases $S$ and $S&rsquo;$ of $V$ have the same number of elements.</li>
+<li>The dimension is the size of the smallest spanning set one can find.</li>
+<li>The dimension is the size of the biggest set of linearly independent vectors one can find.</li>
+</ol>
+<p>Let $A$ be an $n\times n$ matrix and $\lambda\in R$ a scalar. The $\lambda \cdot eigenspace$ of A is the set of all solutions $\vec v$ of the equation $A\vec v=\lambda \vec v$, including $\vec 0$.</p>
+<ul>
+<li>If $\lambda$ is not an eigenvalue, then the $\lambda \cdot eigenspace$ is just ${\vec 0}$.</li>
+<li>${\vec 0}$ is never an eigenvector for $\lambda$, but it is always in the eigenspace.</li>
+<li>Eigenspace is always a subspace of $R^n$.</li>
+</ul>
+<p>The <strong>algebraic multiplicity</strong> of an eigenvalue is the number of times it appears as a root of $\det(A-\lambda I)$.</p>
+<p>The <strong>geometric multiplicity</strong> of an eigenvalue $\lambda$ is the dimension of the $\lambda\cdot eigenspace$ of $A$.</p>
+<p>For each eigenvalue $\lambda$ of an $n\times n$ matrix:
+$$
+1\leq geometric \ multiplicity \leq algebraic \ multiplicity \leq n
+$$
+Let $\lambda_1,\cdots,\lambda_k$ be the distinct eigenvalues of $A$, the sum of their algebraic multiplicities is n.</p>
+<p>If $A$ is triangular, the eigenvalues are the diagonal entries $a_{11},a_{22},\cdots,a_{nn}$.</p>
+<p>Suppose a matrix A has a column $c_j$ all entries 0, except for possibly the $a_{jj}$ entry. Then $a_{jj}$ is an eigenvalue for $A$ and $\vec e_j$ is the corresponding eigenvector.</p>
+<p>Let $X$ be an $n\times n$ matrix and $\vec v$ and eigenvalue $\lambda$, then for any $k\geq0$, $X^k$ has eigenvector $\lambda^k$ with eigenvector $\vec v$.</p>
+<hr>
+<h2 id="week-11">Week 11</h2>
+<p>Let $A$ be any $n\times n$ matrix, $A$ is <strong>diagonalizable</strong> if:</p>
+<ul>
+<li>Some invertible matrix $P$.</li>
+<li>Some diagonal matrix $D=\left[\begin{matrix}\lambda_1 &amp; &amp; &amp; &amp;\\\ &amp; \lambda_2 &amp; &amp; &amp; \\\ &amp; &amp; \cdots &amp; \ &amp; &amp; &amp; &amp; \lambda_n\end{matrix}\right]$.</li>
+</ul>
+<p>such that $A=PDP^{-1}$.</p>
+<p>An $n\times n$ matrix $A$ is diagonalizable only if we can find eigenvectors $\vec v_1, \vec v_2, \cdots, \vec v_n$ with</p>
+<p>eigenvalues $\lambda_1, \lambda_2, \cdots, \lambda_n$ which are linearly independent.</p>
+<p>Then $A=PDP^{-1}$, where $P$ has columns $\vec v_1, \vec v_2, \cdots, \vec v_n$ and $D=\left[\begin{matrix}\lambda_1 &amp; &amp; &amp; &amp;\\\ &amp; \lambda_2 &amp; &amp; &amp; \\\ &amp; &amp; \cdots &amp; \\\ &amp; &amp; &amp; &amp; \lambda_n\end{matrix}\right]$.</p>
+<ul>
+<li>
+<p>Suppose an $n\times n$ matrix $A$ has eigenvalues $\lambda_1&gt; \lambda_2&gt; \cdots&gt; \lambda_n$, with eigenspaces $\vec v_1, \vec v_2, \cdots, \vec v_n$, then if $\vec v_1\in V_1, \vec v_2\in V_2, \cdots, \vec v_n\in V_n$ satisfy
+$$
+\vec v_1 + \vec v_2 + \cdots+ \vec v_n = \vec 0
+$$
+we must have $\vec v_1, \vec v_2, \cdots, \vec v_n = \vec 0$.</p>
+</li>
+<li>
+<p>Suppose an $n\times n$ matrix $A$ has eigenvalues $\lambda_1&gt; \lambda_2&gt; \cdots&gt; \lambda_n$, with eigenspaces $\vec v_1, \vec v_2, \cdots, \vec v_n$. Suppose that for each $i$ we have a set $S_i$ of linearly independent vectors in $v_i$, then the set $S_1\cup S_2\cup\cdots\cup S_n$ of all of these vectors is still linearly independent.</p>
+</li>
+<li>
+<p>$A$ is diagonalizable only if for each eigenvalue of $A$, the <strong>geometric multiplicity is equal to the algebraic multiplicity</strong>.</p>
+</li>
+<li>
+<p>If $A$ is an $n\times n$ matrix with $n$ distinct eigenvalues, than $A$ is diagonalizable.</p>
+</li>
+</ul>
+<p>If $A$ is a diagonalizable matrix:
+$$
+A^n=PD^nP^{-1}
+$$</p>
+<p>Leslie matrix:
+$$
+\left[\begin{matrix}
+b_1 &amp; b_2 &amp; b_3 &amp; b_4\\\
+s_1 &amp; 0   &amp; 0 &amp; 0\\\
+0 &amp; s_2 &amp; 0 &amp; 0 \\\
+0 &amp; 0 &amp; s_3 &amp; 0
+\end{matrix}\right]
+$$</p>
+<ul>
+<li>$b_i$ is the <strong>birth rate</strong> of group $i$.</li>
+<li>$s_i$ is the <strong>survival probability</strong> of group $i$.</li>
+</ul>
+<p>$$
+\vec x_{n+1} = L\vec x_n=L^{n+1}\vec x_0
+$$</p>
+<hr>
+<h2 id="week-12">Week 12</h2>
+<p>A <strong>probability vector</strong> is a vector $\vec v = \left[\begin{matrix}v_1\\\ v_2\\\ \cdots \\\ v_n\end{matrix}\right]\in R^n$ such that:</p>
+<ul>
+<li>For each $i$, $0\leq v_i \leq 1$.</li>
+<li>$v_1+v_2+\cdots+v_n=1$.</li>
+</ul>
+<p>A <strong>stochastic matrix</strong> is a square matrix $P$ such that each column is a probability vector.</p>
+<p>A matrix is <strong>positive</strong> if all of its entries are positive (greater than 0).</p>
+<p>A stochastic matrix $P$ is <strong>regular</strong> if there exists $n\geq 1$ such that $P^n$, is positive.</p>
+<ul>
+<li>If $P$ is positive, $P^n$ is positive.</li>
+<li>If $P$ is stochastic, $p^n$ is stochastic.</li>
+</ul>
+<p>A <strong>Markov</strong> chain is a stochastic model, i t consists of finitely many variables called <strong>states</strong>, <strong>state vector</strong> is denoted as:
+$$
+\vec x_n = \left[\begin{matrix}x_1\\\ x_2\\\ \cdots\\\ x_k\end{matrix}\right]\in R^k
+$$
+The probability of moving from one state to another is called the <strong>transition probability</strong>. The transition probability of moving from state $j$ to $i$ by:
+$$
+P_{ij}
+$$</p>
+<p>An eigenvector $\vec v$ with eigenvalue 1 for the transition matrix $P$ is called a <strong>steady state vector</strong>.</p>
+<ol>
+<li>$P\vec x = \vec x$.</li>
+<li>Non-negative entries summing to the total number of entities in the system.</li>
+</ol>
+<p>A <strong>steady state probability vector</strong> is a probability vector $\vec x$ satisfying $P\vec x=\vec x$.</p>
+<p>The Markov chain always has a steady state vector and a steady state probability vector.</p>
+<p>A Markov chain is <strong>regular</strong> if its transition matrix $P$ is regular.</p>
+<ul>
+<li>
+<p>If $P$ is regular, the $-1$ is NOT an eigenvalue.</p>
+</li>
+<li>
+<p>If $P$ is regular, then there is a unique SSV $\vec x$ and a unique SSPV $\vec y$.</p>
+</li>
+<li>
+<p><strong>Asymptotic behaviors</strong>: For every initial state $\vec x_0$, we have $\vec x_n=P^n\vec x_0$.</p>
+</li>
+<li>
+<p>If $P$ is regular, then as $n\rightarrow \infty$, $P^n$ approaches the long range transition matrix L of the Markov chain:
+$$
+P^n\rightarrow L=
+\left[
+\begin{matrix}
+\vec y | \vec y | \cdots |\vec y
+\end{matrix}
+\right]
+$$</p>
+</li>
+</ul>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>

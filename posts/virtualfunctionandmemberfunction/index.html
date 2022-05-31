@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   
-  <meta name="generator" content="Hugo 0.80.0" />
+  <meta name="generator" content="Hugo 0.93.3" />
 
   
   <meta name="description" content="Some description">
@@ -202,43 +202,43 @@ blockquote,
 <p>For the first question, the answer is during the compilation stage, every call to a member function of a class is translated. We know that after a function is compiled, it will be placed into the read-only code segment, so the address of this function won&rsquo;t change during the ruining time.</p>
 <img src="https://i.stack.imgur.com/Ufj7o.png" alt="c - Why are instructions addresses on the top of the memory user space  contrary to the linux process memory layout? - Stack Overflow" style="zoom:50%;" />
 <p>In addition, for any member function, it has a hidden parameter corresponding to the instance that calling it:</p>
-<pre><code class="language-assembly" data-lang="assembly">lea    -0x20(%rbp),%rax # put instance into rax, then into rdi, which represent the first parameter
+<pre tabindex="0"><code class="language-assembly" data-lang="assembly">lea    -0x20(%rbp),%rax # put instance into rax, then into rdi, which represent the first parameter
 mov    %rax,%rdi
 call   0x55555555524c &lt;ChildA::test()&gt;
 </code></pre><p>Since we have such nice properties, the compiler simply translate each function call into above format, so we don&rsquo;t need to store a pointer inside a class to point to its member function.</p>
 <h1 id="answer-2">Answer 2</h1>
 <p>I thought the answer is it contains two vpointers, the memory layout of child class looks like:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#f92672">-----</span> child
-<span style="color:#f92672">|</span> Vpointer
-<span style="color:#f92672">|</span> SomethingElse
-<span style="color:#f92672">|-----</span> Parent
-<span style="color:#f92672">||</span> Vpointer
-<span style="color:#f92672">||</span> SomethingElse
-<span style="color:#f92672">|-----</span>
-<span style="color:#f92672">-----</span>
-</code></pre></div><p>The reason is I found that I can still access parent&rsquo;s virtual function by doing <code>child.Parent::function()</code>, but it is wrong because this is in fact call though another mechanism rather than using vtable: Instead of finding the function in the vtable, it finds <code>Parent::function()</code> in the code segment, and pass the instance (derived instance, but it is still acceptable by base class&rsquo;s function) into the function.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
-</span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BaseA</span> {
-<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
-    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> F1() {
-        printf(<span style="color:#e6db74">&#34;something A&#34;</span>);
-    };
-};
-
-<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ChildA</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BaseA{
-<span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
-    <span style="color:#66d9ef">void</span> F1(){
-        printf(<span style="color:#e6db74">&#34;something B&#34;</span>);
-    }
-};
-
-<span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
-    ChildA a;
-    a.BaseA<span style="color:#f92672">::</span>F1();
-    a.F1();
-}
-</code></pre></div><p>So the answer to question 2 is only 1 vpointer.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#f92672">-----</span> child
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> Vpointer
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|</span> SomethingElse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|-----</span> Parent
+</span></span><span style="display:flex;"><span><span style="color:#f92672">||</span> Vpointer
+</span></span><span style="display:flex;"><span><span style="color:#f92672">||</span> SomethingElse
+</span></span><span style="display:flex;"><span><span style="color:#f92672">|-----</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-----</span>
+</span></span></code></pre></div><p>The reason is I found that I can still access parent&rsquo;s virtual function by doing <code>child.Parent::function()</code>, but it is wrong because this is in fact call though another mechanism rather than using vtable: Instead of finding the function in the vtable, it finds <code>Parent::function()</code> in the code segment, and pass the instance (derived instance, but it is still acceptable by base class&rsquo;s function) into the function.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&lt;iostream&gt;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">using</span> <span style="color:#66d9ef">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BaseA</span> {
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">virtual</span> <span style="color:#66d9ef">void</span> F1() {
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#e6db74">&#34;something A&#34;</span>);
+</span></span><span style="display:flex;"><span>    };
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ChildA</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> BaseA{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> F1(){
+</span></span><span style="display:flex;"><span>        printf(<span style="color:#e6db74">&#34;something B&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    ChildA a;
+</span></span><span style="display:flex;"><span>    a.BaseA<span style="color:#f92672">::</span>F1();
+</span></span><span style="display:flex;"><span>    a.F1();
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>So the answer to question 2 is only 1 vpointer.</p>
 
     </article>
   </div>
