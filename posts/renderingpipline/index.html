@@ -251,48 +251,26 @@ MathJax.Hub.Config({
 </ul>
 <p>Points will be assembled to corresponding shapes in Primitive Assembly step.</p>
 <h3 id="projection">Projection</h3>
-<p>Not programmable and necessary. In this step GPU transform vertices from camera space to clip space based on one of two methods, this procedure is a preparation for the following Clipping step:</p>
+<p>Not programmable and necessary. In this step GPU transform vertices from camera space to clip space based on one of two methods by transform a <strong>frustum</strong> to clip space (<a href="herainic.com/posts/homogeneouscoordinateinrendering/">for more information about clip space</a>), the frustum is the area that camera select to see, it includes squeezing the frustum and move the origin:</p>
+<img src="http://www.songho.ca/opengl/files/gl_projectionmatrix01.png" alt="OpenGL Perspective Frustum and NDC" style="zoom:50%;" />
+<p>There are two alternative for selecting the area:</p>
 <ul>
 <li>
-<p>Perspective Projection: Define a <strong>frustum</strong>, GPU only rendering objects that inside the frustum. When defining the frustum we need to consider the <strong>Far Clipping Plane</strong>, <strong>Near Clipping Plane</strong>, <strong>Field of View</strong>.</p>
+<p>Perspective Projection: Define a frustum, GPU only rendering objects that inside the frustum. When defining the frustum we need to consider the <strong>Far Clipping Plane</strong>, <strong>Near Clipping Plane</strong>, <strong>Field of View</strong>.</p>
 <p><img src="https://learnopengl.com/img/getting-started/perspective_frustum.png" alt="img"></p>
+<p><img src="/postimage/RenderingPipeline/PerspectiveClipSpace.png" alt="AABB"></p>
+<p><em>The clip space of perspective projection is on the right</em></p>
 </li>
 <li>
 <p>Orthographic Projection Matrix: The frustum will be a cuboid in this case and we need to consider the <strong>Size</strong> of it.</p>
 <p><img src="https://learnopengl-cn.github.io/img/01/08/orthographic_frustum.png" alt="orthographic projection frustum"></p>
 </li>
 </ul>
-<p>The transformation matrix will be introduced in another blog.</p>
+<p>The clip space for perspective projection and orthographic projection looks different, but both of them have properties that the objects inside frustum has $x,y,z\in [-w,w]$, The transformation matrix will be introduced in another blog.</p>
 <h3 id="clipping">Clipping</h3>
-<p>Configurable and necessary. As shown in the images above, we only need to render objects that the camera can see, which is the objects in the frustum, to do this, we need to use the fourth coordinate in the <strong>homogeneous coordinates</strong>, we introduced it to solved translation problem (no matrix in 3D space can represent translation transformation).</p>
-<p>According to the definition we know before transformation of projection, $w\in[0,1]$ (because for points, $w$ equal to 1 and for lines, $w$ equal to 0, in affine space, point plus point is meaningless), thanks to the transformation matrix of projection, we have following nice properties:</p>
-<ul>
-<li>
-<p>Any point multiply by the orthographic projection matrix, it&rsquo;s $w$ coordinates will remains 1, all points inside the frustum will have:
-$$
-x,y,z\in[-w,w]
-$$</p>
-</li>
-<li>
-<p>Any point multiply by the perspective projection matrix, it&rsquo;s $w$ coordinates will be no longer 1, but points inside the frustum will also have:
-$$
-x,y,z\in [-w,w]
-$$
-In addition, $w$ in perspective projection means the distance between camera and the points.</p>
-</li>
-</ul>
-<p>Now GPU will transform the homogeneous coordinates into <strong>Normalized Device Coordinates</strong>, for every points in NDC, they have $x,y,z\in[-1,1]$, to scale clip space into such a coordinates, we can:</p>
-<ul>
-<li>
-<p>For orthographic matrix, we can just remove the $w$ coordinate, the rest will be in $[-1,1]$.</p>
-</li>
-<li>
-<p>For perspective matrix, we need to do the <strong>homogeneous division</strong> which is $(X,Y,Z)=(\frac{x}{w},\frac{y}{w},\frac{z}{w})$, and we will have $X,Y,Z\in[-1,1]$</p>
-<p><img src="https://cdn.jsdelivr.net/gh/codingriver/cdn/texs/%e9%80%8f%e8%a7%86%e6%8a%95%e5%bd%b1%e5%8f%98%e6%8d%a2%e6%8e%a8%e5%af%bc/20210421231724.png" alt="https://cdn.jsdelivr.net/gh/codingriver/cdn/texs/透视投影变换推导/20210421231724.png"></p>
-</li>
-</ul>
+<p>Configurable and necessary. Remove vertices that are outside of the frustum and transform it into a cube (<strong>Normalized Device Coordinates</strong>, any point in NDC has $x,y,z\in [-1,1]$), for orthographic projection, its already in NDC, for perspective projection, we need to perform <strong>perspective divide</strong>, that is $x,y,z=\frac{X}{w},\frac{Y}{w},\frac{Z}{w}$. The NDC transformation is usually after clipping, but some people suggest it in reverse, both of them make sense.</p>
 <h3 id="screen-mapping">Screen Mapping</h3>
-<p>Since GPU already have the <strong>Normalized Device Coordinates</strong>, the next step is just map them into the screen.</p>
+<p>Since GPU already have the <strong>Normalized Device Coordinates</strong>, the next step is just map them into the screen. $x$ and $y$ are used directly, $z$ will be stored for depth test.</p>
 <h2 id="rasterization-step">Rasterization Step</h2>
 <h3 id="primitive-assembly">Primitive Assembly</h3>
 <p>Configurable and necessary. Assemble points according to the output of Geometry Shader.</p>

@@ -6,7 +6,17 @@
     <description>Recent content in Math on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 30 May 2022 13:15:09 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/math/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 01 Jun 2022 16:02:23 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/math/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Homogeneous Coordinate In Rendering</title>
+      <link>https://herainic.com/posts/homogeneouscoordinateinrendering/</link>
+      <pubDate>Wed, 01 Jun 2022 16:02:23 +1000</pubDate>
+      
+      <guid>https://herainic.com/posts/homogeneouscoordinateinrendering/</guid>
+      <description>Homogeneous coordinate is a coordinate system that mapping coordinates in $R^n$ space to $R^{n+1}$ space, there are many methods of mapping but the most commonly used one is using $(x_1,y_1,z_1)=(w x_2, w y_2, w z_2)$, and in $R^{n+1}$ space we will have $(x_2,y_2,z_2,\lambda)$.
+The benefits of this transformation come from two aspect and it is best to think of them as two different applications of homogeneous coordinate (we typically using projection matrix to convert the first one to the second one, but the $w$ value here means exactly different things, please don&amp;rsquo;t mix up):</description>
+    </item>
+    
     <item>
       <title>Basic Linear Algebra</title>
       <link>https://herainic.com/posts/basiclinearalgebra/</link>
