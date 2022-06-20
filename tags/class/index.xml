@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Class on Herain&#39;s Blog</title>
+    <link>https://herainic.com/tags/class/</link>
+    <description>Recent content in Class on Herain&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 19 Jun 2022 12:33:51 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/class/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Smart Pointers And Constructor</title>
+      <link>https://herainic.com/posts/smartpointersandconstructor/</link>
+      <pubDate>Sun, 19 Jun 2022 12:33:51 +1000</pubDate>
+      
+      <guid>https://herainic.com/posts/smartpointersandconstructor/</guid>
+      <description>Constructor There are four kinds of constructor in C++, default constructor, copy constructor, move constructor and delegate constructor. To understand these constructors, a better way is to think as instance fall into a constructor rather than call a constructor. Consider we have such a simple class:
+class test{  int* number; } Default constructor In this case, the constructor takes properties as input, and assign them to member properties inside the class:</description>
+    </item>
+    
+  </channel>
+</rss>

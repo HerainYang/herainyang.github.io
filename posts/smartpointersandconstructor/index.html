@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.93.3" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainic.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainic.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainic.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainic.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainic.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainic.com/css/bootstrap.min.css" />
+
+  
+  <title>Smart Pointers And Constructor | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+    <a href="/friends/">Friends</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Smart Pointers And Constructor</h1>
+<h2 id="constructor">Constructor</h2>
+<p>There are four kinds of constructor in C++, default constructor, copy constructor, move constructor and delegate constructor. To understand these constructors, a better way is to think as instance fall into a constructor rather than call a constructor. Consider we have such a simple class:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">test</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> number;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="default-constructor">Default constructor</h3>
+<p>In this case, the constructor takes properties as input, and assign them to member properties inside the class:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>test(<span style="color:#66d9ef">int</span> number){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>number <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span>(number);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="copy-constructor">Copy constructor</h3>
+<p>When the constructor takes a left value instance as input (the concept of left value and right value won&rsquo;t be introduce here), all initialization that provide a left value instance will fall into this kind of constructor. Actually, &ldquo;copy constructor&rdquo; isn&rsquo;t birth as copy constructor, it is because by definition, left value is stored in a certain memory address and has name, we don&rsquo;t want to modify it too much when we use it as input, as we might want to use it somewhere after this. So we basically want to make the new instance looks like the given instance, but actually have no relation between them, as for how to implement the constructor is depends on our demands:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>test(test<span style="color:#f92672">&amp;</span> instance){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>number <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span>(<span style="color:#f92672">*</span>(instance.number)); <span style="color:#75715e">// so if we change the value in this-&gt;number, it doesn&#39;t affect the value in instance.number
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h3 id="move-constructor">Move constructor</h3>
+<p>As the complement of copy constructor, when the constructor takes a right value instance as input, it is called &ldquo;move constructor&rdquo;, because a right value will be discard after the current row of code, we usually just takes what it have directly rather then make a copy of it, because it will save time for copying.  We usually use <code>std::move()</code> in this case, but be aware, if we don&rsquo;t do any thing in the constructor, this function won&rsquo;t change any thing, that&rsquo;s why I always emphasize that its our giving meaning to constructor to make them as &ldquo;copy constructor&quot;or &ldquo;move constructor&rdquo;, but not themselves have meaning.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>test(test<span style="color:#f92672">&amp;&amp;</span> instance){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>number <span style="color:#f92672">=</span> instance.number;
+</span></span><span style="display:flex;"><span>    instance.number <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// delete instance if necessary, you don&#39;t have to worry if you are using RAII
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div><h3 id="delegate-constructor">Delegate constructor</h3>
+<p>It is just call other constructor recursively, to save some time to write extra code.</p>
+<h2 id="smart-pointer">Smart Pointer</h2>
+<p>Smart pointer is a feature which was introduced in C++11, it is based on the idea of <strong>RAII</strong> to solve <strong>memory leak</strong>. The general idea of smart pointer is for the piece of memory we point to, we also store a integer, <strong>use count</strong>, to count how many pointer we have currently pointing to this memory, if no pointer is pointing to this memory, we just release it to prevent memory leak.</p>
+<h3 id="share-pointer">Share Pointer</h3>
+<p>Share pointer allow multiple pointer pointing at the same memory, and it will increase use count by 1. The basic data structure of a share pointer is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#66d9ef">template</span><span style="color:#f92672">&lt;</span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">T</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Sptr</span>{
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span><span style="color:#f92672">*</span> useCount;
+</span></span><span style="display:flex;"><span>    T<span style="color:#f92672">*</span> pointer;
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>We want <code>useCount</code> to be a pointer because it will be shared across all share pointer, put it in another way, when a new pointer is point to the same memory, we just need to increase <code>useCount</code> in any of the pointer (usually in the new pointer), and the <code>useCount</code> of all pointer that pointing at this memory will be increased.</p>
+<p>So in the basic constructor we do two things, initialize <code>useCount</code> and point to the memory:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>    Sptr(T<span style="color:#f92672">*</span> ptr <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>)<span style="color:#f92672">:</span>pointer(ptr){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(ptr)
+</span></span><span style="display:flex;"><span>            useCount <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span>(<span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>            useCount <span style="color:#f92672">=</span> <span style="color:#66d9ef">new</span> <span style="color:#66d9ef">int</span>(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>Except this constructor, we still have two other ways for initialization:</p>
+<ul>
+<li>
+<p>Using <code>=</code>, we assign an exist pointer to a new one by <code>Sptr&lt;int&gt; a = b</code>, in this case, we need to insure they have the same type and increase/decrease <code>useCount</code> properly:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>    Sptr<span style="color:#f92672">&amp;</span> <span style="color:#66d9ef">operator</span><span style="color:#f92672">=</span>(<span style="color:#66d9ef">const</span> Sptr<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;&amp;</span> ptr){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(ptr.pointer <span style="color:#f92672">==</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer){
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">this</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer){
+</span></span><span style="display:flex;"><span>            (<span style="color:#f92672">*</span><span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount)<span style="color:#f92672">--</span>; <span style="color:#75715e">// the use count to the old memory should be decreased
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>            <span style="color:#66d9ef">if</span>(<span style="color:#f92672">*</span>(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount <span style="color:#f92672">=</span> ptr.useCount;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer <span style="color:#f92672">=</span> ptr.pointer;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer)
+</span></span><span style="display:flex;"><span>            (<span style="color:#f92672">*</span><span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount)<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#f92672">*</span><span style="color:#66d9ef">this</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div></li>
+<li>
+<p>Using constructor that takes instance as input:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>    Sptr(<span style="color:#66d9ef">const</span> Sptr<span style="color:#f92672">&lt;</span>T<span style="color:#f92672">&gt;</span> <span style="color:#f92672">&amp;</span>ptr){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">this</span><span style="color:#f92672">!=&amp;</span>ptr){
+</span></span><span style="display:flex;"><span>            printf(<span style="color:#e6db74">&#34;nope</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer <span style="color:#f92672">=</span> ptr.pointer;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount <span style="color:#f92672">=</span> ptr.useCount;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer){
+</span></span><span style="display:flex;"><span>                (<span style="color:#f92672">*</span><span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount)<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div></li>
+</ul>
+<p>There are also right value version of assign statement and move constructor, but since the general concept is introduced, we just save some time shall we?</p>
+<p>Except constructor, destructor is also important for this pointer because we are working in RAII:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span>    <span style="color:#f92672">~</span>Sptr(){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer){
+</span></span><span style="display:flex;"><span>            (<span style="color:#f92672">*</span><span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount)<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(<span style="color:#f92672">*</span>(<span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>useCount;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">delete</span> <span style="color:#66d9ef">this</span><span style="color:#f92672">-&gt;</span>pointer;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>At the end of the life time, the smart pointer will detach automatically, and the <code>useCount</code> will be decreased.</p>
+<h3 id="unique-pointer">Unique Pointer</h3>
+<p>It is only a special case to the share pointer, which allow only one pointer to the memory address, and we can transfer the ownership by only <code>std:move()</code>.</p>
+<h3 id="weak-pointer">Weak Pointer</h3>
+<p>It is a special case that doesn&rsquo;t affect the <code>useCount</code>, however it can not be used to access the memory by using <code>-&gt;</code> and <code>*</code>, so normally it is used to monitor the <code>useCount</code>.</p>
+<h3 id="circular-reference">Circular reference</h3>
+<p><img src="/postimage/SmartPointer/Circle.png" alt="circle"></p>
+<p>In this problem, we have for share pointer as shown as arrow in the graph, when we reach the end of life of <code>share_ptrA</code> and <code>share_ptrB</code>, the mechanism of share pointer will check the <code>useCount</code> of node A and node B, since there are internal share pointer pointing at each of them, they will not be deleted, which is not what we want.</p>
+<p>If we have a pointer that does not affect the <code>useCount</code>, we can use it as the internal pointer, and everything will be solved. However, as said before, we cannot access memory though weak pointer, but we can do it in another way: We can generate a share pointer by a weak pointer, so every time we need to access the memory, we generate a share pointer, after the access, we destroy the pointer manually.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>
