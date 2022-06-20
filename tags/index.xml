@@ -6,7 +6,34 @@
     <description>Recent content in Tags on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 01 Jun 2022 16:02:23 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Jun 2022 12:33:51 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>C&#43;&#43;</title>
+      <link>https://herainic.com/tags/c&#43;&#43;/</link>
+      <pubDate>Sun, 19 Jun 2022 12:33:51 +1000</pubDate>
+      
+      <guid>https://herainic.com/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Class</title>
+      <link>https://herainic.com/tags/class/</link>
+      <pubDate>Sun, 19 Jun 2022 12:33:51 +1000</pubDate>
+      
+      <guid>https://herainic.com/tags/class/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Memory</title>
+      <link>https://herainic.com/tags/memory/</link>
+      <pubDate>Sun, 19 Jun 2022 12:33:51 +1000</pubDate>
+      
+      <guid>https://herainic.com/tags/memory/</guid>
+      <description></description>
+    </item>
+    
     <item>
       <title>Graphics</title>
       <link>https://herainic.com/tags/graphics/</link>
@@ -53,15 +80,6 @@
     </item>
     
     <item>
-      <title>C&#43;&#43;</title>
-      <link>https://herainic.com/tags/c&#43;&#43;/</link>
-      <pubDate>Tue, 17 May 2022 21:19:00 +1000</pubDate>
-      
-      <guid>https://herainic.com/tags/c&#43;&#43;/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>Programming Technique</title>
       <link>https://herainic.com/tags/programming-technique/</link>
       <pubDate>Tue, 17 May 2022 21:19:00 +1000</pubDate>
@@ -76,15 +94,6 @@
       <pubDate>Tue, 17 May 2022 21:19:00 +1000</pubDate>
       
       <guid>https://herainic.com/tags/raii/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Memory</title>
-      <link>https://herainic.com/tags/memory/</link>
-      <pubDate>Tue, 10 May 2022 12:46:18 +1000</pubDate>
-      
-      <guid>https://herainic.com/tags/memory/</guid>
       <description></description>
     </item>
     

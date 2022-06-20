@@ -2,10 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://herainic.com/tags/graphics/</loc>
-    <lastmod>2022-06-01T16:02:23+10:00</lastmod>
+    <loc>https://herainic.com/tags/c&#43;&#43;/</loc>
+    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/class/</loc>
+    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/</loc>
+    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/memory/</loc>
+    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/posts/</loc>
+    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/posts/smartpointersandconstructor/</loc>
+    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/</loc>
+    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/graphics/</loc>
     <lastmod>2022-06-01T16:02:23+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/posts/homogeneouscoordinateinrendering/</loc>
@@ -15,12 +33,6 @@
     <lastmod>2022-06-01T16:02:23+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/tags/opengl/</loc>
-    <lastmod>2022-06-01T16:02:23+10:00</lastmod>
-  </url><url>
-    <loc>https://herainic.com/posts/</loc>
-    <lastmod>2022-06-01T16:02:23+10:00</lastmod>
-  </url><url>
-    <loc>https://herainic.com/tags/</loc>
     <lastmod>2022-06-01T16:02:23+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/posts/basiclinearalgebra/</loc>
@@ -41,9 +53,6 @@
     <loc>https://herainic.com/posts/briefintroductiontoraii/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
   </url><url>
-    <loc>https://herainic.com/tags/c&#43;&#43;/</loc>
-    <lastmod>2022-05-17T21:19:00+10:00</lastmod>
-  </url><url>
     <loc>https://herainic.com/tags/programming-technique/</loc>
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
   </url><url>
@@ -51,9 +60,6 @@
     <lastmod>2022-05-17T21:19:00+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/posts/fantasticvariablesandwheretofindthem/</loc>
-    <lastmod>2022-05-10T12:46:18+10:00</lastmod>
-  </url><url>
-    <loc>https://herainic.com/tags/memory/</loc>
     <lastmod>2022-05-10T12:46:18+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/tags/variables/</loc>
