@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.93.3" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainic.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainic.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainic.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainic.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainic.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainic.com/css/bootstrap.min.css" />
+
+  
+  <title>Why and How I Refactor My AssetBundle Manager | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+    <a href="/friends/">Friends</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>Why and How I Refactor My AssetBundle Manager</h1>
+<p>Comparing to putting asset inside of <code>Resources</code> folder, using asset bundle system has a lot of benefits. While using resources system, Unity engine will create a index table for all resources inside <code>Resources</code> folder, in order to fasten the speed of <code>Resources.Load</code>. It is really fast but every time we add something into the folder, engine will need to rebuild the table, as the number of resources increase, the table also increase and need a lot of memory. By using asset bundle, we can load asset bundle manually, so compare to resources system, we usually get a faster launch time and a fast enough asset loading time. But here comes the problem, we need to manually manage the bundle.</p>
+<p>The most popular operation with asset bundle are <code>Load</code> and <code>Unload</code>, synchronously or asynchronous, so these API are involved:</p>
+<ul>
+<li><a href="https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromFile.html">LoadFromFile</a></li>
+<li><a href="https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromFileAsync.html">LoadFromFileAsync</a></li>
+<li><a href="https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromStream.html">LoadFromStream</a></li>
+<li><a href="https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromStreamAsync.html">LoadFromStreamAsync</a></li>
+<li><a href="https://docs.unity3d.com/ScriptReference/AssetBundle.Unload.html">Unload</a></li>
+<li><a href="https://docs.unity3d.com/ScriptReference/AssetBundle.UnloadAllAssetBundles.html">UnloadAllAssetBundles</a></li>
+<li><a href="https://docs.unity3d.com/ScriptReference/AssetBundle.LoadAsset.html">LoadAsset</a></li>
+<li><a href="https://docs.unity3d.com/ScriptReference/AssetBundle.LoadAssetAsync.html">LoadAssetAsync</a></li>
+</ul>
+<p>(<a href="https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromMemory.html">LoadFromMemory</a> and <a href="https://docs.unity3d.com/ScriptReference/AssetBundle.LoadFromMemoryAsync.html">LoadFromMemoryAsync</a> are bad in practice because the data is stored redundantly in three location: The memory that store the binary data, the stack and the asset itself.)</p>
+<p>The first 6 API are toward asset bundle and the last 2 are toward asset, my new solution is create asset bundle handler, it contains:</p>
+<ul>
+<li>Asset bundle itself</li>
+<li>Reference count</li>
+<li>A list storing all asset handler of this bundle that have been load, for asset handler, it contains:
+<ul>
+<li>Asset it self</li>
+<li>Reference count</li>
+</ul>
+</li>
+</ul>
+<p>Every time I call my <code>LoadAssetSync</code> or <code>LoadAssetAsync</code> function, the manager checks if the asset bundle is loaded, if not, load it. It doesn&rsquo;t increase the reference count until the asset is loaded. Once the asset is loaded, we increase the reference count for asset bundle handler and asset handler.</p>
+<p>For unload, notice that the asset cannot be unload individually, the API <code>Resources.Unload</code> is for asset that loaded though resources system, so I only decrease the reference count of asset handler, when it hits 0, also decrease the reference count of asset bundle handler by 1. My asset bundle will only be unload when the reference count becomes 0 or <code>UnloadAllAsetBundles</code> is called, when switching scene.</p>
+<p>When I implementing this system, I was thinking to combine RAII with this manager, as we need to unload asset manually, which is quite unsafe. However, we cannot destroy object (not gameobject) by <code>C#</code>, we might also want to reuse the asset a period of time after loaded, so I decide to believe the garbage collection of <code>C#</code> and the programmer who use this manager.</p>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>

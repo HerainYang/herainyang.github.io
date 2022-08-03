@@ -6,7 +6,16 @@
     <description>Recent content on Herain&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 19 Jun 2022 12:33:51 +1000</lastBuildDate><atom:link href="https://herainic.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 03 Aug 2022 20:19:31 +1000</lastBuildDate><atom:link href="https://herainic.com/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Why and How I Refactor My AssetBundle Manager</title>
+      <link>https://herainic.com/posts/whyandhowirefactormyassetbundlemanager/</link>
+      <pubDate>Wed, 03 Aug 2022 20:19:31 +1000</pubDate>
+      
+      <guid>https://herainic.com/posts/whyandhowirefactormyassetbundlemanager/</guid>
+      <description>Comparing to putting asset inside of Resources folder, using asset bundle system has a lot of benefits. While using resources system, Unity engine will create a index table for all resources inside Resources folder, in order to fasten the speed of Resources.Load. It is really fast but every time we add something into the folder, engine will need to rebuild the table, as the number of resources increase, the table also increase and need a lot of memory.</description>
+    </item>
+    
     <item>
       <title>Smart Pointers And Constructor</title>
       <link>https://herainic.com/posts/smartpointersandconstructor/</link>

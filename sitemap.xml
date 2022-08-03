@@ -2,25 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://herainic.com/</loc>
+    <lastmod>2022-08-03T20:19:31+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/posts/</loc>
+    <lastmod>2022-08-03T20:19:31+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/system-design/</loc>
+    <lastmod>2022-08-03T20:19:31+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/</loc>
+    <lastmod>2022-08-03T20:19:31+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/tags/unity/</loc>
+    <lastmod>2022-08-03T20:19:31+10:00</lastmod>
+  </url><url>
+    <loc>https://herainic.com/posts/whyandhowirefactormyassetbundlemanager/</loc>
+    <lastmod>2022-08-03T20:19:31+10:00</lastmod>
+  </url><url>
     <loc>https://herainic.com/tags/c&#43;&#43;/</loc>
     <lastmod>2022-06-19T12:33:51+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/tags/class/</loc>
     <lastmod>2022-06-19T12:33:51+10:00</lastmod>
   </url><url>
-    <loc>https://herainic.com/</loc>
-    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
-  </url><url>
     <loc>https://herainic.com/tags/memory/</loc>
     <lastmod>2022-06-19T12:33:51+10:00</lastmod>
   </url><url>
-    <loc>https://herainic.com/posts/</loc>
-    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
-  </url><url>
     <loc>https://herainic.com/posts/smartpointersandconstructor/</loc>
-    <lastmod>2022-06-19T12:33:51+10:00</lastmod>
-  </url><url>
-    <loc>https://herainic.com/tags/</loc>
     <lastmod>2022-06-19T12:33:51+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/tags/graphics/</loc>
@@ -42,9 +51,6 @@
     <lastmod>2022-05-29T14:11:19+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/tags/computational-geometry/</loc>
-    <lastmod>2022-05-20T14:29:20+10:00</lastmod>
-  </url><url>
-    <loc>https://herainic.com/tags/unity/</loc>
     <lastmod>2022-05-20T14:29:20+10:00</lastmod>
   </url><url>
     <loc>https://herainic.com/posts/unitycollisiondetection/</loc>
