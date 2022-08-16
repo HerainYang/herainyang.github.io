@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <meta name="generator" content="Hugo 0.93.3" />
+
+  
+  <meta name="description" content="Some description">
+  
+
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="https://herainic.com/apple-touch-icon.png">
+
+  
+  <link rel="icon" type="image/png" sizes="32x32" href="https://herainic.com/favicon-32x32.png">
+
+  
+  <link rel="icon" type="image/png" sizes="16x16" href="https://herainic.com/favicon-16x16.png">
+
+  
+  <link rel="manifest" href="https://herainic.com/site.webmanifest">
+
+  
+  <link rel="mask-icon" href="https://herainic.com/safari-pinned-tab.svg" color="#5bbad5">
+
+  <meta name="msapplication-TileColor" content="#da532c">
+
+  <meta name="theme-color" content="#ffffff">
+
+  
+  <link rel="stylesheet" href="https://herainic.com/css/bootstrap.min.css" />
+
+  
+  <title>My C# and Unity&#39;s problem: Async/Await/Task, Multithreaded and Synchronization Context | Herain&#39;s Blog</title>
+  
+
+  <style>
+body {
+  min-width: 300px;
+}
+
+.custom-navbar {
+  margin-bottom: 1em;
+  height: 60px;
+}
+
+.custom-navbar a {
+  display: inline-block; 
+  padding: 18px 0;
+  margin-right: 1em; 
+  font-weight: bold; 
+}
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  text-decoration: none; 
+}
+
+@media print {
+  .custom-navbar {
+    display: none;
+  }
+}
+
+article {
+  padding-bottom: 1em;
+}
+
+img {
+  max-width: 100%;
+}
+
+
+body {
+  background-color: #fff;
+}
+
+
+
+body {
+  color: #212529;
+}
+
+
+
+a {
+  color: #007bff;
+}
+
+
+
+a:hover,
+a:focus {
+  color: #0056b3;
+}
+
+
+
+.custom-navbar {
+  background-color: #212529;
+}
+
+
+
+.custom-navbar a {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+
+
+.custom-navbar a:hover,
+.custom-navbar a:focus {
+  color: rgba(255, 255, 255, 1);
+}
+
+
+
+.container {
+  max-width: 800px;
+}
+
+
+
+pre {
+  display: block;
+  padding: 9.5px;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit; 
+  white-space: pre-wrap;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+code {
+  padding: 2px 4px;
+  color: inherit; 
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: .9em;
+}
+
+
+
+blockquote,
+.blockquote {
+  padding: 10px 20px;
+  margin: 0 0 20px;
+  font-size: 1em;
+  border-left: 5px solid #6c757d;
+}
+
+</style>
+  
+</head>
+
+
+<body>
+  <nav class="custom-navbar">
+  <div class="container">
+    
+    <a href="/">Posts</a>
+    
+    <a href="/tags/">Tags</a>
+    
+    <a href="/about/">About</a>
+    
+    <a href="/index.xml">RSS</a>
+    
+    <a href="/friends/">Friends</a>
+    
+  </div>
+</nav>
+  
+  <div class="container">
+    <article>
+      <h1>My C# and Unity&rsquo;s problem: Async/Await/Task, Multithreaded and Synchronization Context</h1>
+<p>I was working on my university course project these day, and we are using Unity/C#. For function which isn&rsquo;t return immediately, I used coroutine and <code>yield return waituntil</code> to wait for it. I didn&rsquo;t know much about C# so at that time I didn&rsquo;t even know we have <code>async/await/task</code>, my thinking method is imprisoned in only using Unity API, after reading some article I suddenly realize I should definitely try this <code>async/await/task</code> things.</p>
+<p>So the first problem I encountered is I mixed up the concept of multithreading and asynchronous though I kind of remember there is a task schedule thing. So basically asynchronous can be executed in only one thread, that is, at some point, I call <code>await</code>, and C# will generate a function that check at each frame to see if the task is completed (If it is, it trigger callback function), while my main thread is keep going at this time. Async can be used with multithreading, but multithreading is not necessary.</p>
+<p>In Unity/C#, if we want to create a new thread, we use <code>Task.Run()</code> or similar function in <code>Task</code> class. However, isn&rsquo;t that only the main thread can access Unity API? If so, the usage of <code>async/await</code> will be limited, as least coroutine is better in this case.</p>
+<p>At that time I was seeking of a substitution of <code>Promise</code>, most of implementations are using coroutine, but using coroutine too much will mixed up my project and moreover, it takes a long time to repeat the work to create a new coroutine. Then I find this <code>async/await/task</code> thing, isn&rsquo;t it similar to <code>Promise</code>? I mean they can both wait until something is done, the only different now is how to implement a <code>.then()</code> function. The good new is there is a <code>.ContinueWith()</code> function for <code>task</code> class, so if my <code>async</code> function return a <code>task</code> (they usually does), I can follow with a <code>.CoutinueWith()</code> function likes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-C#" data-lang="C#"><span style="display:flex;"><span><span style="color:#66d9ef">async</span> Task func(){
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//...dosomething...</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//...</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>func().ContinueWith(()=&gt;{
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//...callback here...</span>
+</span></span><span style="display:flex;"><span>});
+</span></span></code></pre></div><p>Everything works fine so far, but when I put it into use, here&rsquo;s the problem: the code in <code>ContinueWith</code> will actually runs by <code>Task.Run()</code>, which make it executed in another thread, without permission to access Unity API. However, I found there was another parameter for this <code>ContinueWith()</code> function, which takes a <strong>TaskScheduler</strong>. Emm, what the hack is <code>TaskSchedualer</code>? Anyway just for a try I put <code>TaskScheduler.FromCurrentSynchronizationContext()</code> into this parameter without knowing what it is, but it works! But how? So I have two guess here:</p>
+<ol>
+<li>I move this task to run in the main thread.</li>
+<li>There&rsquo;s some black magic.</li>
+</ol>
+<p>So I print out the thread id, but it was absolutely a different thread, I realize to figure out this problem, I need to find out what is this synchronization context thing.</p>
+<p><a href="https://docs.microsoft.com/en-us/dotnet/api/system.threading.synchronizationcontext?view=net-6.0">Synchronization context</a>, basically is a environment for thread to communicate, each thread can be in 0 or 1 synchronization context. For those threads in the same synchronization context, they will be executed in a certain sequence (can be define by custom synchronization context, or just use a default one). For Unity, they defined a custom synchronization context:</p>
+<blockquote>
+<p>Unity overwrites the default <a href="https://docs.microsoft.com/en-us/archive/msdn-magazine/2011/february/msdn-magazine-parallel-computing-it-s-all-about-the-synchronizationcontext">SynchronizationContext</a> with a custom <a href="https://github.com/Unity-Technologies/UnityCsReference/blob/master/Runtime/Export/Scripting/UnitySynchronizationContext.cs">UnitySynchronizationContext</a> and runs all the tasks on the main thread in both <strong>Edit</strong> and <strong>Play</strong> modes. To utilize async tasks, you must manually create and handle your own threads with a <a href="https://docs.microsoft.com/en-us/dotnet/api/system.threading.tasks.taskfactory?view=netcore-3.1">TaskFactory</a>, as well as use the default SynchronizationContext instead of the Unity version. To listen for enter and exit play mode events to stop the tasks manually, use <a href="https://docs.unity3d.com/2020.1/Documentation/ScriptReference/EditorApplication.playModeStateChanged.html">EditorApplication.playModeStateChanged</a>. However, if you take this approach, most of the Unity scripting APIs are not available to use because you are not using the UnitySynchronizationContext.</p>
+</blockquote>
+<p>After reading this you will find that <strong>Unity doesn&rsquo;t forbid other threads from accessing Unity API, it forbids access from different synchronization context</strong>. So if I move a thread to the main synchronization context, it should work. Here&rsquo;s my test code:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c#" data-lang="c#"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.Collections;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.Collections.Generic;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.Threading;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> System.Threading.Tasks;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">using</span> UnityEngine;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> <span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TestScript</span> : MonoBehaviour
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> SynchronizationContext <span style="color:#ae81ff">_</span>mainThreadSC;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// Start is called before the first frame update</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> Start()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#ae81ff">_</span>mainThreadSC = SynchronizationContext.Current;
+</span></span><span style="display:flex;"><span>        Debug.Log(<span style="color:#e6db74">&#34;Sure is main thread: &#34;</span> + Thread.CurrentThread.ManagedThreadId);
+</span></span><span style="display:flex;"><span>        DisableAfterSecond();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">private</span> <span style="color:#66d9ef">async</span> <span style="color:#66d9ef">void</span> DisableAfterSecond()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        Task.Run((<span style="color:#66d9ef">async</span> () =&gt;
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            SynchronizationContext.SetSynchronizationContext(<span style="color:#ae81ff">_</span>mainThreadSC);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (<span style="color:#ae81ff">_</span>mainThreadSC == SynchronizationContext.Current)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                Debug.Log(<span style="color:#e6db74">&#34;Same synchronization context&#34;</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                Debug.Log(<span style="color:#e6db74">&#34;Different synchronization context&#34;</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            Debug.Log(<span style="color:#e6db74">&#34;Async function: &#34;</span> + Thread.CurrentThread.ManagedThreadId);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">await</span> Task.Delay(<span style="color:#ae81ff">1000</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">this</span>.gameObject.SetActive(<span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i = <span style="color:#ae81ff">0</span>; i &lt; <span style="color:#ae81ff">100000</span>; i++)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                Debug.Log(<span style="color:#e6db74">&#34;Thread test&#34;</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }));
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>Fortunately, it works as expected, it run in a different thread, but it still can access the Unity API. But the bad thing is, notice the for loop, because now this thread is in the same synchronization context as the main thread, and for each thread, this synchronization context will run the code for current frame in turn. So for <code>DisableAfterSecond</code>, there&rsquo;s a frame that it need to print 100K message, and it will block the main thread, which cause the game frozen.</p>
+<p>A simple solution to it is call <code>await Task.Yield();</code> after each iteration of for loop, it will delay the next iteration to next frame. In some case it is useful but it is not cool at all. The suggested way in <a href="https://docs.microsoft.com/en-au/archive/msdn-magazine/2011/february/msdn-magazine-parallel-computing-it-s-all-about-the-synchronizationcontext">MSDN</a> is we run code which doesn&rsquo;t require Unity API in another synchronization context, and change to main synchronization context if we need to execute something relevant to Unity API, after that, we return to our default synchronization context.</p>
+<p><img src="https://docs.microsoft.com/en-au/archive/msdn-magazine/2011/february/images/gg598924.cleary_figure3_hires(en-us,msdn.10).jpg" alt="image: Nested BackgroundWorkers in a UI Context"></p>
+
+    </article>
+  </div>
+
+  
+  
+  
+  <script>
+  window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+  ga('create', 'UA-123456789-1', 'auto');
+  ga('send', 'pageview');
+  </script>
+  <script async src='https://www.google-analytics.com/analytics.js'></script>
+  
+
+  
+
+  
+<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.css" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/cookieconsent2/3.1.0/cookieconsent.min.js"></script>
+<script>
+window.addEventListener("load", function(){
+window.cookieconsent.initialise({
+  "palette": {
+    "popup": {
+      "background": "#216942",
+      "text": "#b2d192"
+    },
+    "button": {
+      "background": "#afed71"
+    }
+  }
+})});
+</script>
+
+</body>
+
+</html>
