@@ -8,11 +8,11 @@
     <language>en-us</language>
     <lastBuildDate>Tue, 16 Aug 2022 11:33:40 +1000</lastBuildDate><atom:link href="https://herainic.com/tags/multithreading/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>My C# and Unity&#39;s problem: Async/Await/Task, Multithreaded and Synchronization Context</title>
-      <link>https://herainic.com/posts/c#unityasyncawaitmultithreadedandsynchronizationcontext/</link>
+      <title>My C-Sharp and Unity&#39;s problem: Async/Await/Task, Multithreaded and Synchronization Context</title>
+      <link>https://herainic.com/posts/csharpunityasyncawaitmultithreadedandsynchronizationcontext/</link>
       <pubDate>Tue, 16 Aug 2022 11:33:40 +1000</pubDate>
       
-      <guid>https://herainic.com/posts/c#unityasyncawaitmultithreadedandsynchronizationcontext/</guid>
+      <guid>https://herainic.com/posts/csharpunityasyncawaitmultithreadedandsynchronizationcontext/</guid>
       <description>I was working on my university course project these day, and we are using Unity/C#. For function which isn&amp;rsquo;t return immediately, I used coroutine and yield return waituntil to wait for it. I didn&amp;rsquo;t know much about C# so at that time I didn&amp;rsquo;t even know we have async/await/task, my thinking method is imprisoned in only using Unity API, after reading some article I suddenly realize I should definitely try this async/await/task things.</description>
     </item>
     
